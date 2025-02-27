@@ -131,7 +131,7 @@ export default function Home() {
                 Ready to Get Started?
               </h2>
               <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Upload your first sermon and see the power of SermonScribe
+                Upload your first sermon and see the power of Gabrious
               </p>
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">

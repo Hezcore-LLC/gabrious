@@ -26,7 +26,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
             <BookOpen className="h-6 w-6" />
-            <span className="hidden font-bold sm:inline-block text-xl">SermonScribe</span>
+            <span className="hidden font-bold sm:inline-block text-xl">Gabrious</span>
           </Link>
         </div>
 
@@ -112,7 +112,7 @@ export default function Header() {
               <div className="flex flex-col gap-6 py-6">
                 <Link href="/" className="flex items-center gap-2">
                   <BookOpen className="h-6 w-6" />
-                  <span className="font-bold text-xl">SermonScribe</span>
+                  <span className="font-bold text-xl">Gabrious</span>
                 </Link>
                 <nav className="flex flex-col gap-4">
                   <Link href="/" className="flex items-center gap-2 text-lg font-medium">

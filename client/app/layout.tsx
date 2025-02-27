@@ -9,7 +9,7 @@ import Footer from '@/components/footer';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'SermonScribe - Sermon Transcription and Study Notes',
+  title: 'Gabrious - Sermon Transcription and Study Notes',
   description: 'Transform sermons into comprehensive study notes with AI-powered transcription and analysis',
 };
 

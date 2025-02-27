@@ -9,7 +9,7 @@ export default function Footer() {
           <div className="flex flex-col gap-2">
             <Link href="/" className="flex items-center gap-2">
               <BookOpen className="h-6 w-6" />
-              <span className="font-bold text-xl">SermonScribe</span>
+              <span className="font-bold text-xl">Gabrious</span>
             </Link>
             <p className="text-sm text-muted-foreground">
               Transform sermons into comprehensive study notes with AI-powered transcription and analysis.
@@ -57,7 +57,7 @@ export default function Footer() {
         </div>
         <div className="mt-8 border-t pt-8">
           <p className="text-sm text-muted-foreground text-center">
-            © {new Date().getFullYear()} SermonScribe. All rights reserved.
+            © {new Date().getFullYear()} Gabrious. All rights reserved.
           </p>
         </div>
       </div>
