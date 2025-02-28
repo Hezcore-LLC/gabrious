@@ -44,7 +44,7 @@ uvicorn app.main:app --reload
 
 4. Run Celery worker:
 ```bash
-celery -A celery worker --loglevel=info
+celery -A celery_app worker --loglevel=info
 ```
 
 ## API Routes

@@ -3,6 +3,7 @@ from models import Transcription, StudyNotes, TranscriptionStatus
 from celery_app import app as celery_app
 import yt_dlp
 import os
+import subprocess
 from openai import AzureOpenAI
 from uuid import UUID
 from typing import Optional, Dict, List
@@ -40,7 +41,7 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
-                'preferredquality': '192',
+                'preferredquality': '32',  # Reduced from 192 to 32 for smaller file size
             }],
             'outtmpl': f'temp/{transcription_id}.%(ext)s'
         }
@@ -52,6 +53,23 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         # Update status to extracting audio
         transcription.status = TranscriptionStatus.EXTRACTING_AUDIO
         await transcription.save()
+        
+        # Further reduce file size by converting to mono and lower bitrate
+        original_file = f'temp/{transcription_id}.mp3'
+        optimized_file = f'temp/{transcription_id}_optimized.mp3'
+        
+        # Use FFmpeg to convert to mono with 16kHz sample rate and 24kbps bitrate
+        subprocess.run([
+            'ffmpeg', '-y', '-i', original_file,
+            '-ac', '1',  # Mono audio (1 channel)
+            '-ar', '16000',  # 16kHz sample rate
+            '-b:a', '24k',  # 24kbps bitrate
+            optimized_file
+        ], check=True)
+        
+        # Replace original with optimized version
+        os.remove(original_file)
+        os.rename(optimized_file, original_file)
         
         # Configure Azure OpenAI client
         client = AzureOpenAI(
@@ -65,12 +83,12 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         await transcription.save()
         
         # Perform transcription using Azure OpenAI
-        deployment_id = os.getenv("AZURE_OPENAI_DEPLOYMENT_ID")
+        deployment_id = os.getenv("AZURE_OPENAI_DEPLOYMENT_ID", "whisper")
         
         with open(f'temp/{transcription_id}.mp3', "rb") as audio_file:
             result = client.audio.transcriptions.create(
                 file=audio_file,
-                model=deployment_id
+                model=deployment_id  # Use the deployment_id instead of hardcoded "whisper"
             )
         
         # Save transcription text
