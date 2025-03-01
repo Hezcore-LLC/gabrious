@@ -1,10 +1,19 @@
+import { studyNotesService } from '@/lib/studyNotesService';
+
 export async function generateStaticParams() {
-  // Mock data - in a real app, this would come from your API or database
-  const sermonIds = ["1", "2", "3", "4"];
-  
-  return sermonIds.map((id) => ({
-    id: id,
-  }));
+  try {
+    // Fetch all study notes from the API
+    const studyNotes = await studyNotesService.getRecentStudyNotes();
+    
+    // Map the study notes to the required format for generateStaticParams
+    return studyNotes.map((note) => ({
+      id: note.id.toString(),
+    }));
+  } catch (error) {
+    console.error('Error generating static params for study notes:', error);
+    // Return empty array as fallback to prevent build failures
+    return [];
+  }
 }
 
 export default function StudyNotesLayout({

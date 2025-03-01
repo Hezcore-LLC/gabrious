@@ -53,20 +53,48 @@ async def get_study_notes(notes_id: str):
         raise HTTPException(status_code=404, detail="Study notes not found")
     
     return {
-        "id": notes.id,
-        "transcript_id": str(notes.transcript_id),
+        "id": str(notes.id),
+        "transcriptionId": str(notes.transcript_id),
+        "title": notes.transcript.title or "",
+        "pastor": notes.transcript.pastor or "",
+        "church": "Global",  # This field is not in the model, defaulting to empty string
+        "date": notes.created_at.isoformat() if notes.created_at else "",
+        "duration": notes.transcript.duration or "",
+        "thumbnail": notes.transcript.thumbnail or "",
         "summary": notes.summary,
-        "key_points": notes.key_points,
+        "keyPoints": notes.key_points,
         "scriptures": notes.scriptures,
-        "discussion_questions": notes.discussion_questions,
-        "application_points": notes.application_points,
-        "created_at": notes.created_at
+        "discussionQuestions": notes.discussion_questions,
+        "applicationPoints": notes.application_points,
+        "created_at": notes.created_at.isoformat() if notes.created_at else "",
+        "updated_at": notes.updated_at.isoformat() if notes.updated_at else ""
     }
 
 @router.get("/")
 async def list_study_notes():
-    notes = await StudyNotes.all()
-    return notes
+    notes = await StudyNotes.all().prefetch_related('transcript')
+    
+    result = []
+    for note in notes:
+        result.append({
+            "id": str(note.id),
+            "transcriptionId": str(note.transcript_id),
+            "title": note.transcript.title or "",
+            "pastor": note.transcript.pastor or "",
+            "church": "Global",  # This field is not in the model, defaulting to empty string
+            "date": note.created_at.isoformat() if note.created_at else "",
+            "duration": note.transcript.duration or "",
+            "thumbnail": note.transcript.thumbnail or "",
+            "summary": note.summary,
+            "keyPoints": note.key_points,
+            "scriptures": note.scriptures,
+            "discussionQuestions": note.discussion_questions,
+            "applicationPoints": note.application_points,
+            "created_at": note.created_at.isoformat() if note.created_at else "",
+            "updated_at": note.updated_at.isoformat() if note.updated_at else ""
+        })
+    
+    return result
 
 @router.delete("/{notes_id}")
 async def delete_study_notes(notes_id: str):

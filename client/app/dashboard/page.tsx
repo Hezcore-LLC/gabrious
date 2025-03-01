@@ -70,13 +70,18 @@ const favoriteSermons = [
 ];
 
 import { transcriptionService, Transcription } from '@/lib/transcriptionService';
+import { studyNotesService, StudyNotes } from '@/lib/studyNotesService';
 import { useEffect } from 'react';
 
 export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [transcriptions, setTranscriptions] = useState<Transcription[]>([]);
+  const [studyNotes, setStudyNotes] = useState<StudyNotes[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingNotes, setIsLoadingNotes] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [notesError, setNotesError] = useState<string | null>(null);
+  const [expandedNotes, setExpandedNotes] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const fetchTranscriptions = async () => {
@@ -91,7 +96,20 @@ export default function DashboardPage() {
       }
     };
 
+    const fetchStudyNotes = async () => {
+      try {
+        const data = await studyNotesService.getRecentStudyNotes();
+        setStudyNotes(data);
+      } catch (err) {
+        setNotesError('Failed to fetch study notes');
+        console.error('Error fetching study notes:', err);
+      } finally {
+        setIsLoadingNotes(false);
+      }
+    };
+
     fetchTranscriptions();
+    fetchStudyNotes();
   }, []);
 
   return (
@@ -331,15 +349,42 @@ export default function DashboardPage() {
               ))}
             </div>
           </TabsContent>
+          {/* Study notes  */}
           <TabsContent value="notes" className="mt-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {transcriptions.filter(sermon => sermon.status === 'completed').slice(0, 2).map((sermon) => (
-                <Card key={sermon.id}>
+              {isLoadingNotes ? (
+                <div className="col-span-full flex justify-center items-center py-12">
+                  <div className="text-center space-y-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                    <p className="text-sm text-muted-foreground">Loading study notes...</p>
+                  </div>
+                </div>
+              ) : notesError ? (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-sm text-destructive">{notesError}</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-4"
+                    onClick={() => window.location.reload()}
+                  >
+                    Try Again
+                  </Button>
+                </div>
+              ) : studyNotes.length === 0 ? (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-sm text-muted-foreground">No study notes available yet</p>
+                  <Button asChild variant="outline" size="sm" className="mt-4">
+                    <Link href="/upload">Upload a sermon to generate notes</Link>
+                  </Button>
+                </div>
+              ) : studyNotes.map((note) => (
+                <Card key={note.id}>
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle className="text-lg">{sermon.title || 'Untitled Sermon'} - Study Notes</CardTitle>
-                        <CardDescription>{new URL(sermon.video_url).hostname}</CardDescription>
+                        <CardTitle className="text-lg">{note.title || 'Untitled Sermon'} - Study Notes</CardTitle>
+                        <CardDescription>{note.church}</CardDescription>
                       </div>
                       <Button variant="outline" size="icon">
                         <Download className="h-4 w-4" />
@@ -348,32 +393,41 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
-                      <h4 className="text-sm font-medium">Key Points:</h4>
+                      <div className="flex justify-between items-center">
+                        <h4 className="text-sm font-medium">Key Points:</h4>
+                        {note.keyPoints.length > 3 && (
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="h-6 text-xs" 
+                            onClick={() => {
+                              const expanded = {...expandedNotes};
+                              expanded[note.id] = !expanded[note.id];
+                              setExpandedNotes(expanded);
+                            }}
+                          >
+                            {expandedNotes[note.id] ? "Show Less" : `+${note.keyPoints.length - 3} More`}
+                          </Button>
+                        )}
+                      </div>
                       <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
-                        <li>Understanding God's peace in difficult circumstances</li>
-                        <li>Practical steps to maintain faith during trials</li>
-                        <li>Biblical examples of peace amidst chaos</li>
+                        {(expandedNotes[note.id] ? note.keyPoints : note.keyPoints.slice(0, 3)).map((point, index) => (
+                          <li key={index}>{point}</li>
+                        ))}
                       </ul>
                     </div>
                   </CardContent>
                   <CardFooter className="flex justify-between">
-                    <div className="text-sm text-muted-foreground">{formatDate(sermon.created_at)}</div>
+                    <div className="text-sm text-muted-foreground">{formatDate(note.created_at)}</div>
                     <Button variant="ghost" size="sm" asChild>
-                      <Link href={`/study-notes/${sermon.id}`}>View Full Notes</Link>
+                      <Link href={`/study-notes/${note.id}`}>View Full Notes</Link>
                     </Button>
                   </CardFooter>
                 </Card>
               ))}
-              {transcriptions.filter(sermon => sermon.status === 'completed').length === 0 && (
-                <div className="col-span-full text-center py-12">
-                  <p className="text-sm text-muted-foreground">No study notes available yet</p>
-                  <Button asChild variant="outline" size="sm" className="mt-4">
-                    <Link href="/upload">Upload a sermon to generate notes</Link>
-                  </Button>
-                </div>
-              )}
             </div>
           </TabsContent>
+          {/* End Study Notes  */}
           <TabsContent value="favorites" className="mt-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {favoriteSermons.map((sermon) => (

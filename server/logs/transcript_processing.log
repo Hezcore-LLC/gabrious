@@ -356,3 +356,5 @@ Traceback (most recent call last):
 tortoise.exceptions.OperationalError: table studynotes has no column named transcript_id
 2025-03-01 02:40:39,858 - transcript_processing - INFO - Starting transcript processing task for ID: 89cd9d8f-75cc-4490-8a6b-1779c2a87ca5
 2025-03-01 02:40:46,126 - transcript_processing - INFO - Transcript processing task completed for ID: 89cd9d8f-75cc-4490-8a6b-1779c2a87ca5
+2025-03-01 04:08:22,112 - transcript_processing - INFO - Starting transcript processing task for ID: d24bc98c-49f3-47fe-b224-06f2b15ecc08
+2025-03-01 04:08:34,350 - transcript_processing - INFO - Transcript processing task completed for ID: d24bc98c-49f3-47fe-b224-06f2b15ecc08

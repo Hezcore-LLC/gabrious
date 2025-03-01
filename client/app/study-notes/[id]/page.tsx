@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,69 +9,58 @@ import { Badge } from "@/components/ui/badge";
 import { BookOpen, ChevronLeft, Copy, Download, FileText, Printer, Share2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { studyNotesService, StudyNotes } from "@/lib/studyNotesService";
+
 
 export default function StudyNotesPage({ params }: { params: { id: string } }) {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("summary");
+  const [studyNotes, setStudyNotes] = useState<StudyNotes | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showingTranscript, setShowingTranscript] = useState(false);
+  const [transcript, setTranscript] = useState<string>("");
+  const [loadingTranscript, setLoadingTranscript] = useState(false);
 
-  // Mock data for demonstration
-  const sermon = {
-    id: params.id,
-    title: "Finding Peace in Troubled Times",
-    pastor: "Pastor John Smith",
-    church: "Grace Community Church",
-    date: "May 15, 2025",
-    duration: "42:18",
-    thumbnail: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1470&auto=format&fit=crop",
-    summary: "In this powerful sermon, Pastor John explores the concept of finding and maintaining peace during life's most challenging moments. Drawing from Scripture and personal experiences, he provides practical guidance for believers seeking God's peace that surpasses all understanding.",
-    keyPoints: [
-      "Peace is not the absence of trouble, but the presence of God in the midst of trouble",
-      "Philippians 4:6-7 offers a practical formula for experiencing God's peace",
-      "Prayer and thanksgiving are essential components to maintaining peace",
-      "God's peace is supernatural and beyond human comprehension",
-      "Peace is a fruit of the Spirit that grows as we abide in Christ"
-    ],
-    scriptures: [
-      { reference: "Philippians 4:6-7", text: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus." },
-      { reference: "John 14:27", text: "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid." },
-      { reference: "Isaiah 26:3", text: "You will keep in perfect peace those whose minds are steadfast, because they trust in you." },
-      { reference: "Romans 5:1", text: "Therefore, since we have been justified through faith, we have peace with God through our Lord Jesus Christ." }
-    ],
-    discussionQuestions: [
-      "How have you experienced God's peace in difficult circumstances in your own life?",
-      "What practical steps can you take this week to cultivate more peace in your daily routine?",
-      "How does the world's definition of peace differ from God's peace as described in Scripture?",
-      "Which of the Scripture passages shared today resonates most with you and why?",
-      "What obstacles in your life are currently preventing you from experiencing God's peace?"
-    ],
-    applicationPoints: [
-      "Set aside 10 minutes each morning for prayer and thanksgiving",
-      "Memorize Philippians 4:6-7 this week",
-      "Identify one worry in your life and practice surrendering it to God daily",
-      "Share with a friend or family member how God has given you peace in a difficult situation",
-      "Create a 'peace playlist' of worship songs that remind you of God's presence"
-    ]
-  };
+  useEffect(() => {
+    const fetchStudyNotes = async () => {
+      try {
+        setIsLoading(true);
+        const data = await studyNotesService.getStudyNotes(params.id);
+        setStudyNotes(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching study notes:', err);
+        setError('Failed to load study notes. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStudyNotes();
+  }, [params.id]);
 
   const handleCopyToClipboard = () => {
+    if (!studyNotes) return;
+    
     const content = `
-# ${sermon.title}
-## ${sermon.pastor} | ${sermon.church} | ${sermon.date}
+# ${studyNotes.title}
+## ${studyNotes.pastor} | ${studyNotes.church} | ${studyNotes.date}
 
 ### Summary
-${sermon.summary}
+${studyNotes.summary}
 
 ### Key Points
-${sermon.keyPoints.map(point => `- ${point}`).join('\n')}
+${studyNotes.keyPoints.map(point => `- ${point}`).join('\n')}
 
 ### Scripture References
-${sermon.scriptures.map(scripture => `- ${scripture.reference}: "${scripture.text}"`).join('\n')}
+${studyNotes.scriptures.map(scripture => `- ${scripture.reference}: "${scripture.text}"`).join('\n')}
 
 ### Discussion Questions
-${sermon.discussionQuestions.map((question, index) => `${index + 1}. ${question}`).join('\n')}
+${studyNotes.discussionQuestions.map((question, index) => `${index + 1}. ${question}`).join('\n')}
 
 ### Application Points
-${sermon.applicationPoints.map(point => `- ${point}`).join('\n')}
+${studyNotes.applicationPoints.map(point => `- ${point}`).join('\n')}
     `;
     
     navigator.clipboard.writeText(content).then(() => {
@@ -81,6 +70,77 @@ ${sermon.applicationPoints.map(point => `- ${point}`).join('\n')}
       });
     });
   };
+
+  if (isLoading) {
+    return (
+      <div className="container py-8 max-w-4xl">
+        <div className="flex flex-col gap-8">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/dashboard">
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Back to Dashboard
+              </Link>
+            </Button>
+          </div>
+          <div className="flex justify-center items-center py-12">
+            <div className="text-center space-y-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
+              <p className="text-sm text-muted-foreground">Loading study notes...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container py-8 max-w-4xl">
+        <div className="flex flex-col gap-8">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/dashboard">
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Back to Dashboard
+              </Link>
+            </Button>
+          </div>
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <p className="text-destructive mb-4">{error}</p>
+              <Button onClick={() => window.location.reload()}>Try Again</Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  if (!studyNotes) {
+    return (
+      <div className="container py-8 max-w-4xl">
+        <div className="flex flex-col gap-8">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/dashboard">
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Back to Dashboard
+              </Link>
+            </Button>
+          </div>
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <p className="text-muted-foreground mb-4">Study notes not found</p>
+              <Button asChild>
+                <Link href="/dashboard">Return to Dashboard</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-8 max-w-4xl">
@@ -97,15 +157,15 @@ ${sermon.applicationPoints.map(point => `- ${point}`).join('\n')}
         <div className="grid gap-6">
           <div className="flex flex-col md:flex-row gap-6 items-start">
             <div className="w-full md:w-2/3">
-              <h1 className="text-3xl font-bold tracking-tight">{sermon.title}</h1>
+              <h1 className="text-3xl font-bold tracking-tight">{studyNotes.title}</h1>
               <div className="flex flex-wrap items-center gap-2 mt-2 text-muted-foreground">
-                <span>{sermon.pastor}</span>
+                <span>{studyNotes.pastor}</span>
                 <span>•</span>
-                <span>{sermon.church}</span>
+                <span>{studyNotes.church}</span>
                 <span>•</span>
-                <span>{sermon.date}</span>
+                <span>{studyNotes.date}</span>
                 <span>•</span>
-                <span>{sermon.duration}</span>
+                <span>{studyNotes.duration}</span>
               </div>
             </div>
             <div className="flex gap-2 w-full md:w-1/3 md:justify-end">
@@ -134,7 +194,7 @@ ${sermon.applicationPoints.map(point => `- ${point}`).join('\n')}
                 <CardHeader className="pb-3">
                   <CardTitle>Study Notes</CardTitle>
                   <CardDescription>
-                    AI-generated study notes from the sermon
+                    Here is your study notes from the sermon
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -147,12 +207,12 @@ ${sermon.applicationPoints.map(point => `- ${point}`).join('\n')}
                     </TabsList>
                     <TabsContent value="summary" className="mt-4 space-y-4">
                       <div className="prose dark:prose-invert max-w-none">
-                        <p className="text-base leading-relaxed">{sermon.summary}</p>
+                        <p className="text-base leading-relaxed">{studyNotes.summary}</p>
                       </div>
                     </TabsContent>
                     <TabsContent value="key-points" className="mt-4 space-y-4">
                       <ul className="space-y-3">
-                        {sermon.keyPoints.map((point, index) => (
+                        {studyNotes.keyPoints.map((point, index) => (
                           <li key={index} className="flex items-start gap-2">
                             <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                               {index + 1}
@@ -164,7 +224,7 @@ ${sermon.applicationPoints.map(point => `- ${point}`).join('\n')}
                     </TabsContent>
                     <TabsContent value="scriptures" className="mt-4 space-y-4">
                       <div className="space-y-4">
-                        {sermon.scriptures.map((scripture, index) => (
+                        {studyNotes.scriptures.map((scripture, index) => (
                           <div key={index} className="space-y-2">
                             <h3 className="text-lg font-semibold">{scripture.reference}</h3>
                             <blockquote className="border-l-4 border-muted pl-4 italic">
@@ -178,7 +238,7 @@ ${sermon.applicationPoints.map(point => `- ${point}`).join('\n')}
                       <div className="space-y-4">
                         <h3 className="text-lg font-semibold">Practical Application</h3>
                         <ul className="space-y-2">
-                          {sermon.applicationPoints.map((point, index) => (
+                          {studyNotes.applicationPoints.map((point, index) => (
                             <li key={index} className="flex items-start gap-2">
                               <div className="h-5 w-5 shrink-0 rounded-full border border-primary flex items-center justify-center text-xs">
                                 ✓
@@ -202,7 +262,7 @@ ${sermon.applicationPoints.map(point => `- ${point}`).join('\n')}
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {sermon.discussionQuestions.map((question, index) => (
+                    {studyNotes.discussionQuestions.map((question, index) => (
                       <div key={index} className="space-y-2">
                         <h3 className="text-base font-medium">Question {index + 1}</h3>
                         <p className="text-base">{question}</p>
@@ -225,16 +285,32 @@ ${sermon.applicationPoints.map(point => `- ${point}`).join('\n')}
                 <Card>
                   <div className="aspect-video">
                     <img
-                      src={sermon.thumbnail}
-                      alt={sermon.title}
+                      src={studyNotes.thumbnail}
+                      alt={studyNotes.title}
                       className="object-cover w-full h-full rounded-t-lg"
                     />
                   </div>
                   <CardContent className="pt-4">
                     <div className="flex flex-col gap-4">
-                      <Button className="w-full">
+                      <Button 
+                        className="w-full" 
+                        onClick={() => {
+                          if (showingTranscript) {
+                            setShowingTranscript(false);
+                          } else {
+                            setLoadingTranscript(true);
+                            setShowingTranscript(true);
+                            // Here you would fetch the transcript using the transcriptionId
+                            // For now, we'll simulate loading and then show a placeholder
+                            setTimeout(() => {
+                              setTranscript("This is the full transcript of the sermon. The actual transcript would be fetched from the API using the transcriptionId: " + studyNotes?.transcriptionId);
+                              setLoadingTranscript(false);
+                            }, 1000);
+                          }
+                        }}
+                      >
                         <BookOpen className="h-4 w-4 mr-2" />
-                        View Full Transcript
+                        {showingTranscript ? "Hide Transcript" : "View Full Transcript"}
                       </Button>
                       <Button variant="outline" className="w-full">
                         <FileText className="h-4 w-4 mr-2" />
@@ -243,6 +319,31 @@ ${sermon.applicationPoints.map(point => `- ${point}`).join('\n')}
                     </div>
                   </CardContent>
                 </Card>
+
+                {showingTranscript && (
+                  <Card className="mt-6">
+                    <CardHeader className="pb-3">
+                      <CardTitle>Full Transcript</CardTitle>
+                      <CardDescription>
+                        Complete transcript of the sermon
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {loadingTranscript ? (
+                        <div className="flex justify-center items-center py-8">
+                          <div className="text-center space-y-4">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
+                            <p className="text-sm text-muted-foreground">Loading transcript...</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="prose dark:prose-invert max-w-none">
+                          <p className="text-base leading-relaxed whitespace-pre-line">{transcript}</p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
 
                 <Card>
                   <CardHeader className="pb-3">
@@ -292,6 +393,31 @@ ${sermon.applicationPoints.map(point => `- ${point}`).join('\n')}
                     </div>
                   </CardContent>
                 </Card>
+
+                {showingTranscript && (
+                  <Card className="mt-6">
+                    <CardHeader className="pb-3">
+                      <CardTitle>Full Transcript</CardTitle>
+                      <CardDescription>
+                        Complete transcript of the sermon
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {loadingTranscript ? (
+                        <div className="flex justify-center items-center py-8">
+                          <div className="text-center space-y-4">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
+                            <p className="text-sm text-muted-foreground">Loading transcript...</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="prose dark:prose-invert max-w-none">
+                          <p className="text-base leading-relaxed whitespace-pre-line">{transcript}</p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
 
                 <Card>
                   <CardHeader className="pb-3">

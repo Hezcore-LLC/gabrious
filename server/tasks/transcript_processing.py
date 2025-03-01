@@ -71,8 +71,11 @@ async def _process_transcript(transcription_id: UUID) -> Dict:
 
         # Create the prompt template
         prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are an AI assistant that analyzes sermon transcripts and extracts key information."),
-            ("user", "Please analyze this sermon transcript and extract the following information:\n\n{transcript}\n\n{format_instructions}")
+            ("system", "As a divinely-inspired analytical tool, you serve as a faithful partner in strengthening church ministries. \
+                        Your mission is to illuminate biblical wisdom within sermons, empowering congregations through structured \
+                        analysis that supports spiritual growth, community building, and practical application of Scripture."),
+            # ("user", "Please analyze this sermon transcript and extract the following information:\n\n{transcript}\n\n{format_instructions}")
+               ("user", "Reverently analyze this sermon transcript and  extract and structure the following elements with pastoral sensitivity: \n\n{transcript}\n\n{format_instructions}")
         ])
 
         # Format the prompt with the transcript and parser instructions
