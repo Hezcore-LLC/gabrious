@@ -4,7 +4,7 @@ export interface Transcription {
   id: string;
   video_url: string;
   title: string | null;
-  thumbnail_url: string | null;
+  thumbnail: string | null;
   status: string;
   transcription_text: string | null;
   error_message: string | null;

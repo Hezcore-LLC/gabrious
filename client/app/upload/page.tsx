@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import { FileUp, Link as LinkIcon, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { transcriptionService } from "@/lib/transcriptionService";
 
 export default function UploadPage() {
   const [uploadMethod, setUploadMethod] = useState("file");
@@ -18,7 +20,9 @@ export default function UploadPage() {
   const [transcriptionTier, setTranscriptionTier] = useState("free");
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [transcriptionId, setTranscriptionId] = useState<string | null>(null);
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -30,7 +34,7 @@ export default function UploadPage() {
     setUrl(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (uploadMethod === "file" && !file) {
@@ -51,22 +55,61 @@ export default function UploadPage() {
       return;
     }
 
-    // Simulate upload process
     setIsUploading(true);
-    const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 100) {
+    
+    try {
+      if (uploadMethod === "url") {
+        // Use the transcription service to submit the URL
+        const response = await transcriptionService.submitUrl(url);
+        setTranscriptionId(response.id);
+        
+        // Simulate progress for better UX
+        const interval = setInterval(() => {
+          setUploadProgress((prev) => {
+            if (prev >= 100) {
+              clearInterval(interval);
+              return 100;
+            }
+            return prev + 5;
+          });
+        }, 300);
+        
+        // After progress reaches 100%, redirect to dashboard
+        setTimeout(() => {
           clearInterval(interval);
           setIsUploading(false);
           toast({
-            title: "Upload complete!",
-            description: "Your sermon is being processed. We'll notify you when it's ready.",
+            title: "URL submitted successfully!",
+            description: "Your sermon is being processed. You can check the status on the dashboard.",
           });
-          return 100;
-        }
-        return prev + 5;
+          router.push('/dashboard');
+        }, 6000);
+      } else {
+        // File upload not implemented yet - using simulation for now
+        const interval = setInterval(() => {
+          setUploadProgress((prev) => {
+            if (prev >= 100) {
+              clearInterval(interval);
+              setIsUploading(false);
+              toast({
+                title: "Upload complete!",
+                description: "Your sermon is being processed. We'll notify you when it's ready.",
+              });
+              return 100;
+            }
+            return prev + 5;
+          });
+        }, 300);
+      }
+    } catch (error) {
+      setIsUploading(false);
+      setUploadProgress(0);
+      toast({
+        title: "Error submitting URL",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
       });
-    }, 300);
+    }
   };
 
   return (

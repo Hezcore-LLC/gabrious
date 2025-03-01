@@ -41,3 +41,30 @@
 2025-02-28 21:38:23,885 - video_processing - INFO - Current working directory: /Users/isaacbrowne/Desktop/ai/gabrious/server
 2025-02-28 21:40:46,641 - video_processing - INFO - Video processing module initialized
 2025-02-28 21:41:54,945 - video_processing - INFO - Video processing module initialized
+2025-02-28 22:06:58,553 - video_processing - INFO - Video processing module initialized
+2025-02-28 22:07:02,806 - video_processing - INFO - Video processing module initialized
+2025-02-28 22:07:08,528 - video_processing - INFO - Video processing module initialized
+2025-02-28 22:07:16,782 - video_processing - INFO - Video processing module initialized
+2025-02-28 22:07:37,768 - video_processing - INFO - Video processing module initialized
+2025-02-28 22:07:44,297 - video_processing - INFO - Starting video processing task for ID: cb0e433a-7590-4432-b05c-77c80b098919, URL: https://www.youtube.com/watch?v=aa39ZYdwEBc
+2025-02-28 22:07:44,638 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=aa39ZYdwEBc
+2025-02-28 22:07:49,521 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=aa39ZYdwEBc
+2025-02-28 22:08:42,376 - video_processing - INFO - Optimizing audio file
+2025-02-28 22:08:59,972 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-02-28 22:10:27,946 - video_processing - INFO - Cleaning up temporary files
+2025-02-28 22:10:27,947 - video_processing - INFO - Generating study notes
+2025-02-28 22:10:27,951 - video_processing - INFO - Video processing completed successfully for ID: cb0e433a-7590-4432-b05c-77c80b098919
+2025-02-28 22:10:27,954 - video_processing - INFO - Video processing task completed for ID: cb0e433a-7590-4432-b05c-77c80b098919
+2025-02-28 22:16:50,181 - video_processing - INFO - Starting video processing task for ID: ea49477f-da2d-4b7b-927f-30ed5438bbb9, URL: https://www.youtube.com/watch?v=aa39ZYdwEBc
+2025-02-28 22:16:50,305 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=aa39ZYdwEBc
+2025-02-28 22:16:55,961 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=aa39ZYdwEBc
+2025-02-28 22:17:58,795 - video_processing - INFO - Optimizing audio file
+2025-02-28 22:18:14,018 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-02-28 22:19:43,352 - video_processing - INFO - Cleaning up temporary files
+2025-02-28 22:19:43,354 - video_processing - INFO - Generating study notes
+2025-02-28 22:19:43,356 - video_processing - INFO - Video processing completed successfully for ID: ea49477f-da2d-4b7b-927f-30ed5438bbb9
+2025-02-28 22:19:43,359 - video_processing - INFO - Video processing task completed for ID: ea49477f-da2d-4b7b-927f-30ed5438bbb9
+2025-02-28 22:48:16,686 - video_processing - INFO - Video processing module initialized
+2025-02-28 22:48:53,204 - video_processing - INFO - Video processing module initialized
+2025-02-28 22:49:25,332 - video_processing - INFO - Video processing module initialized
+2025-02-28 22:49:47,508 - video_processing - INFO - Video processing module initialized

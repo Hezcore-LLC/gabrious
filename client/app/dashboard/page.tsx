@@ -12,37 +12,45 @@ import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
 
-// Mock data for demonstration
-const recentSermons = [
-  {
-    id: "1",
-    title: "Finding Peace in Troubled Times",
-    pastor: "Pastor John Smith",
-    date: "May 15, 2025",
-    duration: "42:18",
-    status: "completed",
-    thumbnail: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1470&auto=format&fit=crop"
-  },
-  {
-    id: "2",
-    title: "The Power of Faith",
-    pastor: "Pastor Sarah Johnson",
-    date: "May 8, 2025",
-    duration: "38:45",
-    status: "completed",
-    thumbnail: "https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=1470&auto=format&fit=crop"
-  },
-  {
-    id: "3",
-    title: "Walking in God's Purpose",
-    pastor: "Pastor Michael Williams",
-    date: "May 1, 2025",
-    duration: "45:22",
-    status: "processing",
-    progress: 75,
-    thumbnail: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=1470&auto=format&fit=crop"
+// Default fallback image for sermons without thumbnails
+const DEFAULT_THUMBNAIL = "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1470&auto=format&fit=crop";
+
+// Helper function to format date
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+};
+
+// Helper function to calculate progress based on status
+const getProgressFromStatus = (status: string) => {
+  switch (status) {
+    case 'pending': return 10;
+    case 'downloading': return 30;
+    case 'processing': return 60;
+    case 'generating_notes': return 80;
+    case 'completed': return 100;
+    case 'failed': return 0;
+    default: return 50;
   }
-];
+};
+
+// Helper function to format status for display
+const formatStatus = (status: string) => {
+  return status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+};
+
+// Helper to determine if a status is considered "processing"
+const isProcessingStatus = (status: string) => {
+  return ['pending', 'downloading', 'processing', 'generating_notes'].includes(status);
+};
+
+// Helper to format duration
+const formatDuration = (seconds: number | null) => {
+  if (!seconds) return "--:--";
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
 
 const favoriteSermons = [
   {
@@ -61,8 +69,30 @@ const favoriteSermons = [
   }
 ];
 
+import { transcriptionService, Transcription } from '@/lib/transcriptionService';
+import { useEffect } from 'react';
+
 export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [transcriptions, setTranscriptions] = useState<Transcription[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTranscriptions = async () => {
+      try {
+        const data = await transcriptionService.getRecentTranscriptions();
+        setTranscriptions(data);
+      } catch (err) {
+        setError('Failed to fetch transcriptions');
+        console.error('Error fetching transcriptions:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTranscriptions();
+  }, []);
 
   return (
     <div className="container py-6 md:py-10">
@@ -141,24 +171,50 @@ export default function DashboardPage() {
           </TabsList>
           <TabsContent value="recent" className="mt-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {recentSermons.map((sermon) => (
+              {isLoading ? (
+                <div className="col-span-full flex justify-center items-center py-12">
+                  <div className="text-center space-y-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                    <p className="text-sm text-muted-foreground">Loading transcriptions...</p>
+                  </div>
+                </div>
+              ) : error ? (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-sm text-destructive">{error}</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-4"
+                    onClick={() => window.location.reload()}
+                  >
+                    Try Again
+                  </Button>
+                </div>
+              ) : transcriptions.length === 0 ? (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-sm text-muted-foreground">No transcriptions found</p>
+                  <Button asChild variant="outline" size="sm" className="mt-4">
+                    <Link href="/upload">Upload Your First Sermon</Link>
+                  </Button>
+                </div>
+              ) : transcriptions.map((sermon) => (
                 <Card key={sermon.id} className="overflow-hidden">
                   <div className="aspect-video relative">
                     <img
-                      src={sermon.thumbnail}
-                      alt={sermon.title}
+                      src={sermon.thumbnail_url || DEFAULT_THUMBNAIL}
+                      alt={sermon.title || 'Sermon'}
                       className="object-cover w-full h-full"
                     />
-                    {sermon.status === "processing" && (
+                    {isProcessingStatus(sermon.status) && (
                       <div className="absolute inset-0 bg-background/80 flex flex-col items-center justify-center p-4">
-                        <p className="text-sm font-medium mb-2">Processing: {sermon.progress}%</p>
-                        <Progress value={sermon.progress} className="w-full h-2" />
+                        <p className="text-sm font-medium mb-2">{formatStatus(sermon.status)}: {getProgressFromStatus(sermon.status)}%</p>
+                        <Progress value={getProgressFromStatus(sermon.status)} className="w-full h-2" />
                       </div>
                     )}
                   </div>
                   <CardHeader className="p-4">
                     <div className="flex justify-between items-start">
-                      <CardTitle className="text-lg">{sermon.title}</CardTitle>
+                      <CardTitle className="text-lg">{sermon.title || 'Untitled Sermon'}</CardTitle>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -182,14 +238,18 @@ export default function DashboardPage() {
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
-                    <CardDescription>{sermon.pastor}</CardDescription>
+                    <CardDescription>
+                      {sermon.video_url && (
+                        <span className="truncate block">{new URL(sermon.video_url).hostname}</span>
+                      )}
+                    </CardDescription>
                   </CardHeader>
                   <CardFooter className="p-4 pt-0 flex justify-between">
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Clock className="mr-1 h-3 w-3" />
-                      {sermon.duration}
+                      <Badge variant="outline" className="text-xs">{formatStatus(sermon.status)}</Badge>
                     </div>
-                    <div className="text-sm text-muted-foreground">{sermon.date}</div>
+                    <div className="text-sm text-muted-foreground">{formatDate(sermon.created_at)}</div>
                   </CardFooter>
                 </Card>
               ))}
@@ -197,7 +257,33 @@ export default function DashboardPage() {
           </TabsContent>
           <TabsContent value="sermons" className="mt-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {recentSermons.map((sermon) => (
+              {isLoading ? (
+                <div className="col-span-full flex justify-center items-center py-12">
+                  <div className="text-center space-y-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                    <p className="text-sm text-muted-foreground">Loading transcriptions...</p>
+                  </div>
+                </div>
+              ) : error ? (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-sm text-destructive">{error}</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-4"
+                    onClick={() => window.location.reload()}
+                  >
+                    Try Again
+                  </Button>
+                </div>
+              ) : transcriptions.length === 0 ? (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-sm text-muted-foreground">No transcriptions found</p>
+                  <Button asChild variant="outline" size="sm" className="mt-4">
+                    <Link href="/upload">Upload Your First Sermon</Link>
+                  </Button>
+                </div>
+              ) : transcriptions.map((sermon) => (
                 <Card key={sermon.id} className="overflow-hidden">
                   <div className="aspect-video relative">
                     <img
@@ -247,13 +333,13 @@ export default function DashboardPage() {
           </TabsContent>
           <TabsContent value="notes" className="mt-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {recentSermons.slice(0, 2).map((sermon) => (
+              {transcriptions.filter(sermon => sermon.status === 'completed').slice(0, 2).map((sermon) => (
                 <Card key={sermon.id}>
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle className="text-lg">{sermon.title} - Study Notes</CardTitle>
-                        <CardDescription>{sermon.pastor}</CardDescription>
+                        <CardTitle className="text-lg">{sermon.title || 'Untitled Sermon'} - Study Notes</CardTitle>
+                        <CardDescription>{new URL(sermon.video_url).hostname}</CardDescription>
                       </div>
                       <Button variant="outline" size="icon">
                         <Download className="h-4 w-4" />
@@ -271,13 +357,21 @@ export default function DashboardPage() {
                     </div>
                   </CardContent>
                   <CardFooter className="flex justify-between">
-                    <div className="text-sm text-muted-foreground">{sermon.date}</div>
+                    <div className="text-sm text-muted-foreground">{formatDate(sermon.created_at)}</div>
                     <Button variant="ghost" size="sm" asChild>
                       <Link href={`/study-notes/${sermon.id}`}>View Full Notes</Link>
                     </Button>
                   </CardFooter>
                 </Card>
               ))}
+              {transcriptions.filter(sermon => sermon.status === 'completed').length === 0 && (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-sm text-muted-foreground">No study notes available yet</p>
+                  <Button asChild variant="outline" size="sm" className="mt-4">
+                    <Link href="/upload">Upload a sermon to generate notes</Link>
+                  </Button>
+                </div>
+              )}
             </div>
           </TabsContent>
           <TabsContent value="favorites" className="mt-6">
