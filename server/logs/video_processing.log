@@ -68,3 +68,279 @@
 2025-02-28 22:48:53,204 - video_processing - INFO - Video processing module initialized
 2025-02-28 22:49:25,332 - video_processing - INFO - Video processing module initialized
 2025-02-28 22:49:47,508 - video_processing - INFO - Video processing module initialized
+2025-02-28 22:59:37,894 - video_processing - INFO - Video processing module initialized
+2025-02-28 23:08:50,260 - video_processing - INFO - Video processing module initialized
+2025-02-28 23:08:59,178 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:07:45,835 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:10:50,058 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:13:43,633 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:18:19,607 - video_processing - INFO - Starting video processing task for ID: 2bda68f1-2832-4bf4-898c-fe15dcf7df9e, URL: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:18:19,815 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:18:24,040 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:18:38,191 - video_processing - ERROR - Error processing video: ERROR: Postprocessing: audio conversion failed: Exiting normally, received signal 2.
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 479, in run_ffmpeg
+    FFmpegPostProcessor.run_ffmpeg(self, path, out_path, opts)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 374, in run_ffmpeg
+    return self.run_ffmpeg_multiple_files([path], out_path, opts, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 329, in run_ffmpeg_multiple_files
+    return self.real_run_ffmpeg(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 367, in real_run_ffmpeg
+    raise FFmpegPostProcessorError(stderr.strip().splitlines()[-1])
+yt_dlp.postprocessor.ffmpeg.FFmpegPostProcessorError: Exiting normally, received signal 2.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3570, in process_info
+    replace_info_dict(self.post_process(dl_filename, info_dict, files_to_move))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3754, in post_process
+    info = self.run_all_pps('post_process', info, additional_pps=info.get('__postprocessors'))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3736, in run_all_pps
+    info = self.run_pp(pp, info)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3714, in run_pp
+    files_to_delete, infodict = pp.run(infodict)
+                                ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/common.py", line 22, in run
+    ret = func(self, info, *args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/common.py", line 127, in wrapper
+    return func(self, info)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 530, in run
+    self.run_ffmpeg(path, temp_path, acodec, more_opts)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 481, in run_ffmpeg
+    raise PostProcessingError(f'audio conversion failed: {err.msg}')
+yt_dlp.utils.PostProcessingError: audio conversion failed: Exiting normally, received signal 2.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/video_processing.py", line 100, in _process_video
+    ydl.download([transcription.video_url])
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3618, in download
+    self.__download_wrapper(self.extract_info)(
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3591, in wrapper
+    res = func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1626, in extract_info
+    return self.__extract_info(url, self.get_info_extractor(key), download, extra_info, process)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1637, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1793, in __extract_info
+    return self.process_ie_result(ie_result, download, extra_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1852, in process_ie_result
+    ie_result = self.process_video_result(ie_result, download=download)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3024, in process_video_result
+    self.process_info(new_info)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 177, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3572, in process_info
+    self.report_error(f'Postprocessing: {err}')
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1095, in report_error
+    self.trouble(f'{self._format_err("ERROR:", self.Styles.ERROR)} {message}', *args, **kwargs)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1034, in trouble
+    raise DownloadError(message, exc_info)
+yt_dlp.utils.DownloadError: ERROR: Postprocessing: audio conversion failed: Exiting normally, received signal 2.
+2025-03-01 01:18:38,215 - video_processing - ERROR - Video processing task failed for ID: 2bda68f1-2832-4bf4-898c-fe15dcf7df9e: ERROR: Postprocessing: audio conversion failed: Exiting normally, received signal 2.
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 479, in run_ffmpeg
+    FFmpegPostProcessor.run_ffmpeg(self, path, out_path, opts)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 374, in run_ffmpeg
+    return self.run_ffmpeg_multiple_files([path], out_path, opts, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 329, in run_ffmpeg_multiple_files
+    return self.real_run_ffmpeg(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 367, in real_run_ffmpeg
+    raise FFmpegPostProcessorError(stderr.strip().splitlines()[-1])
+yt_dlp.postprocessor.ffmpeg.FFmpegPostProcessorError: Exiting normally, received signal 2.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3570, in process_info
+    replace_info_dict(self.post_process(dl_filename, info_dict, files_to_move))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3754, in post_process
+    info = self.run_all_pps('post_process', info, additional_pps=info.get('__postprocessors'))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3736, in run_all_pps
+    info = self.run_pp(pp, info)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3714, in run_pp
+    files_to_delete, infodict = pp.run(infodict)
+                                ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/common.py", line 22, in run
+    ret = func(self, info, *args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/common.py", line 127, in wrapper
+    return func(self, info)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 530, in run
+    self.run_ffmpeg(path, temp_path, acodec, more_opts)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/postprocessor/ffmpeg.py", line 481, in run_ffmpeg
+    raise PostProcessingError(f'audio conversion failed: {err.msg}')
+yt_dlp.utils.PostProcessingError: audio conversion failed: Exiting normally, received signal 2.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/video_processing.py", line 31, in process_video
+    result = asyncio.run(_process_video(transcription_id, video_url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/video_processing.py", line 100, in _process_video
+    ydl.download([transcription.video_url])
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3618, in download
+    self.__download_wrapper(self.extract_info)(
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3591, in wrapper
+    res = func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1626, in extract_info
+    return self.__extract_info(url, self.get_info_extractor(key), download, extra_info, process)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1637, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1793, in __extract_info
+    return self.process_ie_result(ie_result, download, extra_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1852, in process_ie_result
+    ie_result = self.process_video_result(ie_result, download=download)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3024, in process_video_result
+    self.process_info(new_info)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 177, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 3572, in process_info
+    self.report_error(f'Postprocessing: {err}')
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1095, in report_error
+    self.trouble(f'{self._format_err("ERROR:", self.Styles.ERROR)} {message}', *args, **kwargs)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/yt_dlp/YoutubeDL.py", line 1034, in trouble
+    raise DownloadError(message, exc_info)
+yt_dlp.utils.DownloadError: ERROR: Postprocessing: audio conversion failed: Exiting normally, received signal 2.
+2025-03-01 01:18:46,670 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:19:30,008 - video_processing - INFO - Starting video processing task for ID: da6a4b18-a7f2-4dd6-b759-3b5c35d0b231, URL: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:19:30,186 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:19:34,015 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:20:38,193 - video_processing - INFO - Optimizing audio file
+2025-03-01 01:20:53,918 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-01 01:22:46,409 - video_processing - INFO - Cleaning up temporary files
+2025-03-01 01:22:46,411 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-01 01:22:46,411 - video_processing - ERROR - Error processing video: name 'process_transcript' is not defined
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/video_processing.py", line 156, in _process_video
+    process_transcript.delay(str(transcription.id))
+    ^^^^^^^^^^^^^^^^^^
+NameError: name 'process_transcript' is not defined
+2025-03-01 01:22:46,420 - video_processing - ERROR - Video processing task failed for ID: da6a4b18-a7f2-4dd6-b759-3b5c35d0b231: name 'process_transcript' is not defined
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/video_processing.py", line 31, in process_video
+    result = asyncio.run(_process_video(transcription_id, video_url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/video_processing.py", line 156, in _process_video
+    process_transcript.delay(str(transcription.id))
+    ^^^^^^^^^^^^^^^^^^
+NameError: name 'process_transcript' is not defined
+2025-03-01 01:24:30,155 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:27:56,917 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:28:01,236 - video_processing - INFO - Starting video processing task for ID: 2853cc0f-60b7-4a3d-9a64-d080d96a9442, URL: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:28:01,520 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:28:04,969 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:29:08,349 - video_processing - INFO - Optimizing audio file
+2025-03-01 01:29:23,704 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-01 01:31:08,421 - video_processing - INFO - Cleaning up temporary files
+2025-03-01 01:31:08,423 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-01 01:31:08,434 - video_processing - INFO - Study notes generation task queued
+2025-03-01 01:31:08,436 - video_processing - INFO - Video processing completed successfully for ID: 2853cc0f-60b7-4a3d-9a64-d080d96a9442
+2025-03-01 01:31:08,438 - video_processing - INFO - Video processing task completed for ID: 2853cc0f-60b7-4a3d-9a64-d080d96a9442
+2025-03-01 01:32:41,422 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:33:14,768 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:34:11,815 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:34:29,448 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:35:27,660 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:36:48,594 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:37:33,370 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:38:42,201 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:41:15,617 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:41:41,839 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:48:48,353 - video_processing - INFO - Video processing module initialized
+2025-03-01 01:49:14,202 - video_processing - INFO - Starting video processing task for ID: 546016c4-2f42-4f5b-b4c0-34c4c5b7fe17, URL: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:49:14,671 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:49:18,404 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=70n9fUZ4T6o
+2025-03-01 01:50:22,037 - video_processing - INFO - Optimizing audio file
+2025-03-01 01:50:37,928 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-01 01:52:28,585 - video_processing - INFO - Cleaning up temporary files
+2025-03-01 01:52:28,590 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-01 01:52:28,602 - video_processing - INFO - Study notes generation task queued
+2025-03-01 01:52:28,603 - video_processing - INFO - Video processing completed successfully for ID: 546016c4-2f42-4f5b-b4c0-34c4c5b7fe17
+2025-03-01 01:52:28,605 - video_processing - INFO - Video processing task completed for ID: 546016c4-2f42-4f5b-b4c0-34c4c5b7fe17
+2025-03-01 01:57:35,955 - video_processing - INFO - Video processing module initialized
+2025-03-01 02:00:02,138 - video_processing - INFO - Video processing module initialized
+2025-03-01 02:02:47,647 - video_processing - INFO - Video processing module initialized
+2025-03-01 02:02:49,507 - video_processing - INFO - Video processing module initialized
+2025-03-01 02:03:41,404 - video_processing - INFO - Video processing module initialized
+2025-03-01 02:04:11,776 - video_processing - INFO - Starting video processing task for ID: f27e71b8-b7f5-477a-8b62-ebfb8aa3cd0b, URL: https://www.youtube.com/watch?v=yRW2liYkg6c
+2025-03-01 02:04:12,225 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=yRW2liYkg6c
+2025-03-01 02:04:15,691 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=yRW2liYkg6c
+2025-03-01 02:04:58,138 - video_processing - INFO - Optimizing audio file
+2025-03-01 02:05:00,685 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-01 02:05:22,789 - video_processing - INFO - Cleaning up temporary files
+2025-03-01 02:05:22,790 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-01 02:05:22,801 - video_processing - INFO - Study notes generation task queued
+2025-03-01 02:05:22,802 - video_processing - INFO - Video processing completed successfully for ID: f27e71b8-b7f5-477a-8b62-ebfb8aa3cd0b
+2025-03-01 02:05:22,805 - video_processing - INFO - Video processing task completed for ID: f27e71b8-b7f5-477a-8b62-ebfb8aa3cd0b
+2025-03-01 02:21:41,056 - video_processing - INFO - Video processing module initialized
+2025-03-01 02:22:07,518 - video_processing - INFO - Starting video processing task for ID: 954c2145-140e-42eb-a55c-bda39b86d794, URL: https://www.youtube.com/watch?v=yRW2liYkg6c
+2025-03-01 02:22:07,930 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=yRW2liYkg6c
+2025-03-01 02:22:11,387 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=yRW2liYkg6c
+2025-03-01 02:22:53,546 - video_processing - INFO - Optimizing audio file
+2025-03-01 02:22:56,041 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-01 02:23:19,177 - video_processing - INFO - Cleaning up temporary files
+2025-03-01 02:23:19,179 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-01 02:23:19,192 - video_processing - INFO - Study notes generation task queued
+2025-03-01 02:23:19,194 - video_processing - INFO - Video processing completed successfully for ID: 954c2145-140e-42eb-a55c-bda39b86d794
+2025-03-01 02:23:19,196 - video_processing - INFO - Video processing task completed for ID: 954c2145-140e-42eb-a55c-bda39b86d794
+2025-03-01 02:35:16,616 - video_processing - INFO - Video processing module initialized
+2025-03-01 02:35:18,864 - video_processing - INFO - Video processing module initialized
+2025-03-01 02:38:54,876 - video_processing - INFO - Video processing module initialized
+2025-03-01 02:38:57,305 - video_processing - INFO - Video processing module initialized
+2025-03-01 02:39:16,458 - video_processing - INFO - Starting video processing task for ID: 89cd9d8f-75cc-4490-8a6b-1779c2a87ca5, URL: https://www.youtube.com/watch?v=yRW2liYkg6c
+2025-03-01 02:39:16,998 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=yRW2liYkg6c
+2025-03-01 02:39:21,100 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=yRW2liYkg6c
+2025-03-01 02:40:12,854 - video_processing - INFO - Optimizing audio file
+2025-03-01 02:40:16,001 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-01 02:40:39,844 - video_processing - INFO - Cleaning up temporary files
+2025-03-01 02:40:39,845 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-01 02:40:39,854 - video_processing - INFO - Study notes generation task queued
+2025-03-01 02:40:39,856 - video_processing - INFO - Video processing completed successfully for ID: 89cd9d8f-75cc-4490-8a6b-1779c2a87ca5
+2025-03-01 02:40:39,858 - video_processing - INFO - Video processing task completed for ID: 89cd9d8f-75cc-4490-8a6b-1779c2a87ca5

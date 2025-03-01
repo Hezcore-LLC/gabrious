@@ -1,6 +1,7 @@
 from celery import shared_task
 from models import Transcription, StudyNotes, TranscriptionStatus
 from celery_app import app as celery_app
+from tasks.transcript_processing import process_transcript
 import yt_dlp
 import os
 import subprocess
@@ -151,13 +152,12 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         logger.info(f"Cleaning up temporary files")
         os.remove(f'temp/{transcription_id}.mp3')
         
-        # Generate study notes (this would be expanded with actual NLP processing)
-        logger.info(f"Generating study notes")
-        await generate_study_notes(transcription)
+        # Generate study notes using transcript processing
+        logger.info(f"Initiating study notes generation via transcript processing")
+        process_transcript.delay(str(transcription.id))
         
-        # Update status to completed
-        transcription.status = TranscriptionStatus.COMPLETED
-        await transcription.save()
+        # Status will be updated by transcript processing task
+        logger.info(f"Study notes generation task queued")
         
         logger.info(f"Video processing completed successfully for ID: {transcription_id}")
         return {"status": "success", "transcription_id": str(transcription_id)}
@@ -169,21 +169,3 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         transcription.error_message = str(e)
         await transcription.save()
         raise
-
-async def generate_study_notes(transcription: Transcription) -> None:
-    """Generate study notes from transcription text using NLP"""
-    # This is a placeholder for the actual NLP processing
-    # In a real implementation, you would use NLP libraries or AI services
-    # to analyze the transcription and extract key information
-    
-    study_notes = await StudyNotes.create(
-        transcription=transcription,
-        title="Study Notes for " + transcription.video_url.split('/')[-1],
-        summary="Summary will be generated using NLP",
-        key_points=["Key point 1", "Key point 2"],
-        scriptures=[{"reference": "John 3:16", "text": "Scripture text"}],
-        discussion_questions=["Question 1?", "Question 2?"],
-        application_points=["Application point 1", "Application point 2"]
-    )
-    
-    await study_notes.save()
