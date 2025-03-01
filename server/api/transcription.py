@@ -12,6 +12,10 @@ router = APIRouter()
 
 class TranscriptionRequest(BaseModel):
     video_url: str
+    title: Optional[str] = None
+    pastor: Optional[str] = None
+    thumbnail: Optional[str] = None
+    duration: Optional[str] = None
 
 
 
@@ -22,6 +26,10 @@ async def create_transcription(request: TranscriptionRequest, background_tasks: 
     logging.debug(f"Received video_url: {request.video_url}")
     transcription = await Transcription.create(
         video_url=request.video_url,
+        title=request.title,
+        pastor=request.pastor,
+        thumbnail=request.thumbnail,
+        duration=request.duration,
         status=TranscriptionStatus.PENDING
     )
     
@@ -43,6 +51,10 @@ async def get_transcription(transcription_id: str):
     return {
         "id": transcription.id,
         "video_url": transcription.video_url,
+        "title": transcription.title,
+        "pastor": transcription.pastor,
+        "thumbnail": transcription.thumbnail,
+        "duration": transcription.duration,
         "status": transcription.status,
         "transcription_text": transcription.transcription_text,
         "error_message": transcription.error_message,

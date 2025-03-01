@@ -14,6 +14,10 @@ class TranscriptionStatus(str, Enum):
 class Transcription(models.Model):
     id = fields.UUIDField(pk=True)
     video_url = fields.CharField(max_length=500)
+    title = fields.CharField(max_length=255, null=True)
+    pastor = fields.CharField(max_length=255, null=True)
+    thumbnail = fields.CharField(max_length=500, null=True)
+    duration = fields.CharField(max_length=50, null=True)
     status = fields.CharEnumField(TranscriptionStatus, default=TranscriptionStatus.PENDING)
     transcription_text = fields.TextField(null=True)
     error_message = fields.TextField(null=True)
@@ -21,4 +25,4 @@ class Transcription(models.Model):
     updated_at = fields.DatetimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.video_url} - {self.status}"
+        return f"{self.title or self.video_url} - {self.status}"
