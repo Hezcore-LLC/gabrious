@@ -564,3 +564,42 @@ Traceback (most recent call last):
   File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/openai/_base_client.py", line 1022, in _request
     raise APITimeoutError(request=request) from err
 openai.APITimeoutError: Request timed out.
+2025-03-01 14:39:58,230 - video_processing - INFO - Video processing module initialized
+2025-03-01 14:40:00,046 - video_processing - INFO - Video processing module initialized
+2025-03-01 14:41:18,611 - video_processing - INFO - Video processing module initialized
+2025-03-01 14:45:30,738 - video_processing - INFO - Video processing module initialized
+2025-03-01 14:58:55,457 - video_processing - INFO - Starting video processing task for ID: 2433ed13-de85-4320-b28f-94639102224c, URL: https://www.youtube.com/watch?v=Ik_pPzggUTA
+2025-03-01 14:58:55,655 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=Ik_pPzggUTA
+2025-03-01 14:59:00,190 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=Ik_pPzggUTA
+2025-03-01 14:59:26,533 - video_processing - INFO - Optimizing audio file
+2025-03-01 14:59:33,034 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-01 15:00:25,961 - video_processing - INFO - Cleaning up temporary files
+2025-03-01 15:00:25,962 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-01 15:00:25,972 - video_processing - INFO - Study notes generation task queued
+2025-03-01 15:00:25,973 - video_processing - INFO - Video processing completed successfully for ID: 2433ed13-de85-4320-b28f-94639102224c
+2025-03-01 15:00:25,976 - video_processing - INFO - Video processing task completed for ID: 2433ed13-de85-4320-b28f-94639102224c
+2025-03-01 15:10:04,990 - video_processing - INFO - Starting video processing task for ID: d00175be-f6c3-4391-9007-c66f8851ff41, URL: https://www.youtube.com/watch?v=Oclp4DgU_wY
+2025-03-01 15:10:05,095 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=Oclp4DgU_wY
+2025-03-01 15:10:09,148 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=Oclp4DgU_wY
+2025-03-01 15:10:31,361 - video_processing - INFO - Starting video processing task for ID: f7fd6dc5-25b6-411f-9940-1042c9079594, URL: https://www.youtube.com/watch?v=_MoubvjNwXw
+2025-03-01 15:10:31,647 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=_MoubvjNwXw
+2025-03-01 15:10:36,960 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=_MoubvjNwXw
+2025-03-01 15:11:39,550 - video_processing - INFO - Starting video processing task for ID: 9c75b05e-dea8-48a4-9134-19aecde48a9f, URL: https://www.youtube.com/watch?v=DI86Xz-8LPA
+2025-03-01 15:11:39,880 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=DI86Xz-8LPA
+2025-03-01 15:11:48,586 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=DI86Xz-8LPA
+2025-03-01 15:13:41,560 - video_processing - INFO - Optimizing audio file
+2025-03-01 15:14:01,012 - video_processing - INFO - Optimizing audio file
+2025-03-01 15:14:17,522 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-01 15:14:28,805 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-01 15:14:43,507 - video_processing - INFO - Optimizing audio file
+2025-03-01 15:15:19,646 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-01 15:15:20,832 - video_processing - INFO - Cleaning up temporary files
+2025-03-01 15:15:20,833 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-01 15:15:20,848 - video_processing - INFO - Study notes generation task queued
+2025-03-01 15:15:20,849 - video_processing - INFO - Video processing completed successfully for ID: 9c75b05e-dea8-48a4-9134-19aecde48a9f
+2025-03-01 15:15:20,852 - video_processing - INFO - Video processing task completed for ID: 9c75b05e-dea8-48a4-9134-19aecde48a9f
+2025-03-01 15:17:01,800 - video_processing - INFO - Cleaning up temporary files
+2025-03-01 15:17:01,803 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-01 15:17:01,807 - video_processing - INFO - Study notes generation task queued
+2025-03-01 15:17:01,808 - video_processing - INFO - Video processing completed successfully for ID: d00175be-f6c3-4391-9007-c66f8851ff41
+2025-03-01 15:17:01,810 - video_processing - INFO - Video processing task completed for ID: d00175be-f6c3-4391-9007-c66f8851ff41

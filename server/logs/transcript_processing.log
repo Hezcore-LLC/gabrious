@@ -358,3 +358,9 @@ tortoise.exceptions.OperationalError: table studynotes has no column named trans
 2025-03-01 02:40:46,126 - transcript_processing - INFO - Transcript processing task completed for ID: 89cd9d8f-75cc-4490-8a6b-1779c2a87ca5
 2025-03-01 04:08:22,112 - transcript_processing - INFO - Starting transcript processing task for ID: d24bc98c-49f3-47fe-b224-06f2b15ecc08
 2025-03-01 04:08:34,350 - transcript_processing - INFO - Transcript processing task completed for ID: d24bc98c-49f3-47fe-b224-06f2b15ecc08
+2025-03-01 15:00:25,985 - transcript_processing - INFO - Starting transcript processing task for ID: 2433ed13-de85-4320-b28f-94639102224c
+2025-03-01 15:00:35,018 - transcript_processing - INFO - Transcript processing task completed for ID: 2433ed13-de85-4320-b28f-94639102224c
+2025-03-01 15:15:20,876 - transcript_processing - INFO - Starting transcript processing task for ID: 9c75b05e-dea8-48a4-9134-19aecde48a9f
+2025-03-01 15:15:28,993 - transcript_processing - INFO - Transcript processing task completed for ID: 9c75b05e-dea8-48a4-9134-19aecde48a9f
+2025-03-01 15:17:01,810 - transcript_processing - INFO - Starting transcript processing task for ID: d00175be-f6c3-4391-9007-c66f8851ff41
+2025-03-01 15:17:16,240 - transcript_processing - INFO - Transcript processing task completed for ID: d00175be-f6c3-4391-9007-c66f8851ff41

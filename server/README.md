@@ -47,6 +47,17 @@ uvicorn app.main:app --reload
 celery -A celery_app worker --loglevel=info
 ```
 
+5. Run Flower monitoring (optional):
+```bash
+python flower_monitor.py
+```
+Or directly with Flower:
+```bash
+celery -A celery_app flower --port=5555
+```
+
+Once started, access the Flower dashboard at: http://localhost:5555 to monitor task processing, view task history, and check worker status.
+
 ## API Routes
 
 ### Transcription Endpoints
