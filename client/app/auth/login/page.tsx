@@ -32,7 +32,7 @@ export default function LoginPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-background/20 flex items-end p-8">
           <blockquote className="space-y-2">
-            <p className="text-lg">"Transforming sermons into lasting wisdom."</p>
+            <p className="text-lg">&ldquo;Transforming sermons into lasting wisdom.&rdquo;</p>
             <footer className="text-sm">Experience Gabrious</footer>
           </blockquote>
         </div>

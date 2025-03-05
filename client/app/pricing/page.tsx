@@ -64,13 +64,9 @@ const pricingPlans = [
       "25GB storage",
       "Priority processing",
       "Discussion guide generation",
-      "API access",
-      "Batch processing",
-      "Custom branding",
-      "Priority support",
     ],
-    buttonText: "Contact Sales",
-    buttonVariant: "outline" as const,
+    buttonText: "Start Free Trial",
+    buttonVariant: "default" as const,
     highlighted: false,
   },
 ];
@@ -137,7 +133,7 @@ export default function PricingPage() {
             </CardHeader>
             <CardContent className="flex-1">
               <div className="flex items-baseline">
-                <span className="text-3xl font-bold">{billingCycle === "yearly" ? plan.name === "Free" ? "$0" : `$${parseInt(plan.price.replace('$', '')) * 0.8 * 12}` : plan.price}</span>
+                <span className="text-3xl font-bold">{billingCycle === "yearly" ? plan.name === "Free" ? "$0" : `$${Math.round(parseInt(plan.price.replace('$', '')) * 0.8 * 12)}` : plan.price}</span>
                 <span className="ml-1 text-muted-foreground">{plan.name === "Free" ? "forever" : billingCycle === "yearly" ? "/year" : "/month"}</span>
               </div>
               {billingCycle === "yearly" && plan.name !== "Free" && (
@@ -161,7 +157,7 @@ export default function PricingPage() {
             </CardContent>
             <CardFooter>
               <Button variant={plan.buttonVariant} className="w-full" asChild>
-                <Link href={plan.name === "Free" ? "/signup" : plan.name === "Pro" ? "/signup?plan=pro" : "/contact"}>
+                <Link href={plan.name === "Free" ? "/signup" : plan.name === "Pro" ? "/signup?plan=pro" : plan.name === "Church" ? "/signup?plan=church" : "/contact"}>
                   {plan.buttonText}
                 </Link>
               </Button>

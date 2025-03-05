@@ -632,3 +632,8 @@ openai.APITimeoutError: Request timed out.
 2025-03-04 21:13:24,296 - video_processing - INFO - Study notes generation task queued
 2025-03-04 21:13:24,297 - video_processing - INFO - Video processing completed successfully for ID: de36392e-904c-4519-9065-57f1d29ebf91
 2025-03-04 21:13:24,299 - video_processing - INFO - Video processing task completed for ID: de36392e-904c-4519-9065-57f1d29ebf91
+2025-03-05 18:43:07,079 - video_processing - INFO - Video processing module initialized
+2025-03-05 18:43:14,107 - video_processing - INFO - Video processing module initialized
+2025-03-05 18:43:15,983 - video_processing - INFO - Video processing module initialized
+2025-03-05 18:43:25,094 - video_processing - INFO - Video processing module initialized
+2025-03-05 18:43:36,244 - video_processing - INFO - Video processing module initialized
