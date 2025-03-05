@@ -637,3 +637,4 @@ openai.APITimeoutError: Request timed out.
 2025-03-05 18:43:15,983 - video_processing - INFO - Video processing module initialized
 2025-03-05 18:43:25,094 - video_processing - INFO - Video processing module initialized
 2025-03-05 18:43:36,244 - video_processing - INFO - Video processing module initialized
+2025-03-05 19:01:25,051 - video_processing - INFO - Video processing module initialized
