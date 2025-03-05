@@ -608,3 +608,27 @@ openai.APITimeoutError: Request timed out.
 2025-03-01 15:28:43,516 - video_processing - INFO - Study notes generation task queued
 2025-03-01 15:28:43,517 - video_processing - INFO - Video processing completed successfully for ID: f7fd6dc5-25b6-411f-9940-1042c9079594
 2025-03-01 15:28:43,518 - video_processing - INFO - Video processing task completed for ID: f7fd6dc5-25b6-411f-9940-1042c9079594
+2025-03-04 20:44:10,262 - video_processing - INFO - Video processing module initialized
+2025-03-04 20:44:12,308 - video_processing - INFO - Video processing module initialized
+2025-03-04 20:45:05,050 - video_processing - INFO - Video processing module initialized
+2025-03-04 20:45:33,556 - video_processing - INFO - Video processing module initialized
+2025-03-04 20:54:23,950 - video_processing - INFO - Starting video processing task for ID: 7f9f81db-408e-4528-9af3-ed79f56ec68e, URL: https://www.facebook.com/share/v/18QjSDroJB/
+2025-03-04 20:54:24,141 - video_processing - INFO - Extracting metadata for video: https://www.facebook.com/share/v/18QjSDroJB/
+2025-03-04 20:54:26,861 - video_processing - INFO - Downloading video: https://www.facebook.com/share/v/18QjSDroJB/
+2025-03-04 20:56:00,492 - video_processing - INFO - Optimizing audio file
+2025-03-04 20:56:25,673 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-04 20:58:19,294 - video_processing - INFO - Cleaning up temporary files
+2025-03-04 20:58:19,295 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-04 20:58:19,304 - video_processing - INFO - Study notes generation task queued
+2025-03-04 20:58:19,305 - video_processing - INFO - Video processing completed successfully for ID: 7f9f81db-408e-4528-9af3-ed79f56ec68e
+2025-03-04 20:58:19,307 - video_processing - INFO - Video processing task completed for ID: 7f9f81db-408e-4528-9af3-ed79f56ec68e
+2025-03-04 21:04:35,742 - video_processing - INFO - Starting video processing task for ID: de36392e-904c-4519-9065-57f1d29ebf91, URL: https://www.facebook.com/share/v/1BV1Y27dt4/
+2025-03-04 21:04:35,937 - video_processing - INFO - Extracting metadata for video: https://www.facebook.com/share/v/1BV1Y27dt4/
+2025-03-04 21:04:37,714 - video_processing - INFO - Downloading video: https://www.facebook.com/share/v/1BV1Y27dt4/
+2025-03-04 21:08:52,404 - video_processing - INFO - Optimizing audio file
+2025-03-04 21:10:14,038 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-04 21:13:24,289 - video_processing - INFO - Cleaning up temporary files
+2025-03-04 21:13:24,292 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-04 21:13:24,296 - video_processing - INFO - Study notes generation task queued
+2025-03-04 21:13:24,297 - video_processing - INFO - Video processing completed successfully for ID: de36392e-904c-4519-9065-57f1d29ebf91
+2025-03-04 21:13:24,299 - video_processing - INFO - Video processing task completed for ID: de36392e-904c-4519-9065-57f1d29ebf91

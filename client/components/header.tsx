@@ -90,10 +90,10 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <ModeToggle />
             <Button variant="outline" asChild>
-              <Link href="/login">Log in</Link>
+              <Link href="/auth/login">Log in</Link>
             </Button>
             <Button asChild>
-              <Link href="/signup">Sign up</Link>
+              <Link href="/auth/signup">Sign up</Link>
             </Button>
           </div>
         </div>
@@ -140,10 +140,10 @@ export default function Header() {
                 </nav>
                 <div className="flex flex-col gap-2">
                   <Button variant="outline" asChild className="w-full">
-                    <Link href="/login">Log in</Link>
+                    <Link href="/auth/login">Log in</Link>
                   </Button>
                   <Button asChild className="w-full">
-                    <Link href="/signup">Sign up</Link>
+                    <Link href="/auth/signup">Sign up</Link>
                   </Button>
                 </div>
               </div>
