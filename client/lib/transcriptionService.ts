@@ -33,6 +33,10 @@ export const transcriptionService = {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          authService.logout(); // Clear invalid token
+          throw new Error('Session expired. Please log in again.');
+        }
         throw new Error('Failed to submit URL for transcription');
       }
 
@@ -57,6 +61,10 @@ export const transcriptionService = {
       });
       
       if (!response.ok) {
+        if (response.status === 401) {
+          authService.logout(); // Clear invalid token
+          throw new Error('Session expired. Please log in again.');
+        }
         throw new Error('Failed to fetch transcription');
       }
 
@@ -81,6 +89,10 @@ export const transcriptionService = {
       });
       
       if (!response.ok) {
+        if (response.status === 401) {
+          authService.logout(); // Clear invalid token
+          throw new Error('Session expired. Please log in again.');
+        }
         throw new Error('Failed to fetch recent transcriptions');
       }
 

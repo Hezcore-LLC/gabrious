@@ -459,3 +459,91 @@ Traceback (most recent call last):
   File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 34, in translate_exceptions_
     raise IntegrityError(exc)
 tortoise.exceptions.IntegrityError: NOT NULL constraint failed: studynotes.user_id
+2025-03-05 21:55:31,123 - transcript_processing - INFO - Starting transcript processing task for ID: 8c61ec27-193f-483e-9f1c-1818cae2da93
+2025-03-05 21:55:44,865 - transcript_processing - ERROR - Error processing transcript: 'QuerySet' object has no attribute '_saved_in_db'
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1106, in create
+    instance = cls(**kwargs)
+               ^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 659, in __init__
+    for key in meta.fields.difference(self._set_kwargs(kwargs)):
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 674, in _set_kwargs
+    if value and not value._saved_in_db:
+                     ^^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute '_saved_in_db'
+2025-03-05 21:55:44,874 - transcript_processing - ERROR - Transcript processing task failed for ID: 8c61ec27-193f-483e-9f1c-1818cae2da93: 'QuerySet' object has no attribute '_saved_in_db'
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1106, in create
+    instance = cls(**kwargs)
+               ^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 659, in __init__
+    for key in meta.fields.difference(self._set_kwargs(kwargs)):
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 674, in _set_kwargs
+    if value and not value._saved_in_db:
+                     ^^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute '_saved_in_db'
+2025-03-05 23:56:42,315 - transcript_processing - INFO - Starting transcript processing task for ID: d634b416-e112-436b-bd74-5677482120d2
+2025-03-05 23:57:04,803 - transcript_processing - ERROR - Error processing transcript: 'QuerySet' object has no attribute '_saved_in_db'
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1106, in create
+    instance = cls(**kwargs)
+               ^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 659, in __init__
+    for key in meta.fields.difference(self._set_kwargs(kwargs)):
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 674, in _set_kwargs
+    if value and not value._saved_in_db:
+                     ^^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute '_saved_in_db'
+2025-03-05 23:57:04,811 - transcript_processing - ERROR - Transcript processing task failed for ID: d634b416-e112-436b-bd74-5677482120d2: 'QuerySet' object has no attribute '_saved_in_db'
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1106, in create
+    instance = cls(**kwargs)
+               ^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 659, in __init__
+    for key in meta.fields.difference(self._set_kwargs(kwargs)):
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 674, in _set_kwargs
+    if value and not value._saved_in_db:
+                     ^^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute '_saved_in_db'
+2025-03-06 00:18:06,139 - transcript_processing - INFO - Starting transcript processing task for ID: 85479639-bdd9-479d-bd41-a1f480683877
+2025-03-06 00:18:35,997 - transcript_processing - INFO - Transcript processing task completed for ID: 85479639-bdd9-479d-bd41-a1f480683877

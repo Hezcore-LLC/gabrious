@@ -51,8 +51,8 @@ async def _process_transcript(transcription_id: UUID) -> Dict:
             modules={'models': ['models']}
         )
 
-        # Get transcription object
-        transcription = await Transcription.get(id=transcription_id)
+        # Get transcription object with related user
+        transcription = await Transcription.get(id=transcription_id).prefetch_related('user')
         
         # Update status to generating notes
         transcription.status = TranscriptionStatus.GENERATING_NOTES

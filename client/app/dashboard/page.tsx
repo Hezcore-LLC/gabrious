@@ -71,6 +71,7 @@ const favoriteSermons = [
 
 import { transcriptionService, Transcription } from '@/lib/transcriptionService';
 import { studyNotesService, StudyNotes } from '@/lib/studyNotesService';
+import { statisticsService } from '@/lib/statisticsService';
 import { useEffect } from 'react';
 
 export default function DashboardPage() {
@@ -82,8 +83,28 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [notesError, setNotesError] = useState<string | null>(null);
   const [expandedNotes, setExpandedNotes] = useState<Record<string, boolean>>({});
+  const [statistics, setStatistics] = useState({
+    total_sermons: 0,
+    sermons_last_month: 0,
+    total_notes: 0,
+    notes_last_month: 0
+  });
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
+  const [statsError, setStatsError] = useState<string | null>(null);
 
   useEffect(() => {
+    const fetchStatistics = async () => {
+      try {
+        const data = await statisticsService.getDashboardStatistics();
+        setStatistics(data);
+      } catch (err) {
+        setStatsError('Failed to fetch statistics');
+        console.error('Error fetching statistics:', err);
+      } finally {
+        setIsLoadingStats(false);
+      }
+    };
+
     const fetchTranscriptions = async () => {
       try {
         const data = await transcriptionService.getRecentTranscriptions();
@@ -108,6 +129,7 @@ export default function DashboardPage() {
       }
     };
 
+    fetchStatistics();
     fetchTranscriptions();
     fetchStudyNotes();
   }, []);
@@ -133,8 +155,8 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">Total Sermons</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">12</div>
-              <p className="text-xs text-muted-foreground">+2 from last month</p>
+              <div className="text-2xl font-bold">{statistics.total_sermons}</div>
+              <p className="text-xs text-muted-foreground">+{statistics.sermons_last_month} from last month</p>
             </CardContent>
           </Card>
           <Card>
@@ -142,8 +164,8 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">Study Notes</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">8</div>
-              <p className="text-xs text-muted-foreground">+3 from last month</p>
+              <div className="text-2xl font-bold">{statistics.total_notes}</div>
+              <p className="text-xs text-muted-foreground">+{statistics.notes_last_month} from last month</p>
             </CardContent>
           </Card>
           <Card>
