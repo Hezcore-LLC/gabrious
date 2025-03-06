@@ -1,12 +1,13 @@
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException, BackgroundTasks, Depends
 from typing import Optional
 from models.transcription import Transcription, TranscriptionStatus
+from models.user import User
 from pydantic import BaseModel
 from tasks.video_processing import process_video
+from api.auth import get_current_user
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
-
 
 router = APIRouter()
 
@@ -17,14 +18,11 @@ class TranscriptionRequest(BaseModel):
     thumbnail: Optional[str] = None
     duration: Optional[str] = None
 
-
-
 @router.post("/")
-async def create_transcription(request: TranscriptionRequest, background_tasks: BackgroundTasks):
-    # Create a new transcription record
-    # logging.debug(f"Received video_url: {video_url}")
+async def create_transcription(request: TranscriptionRequest, background_tasks: BackgroundTasks, current_user: User = Depends(get_current_user)):
     logging.debug(f"Received video_url: {request.video_url}")
     transcription = await Transcription.create(
+        user=current_user,
         video_url=request.video_url,
         title=request.title,
         pastor=request.pastor,
@@ -33,7 +31,6 @@ async def create_transcription(request: TranscriptionRequest, background_tasks: 
         status=TranscriptionStatus.PENDING
     )
     
-    # Start the background task for video processing
     task = process_video.delay(str(transcription.id), request.video_url)
     
     return {
@@ -43,8 +40,8 @@ async def create_transcription(request: TranscriptionRequest, background_tasks: 
     }
 
 @router.get("/{transcription_id}")
-async def get_transcription(transcription_id: str):
-    transcription = await Transcription.get_or_none(id=transcription_id)
+async def get_transcription(transcription_id: str, current_user: User = Depends(get_current_user)):
+    transcription = await Transcription.get_or_none(id=transcription_id, user=current_user)
     if not transcription:
         raise HTTPException(status_code=404, detail="Transcription not found")
     
@@ -63,8 +60,8 @@ async def get_transcription(transcription_id: str):
     }
 
 @router.get("/")
-async def list_transcriptions():
-    transcriptions = await Transcription.all()
+async def list_transcriptions(current_user: User = Depends(get_current_user)):
+    transcriptions = await Transcription.filter(user=current_user)
     return transcriptions
 
 

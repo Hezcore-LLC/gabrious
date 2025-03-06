@@ -1,4 +1,5 @@
 import { toast } from "@/hooks/use-toast";
+import { authService } from "./authService";
 
 export interface Transcription {
   id: string;
@@ -17,10 +18,16 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 export const transcriptionService = {
   submitUrl: async (url: string): Promise<{ id: string; status: string; task_id: string }> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/transcriptions`, {
+      const token = authService.getToken();
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/transcriptions/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ video_url: url }),
       });
@@ -38,7 +45,16 @@ export const transcriptionService = {
 
   getTranscription: async (id: string): Promise<Transcription> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/transcriptions/${id}`);
+      const token = authService.getToken();
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/transcriptions/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       
       if (!response.ok) {
         throw new Error('Failed to fetch transcription');
@@ -53,7 +69,16 @@ export const transcriptionService = {
 
   getRecentTranscriptions: async (): Promise<Transcription[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/transcriptions`);
+      const token = authService.getToken();
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/transcriptions/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       
       if (!response.ok) {
         throw new Error('Failed to fetch recent transcriptions');

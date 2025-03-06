@@ -370,3 +370,92 @@ tortoise.exceptions.OperationalError: table studynotes has no column named trans
 2025-03-04 20:58:33,727 - transcript_processing - INFO - Transcript processing task completed for ID: 7f9f81db-408e-4528-9af3-ed79f56ec68e
 2025-03-04 21:13:24,301 - transcript_processing - INFO - Starting transcript processing task for ID: de36392e-904c-4519-9065-57f1d29ebf91
 2025-03-04 21:13:43,586 - transcript_processing - INFO - Transcript processing task completed for ID: de36392e-904c-4519-9065-57f1d29ebf91
+2025-03-05 21:44:49,030 - transcript_processing - INFO - Starting transcript processing task for ID: 71f9fc63-a2b5-4519-ae02-fcb8f58b4307
+2025-03-05 21:45:08,311 - transcript_processing - ERROR - Error processing transcript: NOT NULL constraint failed: studynotes.user_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: studynotes.user_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 34, in translate_exceptions_
+    raise IntegrityError(exc)
+tortoise.exceptions.IntegrityError: NOT NULL constraint failed: studynotes.user_id
+2025-03-05 21:45:08,319 - transcript_processing - ERROR - Transcript processing task failed for ID: 71f9fc63-a2b5-4519-ae02-fcb8f58b4307: NOT NULL constraint failed: studynotes.user_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: studynotes.user_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 34, in translate_exceptions_
+    raise IntegrityError(exc)
+tortoise.exceptions.IntegrityError: NOT NULL constraint failed: studynotes.user_id

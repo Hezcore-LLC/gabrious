@@ -1,8 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import List, Dict, Any
 from models.study_notes import StudyNotes
 from models.transcription import Transcription
+from models.user import User
+from api.auth import get_current_user
 
 router = APIRouter()
 
@@ -19,14 +21,15 @@ class StudyNotesCreate(BaseModel):
     application_points: List[str]
 
 @router.post("/")
-async def create_study_notes(study_notes: StudyNotesCreate):
+async def create_study_notes(study_notes: StudyNotesCreate, current_user: User = Depends(get_current_user)):
     # Get the transcription
-    transcript = await Transcription.get_or_none(id=study_notes.transcript_id)
+    transcript = await Transcription.get_or_none(id=study_notes.transcript_id, user=current_user)
     if not transcript:
         raise HTTPException(status_code=404, detail="Transcription not found")
     
     # Create study notes
     notes = await StudyNotes.create(
+        user=current_user,
         transcript=transcript,
         summary=study_notes.summary,
         key_points=study_notes.key_points,
@@ -47,8 +50,8 @@ async def create_study_notes(study_notes: StudyNotesCreate):
     }
 
 @router.get("/{notes_id}")
-async def get_study_notes(notes_id: str):
-    notes = await StudyNotes.get_or_none(id=notes_id).prefetch_related('transcript')
+async def get_study_notes(notes_id: str, current_user: User = Depends(get_current_user)):
+    notes = await StudyNotes.get_or_none(id=notes_id, user=current_user).prefetch_related('transcript')
     if not notes:
         raise HTTPException(status_code=404, detail="Study notes not found")
     
@@ -71,8 +74,8 @@ async def get_study_notes(notes_id: str):
     }
 
 @router.get("/")
-async def list_study_notes():
-    notes = await StudyNotes.all().prefetch_related('transcript')
+async def list_study_notes(current_user: User = Depends(get_current_user)):
+    notes = await StudyNotes.filter(user=current_user).prefetch_related('transcript')
     
     result = []
     for note in notes:
@@ -97,8 +100,8 @@ async def list_study_notes():
     return result
 
 @router.delete("/{notes_id}")
-async def delete_study_notes(notes_id: str):
-    notes = await StudyNotes.get_or_none(id=notes_id)
+async def delete_study_notes(notes_id: str, current_user: User = Depends(get_current_user)):
+    notes = await StudyNotes.get_or_none(id=notes_id, user=current_user)
     if not notes:
         raise HTTPException(status_code=404, detail="Study notes not found")
     

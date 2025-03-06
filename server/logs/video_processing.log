@@ -638,3 +638,36 @@ openai.APITimeoutError: Request timed out.
 2025-03-05 18:43:25,094 - video_processing - INFO - Video processing module initialized
 2025-03-05 18:43:36,244 - video_processing - INFO - Video processing module initialized
 2025-03-05 19:01:25,051 - video_processing - INFO - Video processing module initialized
+2025-03-05 20:20:59,672 - video_processing - INFO - Video processing module initialized
+2025-03-05 20:21:17,194 - video_processing - INFO - Video processing module initialized
+2025-03-05 20:21:18,905 - video_processing - INFO - Video processing module initialized
+2025-03-05 20:45:28,892 - video_processing - INFO - Video processing module initialized
+2025-03-05 20:45:36,363 - video_processing - INFO - Video processing module initialized
+2025-03-05 20:46:03,583 - video_processing - INFO - Video processing module initialized
+2025-03-05 20:51:42,335 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:00:12,179 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:00:15,126 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:15:40,986 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:17:53,881 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:17:56,576 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:21:59,734 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:22:39,752 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:41:53,654 - video_processing - INFO - Starting video processing task for ID: 71f9fc63-a2b5-4519-ae02-fcb8f58b4307, URL: https://www.youtube.com/watch?v=DYWyQ1xFQSI
+2025-03-05 21:41:54,228 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=DYWyQ1xFQSI
+2025-03-05 21:41:59,298 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=DYWyQ1xFQSI
+2025-03-05 21:42:54,840 - video_processing - INFO - Optimizing audio file
+2025-03-05 21:43:12,197 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-05 21:44:48,996 - video_processing - INFO - Cleaning up temporary files
+2025-03-05 21:44:48,998 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-05 21:44:49,011 - video_processing - INFO - Study notes generation task queued
+2025-03-05 21:44:49,011 - video_processing - INFO - Video processing completed successfully for ID: 71f9fc63-a2b5-4519-ae02-fcb8f58b4307
+2025-03-05 21:44:49,013 - video_processing - INFO - Video processing task completed for ID: 71f9fc63-a2b5-4519-ae02-fcb8f58b4307
+2025-03-05 21:48:32,880 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:49:34,695 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:50:48,183 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:50:50,800 - video_processing - INFO - Video processing module initialized
+2025-03-05 21:52:08,534 - video_processing - INFO - Starting video processing task for ID: 8c61ec27-193f-483e-9f1c-1818cae2da93, URL: https://www.youtube.com/watch?v=DYWyQ1xFQSI
+2025-03-05 21:52:08,699 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=DYWyQ1xFQSI
+2025-03-05 21:52:12,626 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=DYWyQ1xFQSI
+2025-03-05 21:53:26,031 - video_processing - INFO - Optimizing audio file
+2025-03-05 21:53:48,046 - video_processing - INFO - Transcribing audio using Azure OpenAI

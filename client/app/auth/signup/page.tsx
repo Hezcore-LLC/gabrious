@@ -8,16 +8,69 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { authService } from "@/lib/authService";
+import { toast } from "@/hooks/use-toast";
 
 export default function SignupPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    first_name: "",
+    last_name: ""
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setIsLoading(true);
 
-    // TODO: Implement signup logic
-    setTimeout(() => setIsLoading(false), 1000);
+    // Basic validation
+    if (formData.password !== formData.confirmPassword) {
+      toast({
+        title: "Error",
+        description: "Passwords do not match",
+        variant: "destructive"
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    // Extract name into first and last name
+    const nameParts = formData.first_name.split(" ");
+    const signupData = {
+      email: formData.email,
+      password: formData.password,
+      first_name: nameParts[0],
+      last_name: nameParts.length > 1 ? nameParts.slice(1).join(" ") : undefined
+    };
+
+    try {
+      await authService.signup(signupData);
+      toast({
+        title: "Success",
+        description: "Account created successfully! Please log in."
+      });
+      router.push("/auth/login");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to create account",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -71,13 +124,15 @@ export default function SignupPage() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4, duration: 0.3 }}
                 >
-                  <Label htmlFor="name">Full Name</Label>
+                  <Label htmlFor="first_name">Full Name</Label>
                   <Input
-                    id="name"
+                    id="first_name"
                     type="text"
                     placeholder="John Doe"
                     required
                     className="w-full"
+                    value={formData.first_name}
+                    onChange={handleInputChange}
                   />
                 </motion.div>
                 <motion.div 
@@ -93,6 +148,8 @@ export default function SignupPage() {
                     placeholder="m@example.com"
                     required
                     className="w-full"
+                    value={formData.email}
+                    onChange={handleInputChange}
                   />
                 </motion.div>
                 <motion.div 
@@ -107,6 +164,8 @@ export default function SignupPage() {
                     type="password"
                     required
                     className="w-full"
+                    value={formData.password}
+                    onChange={handleInputChange}
                   />
                 </motion.div>
                 <motion.div 
@@ -121,6 +180,8 @@ export default function SignupPage() {
                     type="password"
                     required
                     className="w-full"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
                   />
                 </motion.div>
                 <motion.div

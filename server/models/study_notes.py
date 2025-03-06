@@ -2,6 +2,7 @@ from tortoise import fields, models
 
 class StudyNotes(models.Model):
     id = fields.UUIDField(pk=True)
+    user = fields.ForeignKeyField('models.User', related_name='study_notes')
     transcript = fields.ForeignKeyField('models.Transcription', related_name='study_notes')
     summary = fields.TextField()  # Summary of the sermon
     key_points = fields.JSONField()  # List of key points

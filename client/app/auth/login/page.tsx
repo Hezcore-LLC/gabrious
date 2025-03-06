@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,16 +8,46 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { authService } from "@/lib/authService";
+import { toast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    password: ""
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id === "email" ? "username" : id]: value
+    }));
+  };
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setIsLoading(true);
 
-    // TODO: Implement login logic
-    setTimeout(() => setIsLoading(false), 1000);
+    try {
+      await authService.login(formData);
+      toast({
+        title: "Success",
+        description: "You have been successfully logged in"
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to login",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -78,6 +108,8 @@ export default function LoginPage() {
                     placeholder="m@example.com"
                     required
                     className="w-full"
+                    value={formData.username}
+                    onChange={handleInputChange}
                   />
                 </motion.div>
                 <motion.div 
@@ -92,6 +124,8 @@ export default function LoginPage() {
                     type="password"
                     required
                     className="w-full"
+                    value={formData.password}
+                    onChange={handleInputChange}
                   />
                 </motion.div>
                 <motion.div

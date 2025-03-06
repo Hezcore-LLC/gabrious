@@ -91,6 +91,7 @@ async def _process_transcript(transcription_id: UUID) -> Dict:
         # Create study notes in database
         study_notes = await StudyNotes.create(
             transcript=transcription,
+            user=transcription.user,  # Add the user from the transcription
             summary=study_notes_data.summary,
             key_points=study_notes_data.key_points,
             scriptures=[{"reference": s.reference, "text": s.text} for s in study_notes_data.scriptures],

@@ -1,4 +1,5 @@
 import { toast } from "@/hooks/use-toast";
+import { authService } from "./authService";
 
 export interface Scripture {
   reference: string;
@@ -28,8 +29,17 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 export const studyNotesService = {
   getStudyNotes: async (id: string): Promise<StudyNotes> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/study-notes/${id}`);
-      console.log(response)
+      const token = authService.getToken();
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/study-notes/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
       if (!response.ok) {
         if (response.status === 404) {
           throw new Error('Study notes not found');
@@ -46,7 +56,16 @@ export const studyNotesService = {
 
   getRecentStudyNotes: async (): Promise<StudyNotes[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/study-notes`);
+      const token = authService.getToken();
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/study-notes/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       
       if (!response.ok) {
         throw new Error('Failed to fetch recent study notes');

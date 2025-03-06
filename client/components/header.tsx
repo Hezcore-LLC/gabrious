@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -14,11 +14,25 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { BookOpen, Church, FileText, Home, Menu, X } from "lucide-react";
+import { BookOpen, Church, FileText, Home, Menu, X, LogOut } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { authService } from "@/lib/authService";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsAuthenticated(authService.isAuthenticated());
+  }, []);
+
+  const handleLogout = () => {
+    authService.logout();
+    setIsAuthenticated(false);
+    router.push("/");
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -77,24 +91,35 @@ export default function Header() {
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link href="/dashboard" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Dashboard
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
+              {isAuthenticated && (
+                <NavigationMenuItem>
+                  <Link href="/dashboard" legacyBehavior passHref>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      Dashboard
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              )}
             </NavigationMenuList>
           </NavigationMenu>
           
           <div className="flex items-center gap-4">
             <ModeToggle />
-            <Button variant="outline" asChild>
-              <Link href="/auth/login">Log in</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/auth/signup">Sign up</Link>
-            </Button>
+            {isAuthenticated ? (
+              <Button variant="outline" onClick={handleLogout}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Log out
+              </Button>
+            ) : (
+              <>
+                <Button variant="outline" asChild>
+                  <Link href="/auth/login">Log in</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/auth/signup">Sign up</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
@@ -134,17 +159,28 @@ export default function Header() {
                   <Link href="/pricing" className="flex items-center gap-2 text-lg font-medium">
                     Pricing
                   </Link>
-                  <Link href="/dashboard" className="flex items-center gap-2 text-lg font-medium">
-                    Dashboard
-                  </Link>
+                  {isAuthenticated && (
+                    <Link href="/dashboard" className="flex items-center gap-2 text-lg font-medium">
+                      Dashboard
+                    </Link>
+                  )}
                 </nav>
                 <div className="flex flex-col gap-2">
-                  <Button variant="outline" asChild className="w-full">
-                    <Link href="/auth/login">Log in</Link>
-                  </Button>
-                  <Button asChild className="w-full">
-                    <Link href="/auth/signup">Sign up</Link>
-                  </Button>
+                  {isAuthenticated ? (
+                    <Button variant="outline" onClick={handleLogout} className="w-full">
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Log out
+                    </Button>
+                  ) : (
+                    <>
+                      <Button variant="outline" asChild className="w-full">
+                        <Link href="/auth/login">Log in</Link>
+                      </Button>
+                      <Button asChild className="w-full">
+                        <Link href="/auth/signup">Sign up</Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </SheetContent>

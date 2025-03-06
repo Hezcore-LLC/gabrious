@@ -13,6 +13,7 @@ class TranscriptionStatus(str, Enum):
 
 class Transcription(models.Model):
     id = fields.UUIDField(pk=True)
+    user = fields.ForeignKeyField('models.User', related_name='transcriptions')
     video_url = fields.CharField(max_length=500)
     title = fields.CharField(max_length=255, null=True)
     pastor = fields.CharField(max_length=255, null=True)
