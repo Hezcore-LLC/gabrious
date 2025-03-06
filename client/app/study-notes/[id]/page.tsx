@@ -10,6 +10,8 @@ import { BookOpen, ChevronLeft, Copy, Download, FileText, Printer, Share2 } from
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { studyNotesService, StudyNotes } from "@/lib/studyNotesService";
+import { favoritesService } from '@/lib/favoritesService';
+import { Heart } from 'lucide-react';
 
 
 export default function StudyNotesPage({ params }: { params: { id: string } }) {
@@ -21,6 +23,7 @@ export default function StudyNotesPage({ params }: { params: { id: string } }) {
   const [showingTranscript, setShowingTranscript] = useState(false);
   const [transcript, setTranscript] = useState<string>("");
   const [loadingTranscript, setLoadingTranscript] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     const fetchStudyNotes = async () => {
@@ -38,6 +41,23 @@ export default function StudyNotesPage({ params }: { params: { id: string } }) {
     };
 
     fetchStudyNotes();
+  }, [params.id]);
+
+  // Check if the study note is in favorites
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      try {
+        const favorites = await favoritesService.getFavorites();
+        const isFav = favorites.some(fav => fav.id === params.id);
+        setIsFavorite(isFav);
+      } catch (error) {
+        console.error('Error checking favorite status:', error);
+      }
+    };
+
+    if (params.id) {
+      checkFavoriteStatus();
+    }
   }, [params.id]);
 
   const handleCopyToClipboard = () => {
@@ -184,6 +204,39 @@ ${studyNotes.applicationPoints.map(point => `- ${point}`).join('\n')}
               <Button variant="outline" size="sm">
                 <Share2 className="h-4 w-4 mr-2" />
                 Share
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={async () => {
+                  try {
+                    if (isFavorite) {
+                      await favoritesService.removeFromFavorites(params.id);
+                      setIsFavorite(false);
+                      toast({
+                        title: "Success",
+                        description: "Removed from favorites successfully",
+                      });
+                    } else {
+                      await favoritesService.addToFavorites(params.id);
+                      setIsFavorite(true);
+                      toast({
+                        title: "Success",
+                        description: "Added to favorites successfully",
+                      });
+                    }
+                  } catch (error) {
+                    console.error('Error updating favorites:', error);
+                    toast({
+                      title: "Error",
+                      description: isFavorite ? "Failed to remove from favorites" : "Failed to add to favorites",
+                      variant: "destructive",
+                    });
+                  }
+                }}
+              >
+                <Heart className={`h-4 w-4 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
+                {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
               </Button>
             </div>
           </div>

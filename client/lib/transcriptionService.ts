@@ -20,6 +20,11 @@ export const transcriptionService = {
     try {
       const token = authService.getToken();
       if (!token) {
+        toast({
+          title: "Authentication Error",
+          description: "Please log in to continue.",
+          variant: "destructive",
+        });
         throw new Error('Authentication required');
       }
 
@@ -35,8 +40,18 @@ export const transcriptionService = {
       if (!response.ok) {
         if (response.status === 401) {
           authService.logout(); // Clear invalid token
+          toast({
+            title: "Session Expired",
+            description: "Please log in again to continue.",
+            variant: "destructive",
+          });
           throw new Error('Session expired. Please log in again.');
         }
+        toast({
+          title: "Error",
+          description: "Failed to submit URL for transcription. Please try again.",
+          variant: "destructive",
+        });
         throw new Error('Failed to submit URL for transcription');
       }
 
@@ -51,6 +66,11 @@ export const transcriptionService = {
     try {
       const token = authService.getToken();
       if (!token) {
+        toast({
+          title: "Authentication Error",
+          description: "Please log in to continue.",
+          variant: "destructive",
+        });
         throw new Error('Authentication required');
       }
 
@@ -63,8 +83,18 @@ export const transcriptionService = {
       if (!response.ok) {
         if (response.status === 401) {
           authService.logout(); // Clear invalid token
+          toast({
+            title: "Session Expired",
+            description: "Please log in again to continue.",
+            variant: "destructive",
+          });
           throw new Error('Session expired. Please log in again.');
         }
+        toast({
+          title: "Error",
+          description: "Failed to fetch transcription. Please try again.",
+          variant: "destructive",
+        });
         throw new Error('Failed to fetch transcription');
       }
 
@@ -79,6 +109,11 @@ export const transcriptionService = {
     try {
       const token = authService.getToken();
       if (!token) {
+        toast({
+          title: "Authentication Error",
+          description: "Please log in to continue.",
+          variant: "destructive",
+        });
         throw new Error('Authentication required');
       }
 
@@ -91,8 +126,18 @@ export const transcriptionService = {
       if (!response.ok) {
         if (response.status === 401) {
           authService.logout(); // Clear invalid token
+          toast({
+            title: "Session Expired",
+            description: "Please log in again to continue.",
+            variant: "destructive",
+          });
           throw new Error('Session expired. Please log in again.');
         }
+        toast({
+          title: "Error",
+          description: "Failed to fetch recent transcriptions. Please try again.",
+          variant: "destructive",
+        });
         throw new Error('Failed to fetch recent transcriptions');
       }
 

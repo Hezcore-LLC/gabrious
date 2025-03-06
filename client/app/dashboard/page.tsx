@@ -241,7 +241,7 @@ export default function DashboardPage() {
                 <Card key={sermon.id} className="overflow-hidden">
                   <div className="aspect-video relative">
                     <img
-                      src={sermon.thumbnail_url || DEFAULT_THUMBNAIL}
+                      src={sermon.thumbnail || DEFAULT_THUMBNAIL}
                       alt={sermon.title || 'Sermon'}
                       className="object-cover w-full h-full"
                     />
