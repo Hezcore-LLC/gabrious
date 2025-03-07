@@ -1,4 +1,11 @@
-import { StudyNotes } from "./types";
+interface StudyNotes {
+  id: string;
+  title: string;
+  content: string;
+  // Add other required properties based on your application needs
+}
+
+export type { StudyNotes };
 import { authService } from "./authService";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
