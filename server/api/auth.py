@@ -28,7 +28,7 @@ class UserResponse(BaseModel):
 
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 10080
 
 def create_access_token(data: dict):
     to_encode = data.copy()

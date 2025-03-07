@@ -5,6 +5,7 @@ from models.user import User
 from pydantic import BaseModel
 from tasks.video_processing import process_video
 from api.auth import get_current_user
+from services.metrics import MetricsService
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -44,6 +45,9 @@ async def get_transcription(transcription_id: str, current_user: User = Depends(
     transcription = await Transcription.get_or_none(id=transcription_id, user=current_user)
     if not transcription:
         raise HTTPException(status_code=404, detail="Transcription not found")
+    
+    # Record sermon view metric
+    await MetricsService.record_sermon_view(current_user, transcription.id)
     
     return {
         "id": transcription.id,

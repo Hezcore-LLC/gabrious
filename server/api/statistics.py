@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from models.transcription import Transcription
 from models.study_notes import StudyNotes
+from models.favorite import Favorite
 from models.user import User
 from api.auth import get_current_user
 from datetime import datetime, timedelta
@@ -29,9 +30,19 @@ async def get_dashboard_statistics(current_user: User = Depends(get_current_user
         created_at__lt=now.replace(day=1)
     ).count()
     
+    # Get total favorites count
+    total_favorites = await Favorite.filter(user=current_user).count()
+    last_month_favorites = await Favorite.filter(
+        user=current_user,
+        created_at__gte=first_day_last_month,
+        created_at__lt=now.replace(day=1)
+    ).count()
+    
     return {
         "total_sermons": total_sermons,
         "sermons_last_month": last_month_sermons,
         "total_notes": total_notes,
-        "notes_last_month": last_month_notes
+        "notes_last_month": last_month_notes,
+        "total_favorites": total_favorites,
+        "favorites_last_month": last_month_favorites
     }

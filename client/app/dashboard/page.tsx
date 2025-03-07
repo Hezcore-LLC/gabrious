@@ -210,8 +210,8 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">Saved Favorites</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">5</div>
-              <p className="text-xs text-muted-foreground">+1 from last month</p>
+              <div className="text-2xl font-bold">{statistics.total_favorites}</div>
+              <p className="text-xs text-muted-foreground">+{statistics.favorites_last_month} from last month</p>
             </CardContent>
           </Card>
           <Card>

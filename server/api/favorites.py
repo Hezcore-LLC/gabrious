@@ -3,6 +3,7 @@ from models.favorite import Favorite
 from models.study_notes import StudyNotes
 from models.user import User
 from api.auth import get_current_user
+from services.metrics import MetricsService
 
 router = APIRouter()
 
@@ -20,6 +21,10 @@ async def add_to_favorites(notes_id: str, current_user: User = Depends(get_curre
     
     # Add to favorites
     favorite = await Favorite.create(user=current_user, study_notes=notes)
+    
+    # Record favorite interaction metric
+    await MetricsService.record_favorite_interaction(current_user, notes.id)
+    
     return {"message": "Added to favorites successfully"}
 
 @router.delete("/{notes_id}")

@@ -547,3 +547,5 @@ Traceback (most recent call last):
 AttributeError: 'QuerySet' object has no attribute '_saved_in_db'
 2025-03-06 00:18:06,139 - transcript_processing - INFO - Starting transcript processing task for ID: 85479639-bdd9-479d-bd41-a1f480683877
 2025-03-06 00:18:35,997 - transcript_processing - INFO - Transcript processing task completed for ID: 85479639-bdd9-479d-bd41-a1f480683877
+2025-03-07 03:01:01,490 - transcript_processing - INFO - Starting transcript processing task for ID: eb693352-b521-4d9c-a9cf-67e8fbec11d5
+2025-03-07 03:01:12,117 - transcript_processing - INFO - Transcript processing task completed for ID: eb693352-b521-4d9c-a9cf-67e8fbec11d5

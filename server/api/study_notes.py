@@ -5,6 +5,7 @@ from models.study_notes import StudyNotes
 from models.transcription import Transcription
 from models.user import User
 from api.auth import get_current_user
+from services.metrics import MetricsService
 
 router = APIRouter()
 
@@ -37,6 +38,9 @@ async def create_study_notes(study_notes: StudyNotesCreate, current_user: User =
         discussion_questions=study_notes.discussion_questions,
         application_points=study_notes.application_points
     )
+    
+    # Record study note generation metric
+    await MetricsService.record_study_note_generation(current_user, notes.id)
     
     return {
         "id": notes.id,

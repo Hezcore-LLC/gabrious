@@ -5,6 +5,8 @@ export interface DashboardStatistics {
   sermons_last_month: number;
   total_notes: number;
   notes_last_month: number;
+  total_favorites: number;
+  favorites_last_month: number;
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
