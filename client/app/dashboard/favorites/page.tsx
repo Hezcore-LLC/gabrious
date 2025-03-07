@@ -5,7 +5,7 @@ import { StudyNotes } from '@/lib/types';
 import { favoritesService } from '@/lib/favoritesService';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Loader2, Clock, Heart } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';

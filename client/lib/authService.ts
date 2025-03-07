@@ -60,12 +60,14 @@ export const authService = {
     }
 
     const authData = await response.json();
-    localStorage.setItem(TOKEN_KEY, authData.access_token);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(TOKEN_KEY, authData.access_token);
+    }
     return authData;
   },
 
   async getCurrentUser(): Promise<UserResponse> {
-    const token = localStorage.getItem(TOKEN_KEY);
+    const token = this.getToken();
     if (!token) {
       throw new Error('No authentication token found');
     }
@@ -87,11 +89,16 @@ export const authService = {
   },
 
   logout() {
-    localStorage.removeItem(TOKEN_KEY);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(TOKEN_KEY);
+    }
   },
 
   getToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(TOKEN_KEY);
+    }
+    return null;
   },
 
   isAuthenticated(): boolean {

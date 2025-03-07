@@ -11,6 +11,7 @@ import { BookOpen, Clock, Download, FileText, Heart, MoreHorizontal, Search, Upl
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
 
 // Default fallback image for sermons without thumbnails
 const DEFAULT_THUMBNAIL = "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1470&auto=format&fit=crop";
@@ -72,7 +73,9 @@ const favoriteSermons = [
 import { transcriptionService, Transcription } from '@/lib/transcriptionService';
 import { studyNotesService, StudyNotes } from '@/lib/studyNotesService';
 import { statisticsService } from '@/lib/statisticsService';
+import { favoritesService } from '@/lib/favoritesService';
 import { useEffect } from 'react';
+import Image from 'next/image';
 
 export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -91,6 +94,25 @@ export default function DashboardPage() {
   });
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [statsError, setStatsError] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<StudyNotes[]>([]);
+
+  const handleRemoveFromFavorites = async (id: string) => {
+    try {
+      await favoritesService.removeFromFavorites(id);
+      setFavorites(favorites.filter(note => note.id !== id));
+      toast({
+        title: 'Success',
+        description: 'Removed from favorites',
+      });
+    } catch (error) {
+      console.error('Error removing from favorites:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to remove from favorites',
+        variant: 'destructive',
+      });
+    }
+  };
 
   useEffect(() => {
     const fetchStatistics = async () => {
@@ -129,9 +151,24 @@ export default function DashboardPage() {
       }
     };
 
+    const fetchFavorites = async () => {
+      try {
+        const data = await favoritesService.getFavorites();
+        setFavorites(data);
+      } catch (error) {
+        console.error('Error fetching favorites:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to load favorites. Please try again.',
+          variant: 'destructive',
+        });
+      }
+    };
+
     fetchStatistics();
     fetchTranscriptions();
     fetchStudyNotes();
+    fetchFavorites();
   }, []);
 
   return (
@@ -207,7 +244,12 @@ export default function DashboardPage() {
             <TabsTrigger value="recent">Recent</TabsTrigger>
             <TabsTrigger value="sermons">Sermons</TabsTrigger>
             <TabsTrigger value="notes">Study Notes</TabsTrigger>
-            <TabsTrigger value="favorites">Favorites</TabsTrigger>
+            <TabsTrigger value="favorites">
+              <div className="flex items-center">
+                <Heart className="h-4 w-4 mr-2" />
+                Favorites
+              </div>
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="recent" className="mt-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -451,33 +493,71 @@ export default function DashboardPage() {
           </TabsContent>
           {/* End Study Notes  */}
           <TabsContent value="favorites" className="mt-6">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {favoriteSermons.map((sermon) => (
-                <Card key={sermon.id} className="overflow-hidden">
-                  <div className="aspect-video relative">
-                    <img
-                      src={sermon.thumbnail}
-                      alt={sermon.title}
-                      className="object-cover w-full h-full"
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute top-2 right-2 bg-background/50 hover:bg-background/70"
-                    >
-                      <Heart className="h-4 w-4 fill-primary" />
-                    </Button>
-                  </div>
-                  <CardHeader className="p-4">
-                    <CardTitle className="text-lg">{sermon.title}</CardTitle>
-                    <CardDescription>{sermon.pastor}</CardDescription>
-                  </CardHeader>
-                  <CardFooter className="p-4 pt-0">
-                    <div className="text-sm text-muted-foreground">{sermon.date}</div>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="flex justify-center items-center py-12">
+                <div className="text-center space-y-4">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
+                  <p className="text-sm text-muted-foreground">Loading favorites...</p>
+                </div>
+              </div>
+            ) : favorites.length === 0 ? (
+              <div className="text-center py-12">
+                <Heart className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                <h2 className="text-xl font-semibold mb-2">No favorites yet</h2>
+                <p className="text-gray-500 mb-4">You haven't added any study notes to your favorites.</p>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="/study-notes">Browse Study Notes</Link>
+                </Button>
+              </div>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {favorites.map((note) => (
+                  <Card key={note.id} className="flex flex-col h-full">
+                    <CardHeader className="pb-2">
+                      <div className="relative w-full h-40 mb-2 rounded-md overflow-hidden">
+                        {note.thumbnail ? (
+                          <Image 
+                            src={note.thumbnail} 
+                            alt={note.title} 
+                            fill 
+                            className="object-cover" 
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-gray-500">No thumbnail</span>
+                          </div>
+                        )}
+                      </div>
+                      <CardTitle className="line-clamp-2">{note.title}</CardTitle>
+                      <CardDescription>
+                        {note.pastor} • {note.duration}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                      <p className="text-sm text-gray-500 line-clamp-3 mb-2">{note.summary}</p>
+                    </CardContent>
+                    <CardFooter className="flex justify-between pt-2">
+                      <div className="flex items-center text-sm text-gray-500">
+                        <Clock className="h-4 w-4 mr-1" />
+                        <span>{new Date(note.created_at).toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleRemoveFromFavorites(note.id)}
+                        >
+                          <Heart className="h-4 w-4 mr-1 fill-current" /> Unfavorite
+                        </Button>
+                        <Link href={`/study-notes/${note.id}`}>
+                          <Button size="sm">View</Button>
+                        </Link>
+                      </div>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>
