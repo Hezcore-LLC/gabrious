@@ -34,11 +34,8 @@ export default function LoginPage() {
 
     try {
       await authService.login(formData);
-      toast({
-        title: "Success",
-        description: "You have been successfully logged in"
-      });
-      router.push("/dashboard");
+      // Use window.location.href for navigation, which will automatically reload the page
+      window.location.href = "/dashboard";
     } catch (error) {
       toast({
         title: "Error",
