@@ -22,6 +22,7 @@ class Transcription(models.Model):
     status = fields.CharEnumField(TranscriptionStatus, default=TranscriptionStatus.PENDING)
     transcription_text = fields.TextField(null=True)
     error_message = fields.TextField(null=True)
+    file_size = fields.BigIntField(default=0)  # Size in bytes
     created_at = fields.DatetimeField(auto_now_add=True)
     updated_at = fields.DatetimeField(auto_now=True)
 

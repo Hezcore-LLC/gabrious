@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from tasks.video_processing import process_video
 from api.auth import get_current_user
 from services.metrics import MetricsService
+from services.storage import StorageService
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -22,6 +23,19 @@ class TranscriptionRequest(BaseModel):
 @router.post("/")
 async def create_transcription(request: TranscriptionRequest, background_tasks: BackgroundTasks, current_user: User = Depends(get_current_user)):
     logging.debug(f"Received video_url: {request.video_url}")
+    
+    # Check if user has enough storage space (estimate 10MB per minute of audio)
+    # This is a rough estimate, actual size will be calculated during processing
+    estimated_size = 10 * 1024 * 1024  # Default 10MB estimate
+    
+    # Check storage limit before creating transcription
+    has_space = await StorageService.check_storage_limit(str(current_user.id), estimated_size)
+    if not has_space:
+        raise HTTPException(
+            status_code=400,
+            detail="Storage limit exceeded. Please upgrade your plan or delete some content."
+        )
+    
     transcription = await Transcription.create(
         user=current_user,
         video_url=request.video_url,
