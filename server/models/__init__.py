@@ -3,5 +3,6 @@ from .study_notes import StudyNotes
 from .user import User
 from .favorite import Favorite
 from .metrics import Metrics, MetricType
+from .subscription import SubscriptionPlan, PlanTier
 
-__all__ = ['Transcription', 'TranscriptionStatus', 'StudyNotes', 'User', 'Favorite', 'Metrics', 'MetricType']
+__all__ = ['Transcription', 'TranscriptionStatus', 'StudyNotes', 'User', 'Favorite', 'Metrics', 'MetricType', 'SubscriptionPlan', 'PlanTier']

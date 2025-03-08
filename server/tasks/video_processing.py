@@ -122,6 +122,11 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         os.remove(original_file)
         os.rename(optimized_file, original_file)
         
+        # Calculate and store file size
+        file_size = os.path.getsize(original_file)
+        transcription.file_size = file_size
+        await transcription.save()
+        
         # Configure Azure OpenAI client
         client = AzureOpenAI(
             api_key=os.getenv("AZURE_OPENAI_API_KEY"),

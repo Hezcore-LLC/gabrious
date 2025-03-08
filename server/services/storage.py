@@ -14,7 +14,17 @@ class StorageService:
         """Check if user has enough storage space for additional content"""
         subscription = await SubscriptionPlan.get_or_none(user_id=user_id)
         if not subscription:
-            return False
+            # Create a default free subscription plan for the user
+            from models.user import User
+            user = await User.get_or_none(id=user_id)
+            if not user:
+                return False
+                
+            subscription = await SubscriptionPlan.create(
+                user_id=user_id,
+                plan_tier=PlanTier.FREE,
+                storage_limit=SubscriptionPlan.get_plan_storage_limit(PlanTier.FREE)
+            )
 
         current_usage = await StorageService.get_user_storage_usage(user_id)
         storage_limit = subscription.storage_limit

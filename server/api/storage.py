@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from models.user import User
 from api.auth import get_current_user
 from services.storage import StorageService
+from utils.format_bytes import format_bytes
 
 router = APIRouter()
 
@@ -29,15 +30,4 @@ async def check_storage_limit(file_size: int, current_user: User = Depends(get_c
     
     return {"has_space": True}
 
-def format_bytes(size_bytes):
-    """Format bytes to human readable format"""
-    if size_bytes == 0:
-        return "0B"
-    
-    size_names = ("B", "KB", "MB", "GB", "TB")
-    i = 0
-    while size_bytes >= 1024 and i < len(size_names) - 1:
-        size_bytes /= 1024
-        i += 1
-    
-    return f"{size_bytes:.2f} {size_names[i]}"
+# Using the imported format_bytes utility function from utils/format_bytes.py

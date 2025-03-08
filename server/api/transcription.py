@@ -71,6 +71,7 @@ async def get_transcription(transcription_id: str, current_user: User = Depends(
         "thumbnail": transcription.thumbnail,
         "duration": transcription.duration,
         "status": transcription.status,
+        "file_size": transcription.file_size,
         "transcription_text": transcription.transcription_text,
         "error_message": transcription.error_message,
         "created_at": transcription.created_at,
