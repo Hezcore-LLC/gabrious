@@ -74,6 +74,7 @@ import { transcriptionService, Transcription } from '@/lib/transcriptionService'
 import { studyNotesService, StudyNotes } from '@/lib/studyNotesService';
 import { statisticsService } from '@/lib/statisticsService';
 import { favoritesService } from '@/lib/favoritesService';
+import { storageService, StorageStats } from '@/lib/storageService';
 import { useEffect } from 'react';
 import Image from 'next/image';
 
@@ -95,6 +96,15 @@ export default function DashboardPage() {
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [statsError, setStatsError] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<StudyNotes[]>([]);
+  const [storageData, setStorageData] = useState<StorageStats>({ 
+    used: 0, 
+    total: 0, 
+    percentage: 0, 
+    used_formatted: '0 MB', 
+    total_formatted: '0 GB' 
+  });
+  const [isLoadingStorage, setIsLoadingStorage] = useState(true);
+  const [storageError, setStorageError] = useState<string | null>(null);
 
   const handleRemoveFromFavorites = async (id: string) => {
     try {
@@ -124,6 +134,18 @@ export default function DashboardPage() {
         console.error('Error fetching statistics:', err);
       } finally {
         setIsLoadingStats(false);
+      }
+    };
+    
+    const fetchStorageData = async () => {
+      try {
+        const data = await storageService.getStorageUsage();
+        setStorageData(data);
+      } catch (err) {
+        setStorageError('Failed to fetch storage data');
+        console.error('Error fetching storage data:', err);
+      } finally {
+        setIsLoadingStorage(false);
       }
     };
 
@@ -169,6 +191,7 @@ export default function DashboardPage() {
     fetchTranscriptions();
     fetchStudyNotes();
     fetchFavorites();
+    fetchStorageData();
   }, []);
 
   return (
@@ -219,9 +242,21 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">Storage Used</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1.2 GB</div>
-              <p className="text-xs text-muted-foreground">of 5 GB (Free Plan)</p>
-              <Progress value={24} className="mt-2 h-2" />
+              {isLoadingStorage ? (
+                <div className="space-y-2">
+                  <div className="h-6 w-24 bg-muted animate-pulse rounded"></div>
+                  <div className="h-4 w-32 bg-muted animate-pulse rounded"></div>
+                  <div className="mt-2 h-2 bg-muted animate-pulse rounded"></div>
+                </div>
+              ) : storageError ? (
+                <div className="text-sm text-destructive">{storageError}</div>
+              ) : (
+                <>
+                  <div className="text-2xl font-bold">{storageData.used_formatted}</div>
+                  <p className="text-xs text-muted-foreground">of {storageData.total_formatted}</p>
+                  <Progress value={storageData.percentage} className="mt-2 h-2" />
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
