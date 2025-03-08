@@ -1,0 +1,563 @@
+2025-03-01 01:31:08,444 - transcript_processing - INFO - Starting transcript processing task for ID: 2853cc0f-60b7-4a3d-9a64-d080d96a9442
+2025-03-01 01:31:23,507 - transcript_processing - ERROR - Error processing transcript: table studynotes has no column named transcript_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table studynotes has no column named transcript_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 89, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 32, in translate_exceptions_
+    raise OperationalError(exc)
+tortoise.exceptions.OperationalError: table studynotes has no column named transcript_id
+2025-03-01 01:31:23,515 - transcript_processing - ERROR - Transcript processing task failed for ID: 2853cc0f-60b7-4a3d-9a64-d080d96a9442: table studynotes has no column named transcript_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table studynotes has no column named transcript_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 89, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 32, in translate_exceptions_
+    raise OperationalError(exc)
+tortoise.exceptions.OperationalError: table studynotes has no column named transcript_id
+2025-03-01 01:52:28,612 - transcript_processing - INFO - Starting transcript processing task for ID: 546016c4-2f42-4f5b-b4c0-34c4c5b7fe17
+2025-03-01 01:52:39,944 - transcript_processing - ERROR - Error processing transcript: table studynotes has no column named transcript_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table studynotes has no column named transcript_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 89, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 32, in translate_exceptions_
+    raise OperationalError(exc)
+tortoise.exceptions.OperationalError: table studynotes has no column named transcript_id
+2025-03-01 01:52:39,953 - transcript_processing - ERROR - Transcript processing task failed for ID: 546016c4-2f42-4f5b-b4c0-34c4c5b7fe17: table studynotes has no column named transcript_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table studynotes has no column named transcript_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 89, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 32, in translate_exceptions_
+    raise OperationalError(exc)
+tortoise.exceptions.OperationalError: table studynotes has no column named transcript_id
+2025-03-01 02:05:22,810 - transcript_processing - INFO - Starting transcript processing task for ID: f27e71b8-b7f5-477a-8b62-ebfb8aa3cd0b
+2025-03-01 02:05:28,691 - transcript_processing - ERROR - Error processing transcript: table studynotes has no column named transcript_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table studynotes has no column named transcript_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 89, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 32, in translate_exceptions_
+    raise OperationalError(exc)
+tortoise.exceptions.OperationalError: table studynotes has no column named transcript_id
+2025-03-01 02:05:28,698 - transcript_processing - ERROR - Transcript processing task failed for ID: f27e71b8-b7f5-477a-8b62-ebfb8aa3cd0b: table studynotes has no column named transcript_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table studynotes has no column named transcript_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 89, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 32, in translate_exceptions_
+    raise OperationalError(exc)
+tortoise.exceptions.OperationalError: table studynotes has no column named transcript_id
+2025-03-01 02:23:19,204 - transcript_processing - INFO - Starting transcript processing task for ID: 954c2145-140e-42eb-a55c-bda39b86d794
+2025-03-01 02:23:26,048 - transcript_processing - ERROR - Error processing transcript: table studynotes has no column named transcript_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table studynotes has no column named transcript_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 89, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 32, in translate_exceptions_
+    raise OperationalError(exc)
+tortoise.exceptions.OperationalError: table studynotes has no column named transcript_id
+2025-03-01 02:23:26,056 - transcript_processing - ERROR - Transcript processing task failed for ID: 954c2145-140e-42eb-a55c-bda39b86d794: table studynotes has no column named transcript_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table studynotes has no column named transcript_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 89, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 32, in translate_exceptions_
+    raise OperationalError(exc)
+tortoise.exceptions.OperationalError: table studynotes has no column named transcript_id
+2025-03-01 02:40:39,858 - transcript_processing - INFO - Starting transcript processing task for ID: 89cd9d8f-75cc-4490-8a6b-1779c2a87ca5
+2025-03-01 02:40:46,126 - transcript_processing - INFO - Transcript processing task completed for ID: 89cd9d8f-75cc-4490-8a6b-1779c2a87ca5
+2025-03-01 04:08:22,112 - transcript_processing - INFO - Starting transcript processing task for ID: d24bc98c-49f3-47fe-b224-06f2b15ecc08
+2025-03-01 04:08:34,350 - transcript_processing - INFO - Transcript processing task completed for ID: d24bc98c-49f3-47fe-b224-06f2b15ecc08
+2025-03-01 15:00:25,985 - transcript_processing - INFO - Starting transcript processing task for ID: 2433ed13-de85-4320-b28f-94639102224c
+2025-03-01 15:00:35,018 - transcript_processing - INFO - Transcript processing task completed for ID: 2433ed13-de85-4320-b28f-94639102224c
+2025-03-01 15:15:20,876 - transcript_processing - INFO - Starting transcript processing task for ID: 9c75b05e-dea8-48a4-9134-19aecde48a9f
+2025-03-01 15:15:28,993 - transcript_processing - INFO - Transcript processing task completed for ID: 9c75b05e-dea8-48a4-9134-19aecde48a9f
+2025-03-01 15:17:01,810 - transcript_processing - INFO - Starting transcript processing task for ID: d00175be-f6c3-4391-9007-c66f8851ff41
+2025-03-01 15:17:16,240 - transcript_processing - INFO - Transcript processing task completed for ID: d00175be-f6c3-4391-9007-c66f8851ff41
+2025-03-01 15:28:43,519 - transcript_processing - INFO - Starting transcript processing task for ID: f7fd6dc5-25b6-411f-9940-1042c9079594
+2025-03-01 15:28:54,611 - transcript_processing - INFO - Transcript processing task completed for ID: f7fd6dc5-25b6-411f-9940-1042c9079594
+2025-03-04 20:58:19,325 - transcript_processing - INFO - Starting transcript processing task for ID: 7f9f81db-408e-4528-9af3-ed79f56ec68e
+2025-03-04 20:58:33,727 - transcript_processing - INFO - Transcript processing task completed for ID: 7f9f81db-408e-4528-9af3-ed79f56ec68e
+2025-03-04 21:13:24,301 - transcript_processing - INFO - Starting transcript processing task for ID: de36392e-904c-4519-9065-57f1d29ebf91
+2025-03-04 21:13:43,586 - transcript_processing - INFO - Transcript processing task completed for ID: de36392e-904c-4519-9065-57f1d29ebf91
+2025-03-05 21:44:49,030 - transcript_processing - INFO - Starting transcript processing task for ID: 71f9fc63-a2b5-4519-ae02-fcb8f58b4307
+2025-03-05 21:45:08,311 - transcript_processing - ERROR - Error processing transcript: NOT NULL constraint failed: studynotes.user_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: studynotes.user_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 34, in translate_exceptions_
+    raise IntegrityError(exc)
+tortoise.exceptions.IntegrityError: NOT NULL constraint failed: studynotes.user_id
+2025-03-05 21:45:08,319 - transcript_processing - ERROR - Transcript processing task failed for ID: 71f9fc63-a2b5-4519-ae02-fcb8f58b4307: NOT NULL constraint failed: studynotes.user_id
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 30, in translate_exceptions_
+    return await func(self, query, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 112, in execute_insert
+    return (await connection.execute_insert(query, values))[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 194, in execute_insert
+    return await self._execute(self._execute_insert, sql, parameters)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 129, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 102, in run
+    result = function()
+             ^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/aiosqlite/core.py", line 74, in _execute_insert
+    cursor = self._conn.execute(sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: studynotes.user_id
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1109, in create
+    await instance.save(using_db=db, force_create=True)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 930, in save
+    await executor.execute_insert(self)
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/base/executor.py", line 220, in execute_insert
+    insert_result = await self.db.execute_insert(self.insert_query, values)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/backends/sqlite/client.py", line 34, in translate_exceptions_
+    raise IntegrityError(exc)
+tortoise.exceptions.IntegrityError: NOT NULL constraint failed: studynotes.user_id
+2025-03-05 21:55:31,123 - transcript_processing - INFO - Starting transcript processing task for ID: 8c61ec27-193f-483e-9f1c-1818cae2da93
+2025-03-05 21:55:44,865 - transcript_processing - ERROR - Error processing transcript: 'QuerySet' object has no attribute '_saved_in_db'
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1106, in create
+    instance = cls(**kwargs)
+               ^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 659, in __init__
+    for key in meta.fields.difference(self._set_kwargs(kwargs)):
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 674, in _set_kwargs
+    if value and not value._saved_in_db:
+                     ^^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute '_saved_in_db'
+2025-03-05 21:55:44,874 - transcript_processing - ERROR - Transcript processing task failed for ID: 8c61ec27-193f-483e-9f1c-1818cae2da93: 'QuerySet' object has no attribute '_saved_in_db'
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1106, in create
+    instance = cls(**kwargs)
+               ^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 659, in __init__
+    for key in meta.fields.difference(self._set_kwargs(kwargs)):
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 674, in _set_kwargs
+    if value and not value._saved_in_db:
+                     ^^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute '_saved_in_db'
+2025-03-05 23:56:42,315 - transcript_processing - INFO - Starting transcript processing task for ID: d634b416-e112-436b-bd74-5677482120d2
+2025-03-05 23:57:04,803 - transcript_processing - ERROR - Error processing transcript: 'QuerySet' object has no attribute '_saved_in_db'
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1106, in create
+    instance = cls(**kwargs)
+               ^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 659, in __init__
+    for key in meta.fields.difference(self._set_kwargs(kwargs)):
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 674, in _set_kwargs
+    if value and not value._saved_in_db:
+                     ^^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute '_saved_in_db'
+2025-03-05 23:57:04,811 - transcript_processing - ERROR - Transcript processing task failed for ID: d634b416-e112-436b-bd74-5677482120d2: 'QuerySet' object has no attribute '_saved_in_db'
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 92, in _process_transcript
+    study_notes = await StudyNotes.create(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 1106, in create
+    instance = cls(**kwargs)
+               ^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 659, in __init__
+    for key in meta.fields.difference(self._set_kwargs(kwargs)):
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/site-packages/tortoise/models.py", line 674, in _set_kwargs
+    if value and not value._saved_in_db:
+                     ^^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute '_saved_in_db'
+2025-03-06 00:18:06,139 - transcript_processing - INFO - Starting transcript processing task for ID: 85479639-bdd9-479d-bd41-a1f480683877
+2025-03-06 00:18:35,997 - transcript_processing - INFO - Transcript processing task completed for ID: 85479639-bdd9-479d-bd41-a1f480683877
+2025-03-07 03:01:01,490 - transcript_processing - INFO - Starting transcript processing task for ID: eb693352-b521-4d9c-a9cf-67e8fbec11d5
+2025-03-07 03:01:12,117 - transcript_processing - INFO - Transcript processing task completed for ID: eb693352-b521-4d9c-a9cf-67e8fbec11d5
+2025-03-08 02:25:04,708 - transcript_processing - INFO - Starting transcript processing task for ID: 1f27a2c8-52f0-4716-b829-c809a0ae6f8c
+2025-03-08 02:25:11,660 - transcript_processing - INFO - Transcript processing task completed for ID: 1f27a2c8-52f0-4716-b829-c809a0ae6f8c
+2025-03-08 02:32:35,486 - transcript_processing - INFO - Starting transcript processing task for ID: 8f2cff6b-3af6-4a7d-9ee9-54d5cd058b5b
+2025-03-08 02:32:41,903 - transcript_processing - INFO - Transcript processing task completed for ID: 8f2cff6b-3af6-4a7d-9ee9-54d5cd058b5b
+2025-03-08 02:39:06,180 - transcript_processing - INFO - Starting transcript processing task for ID: f2d66570-ac68-4bfc-bc05-874f5f3c13dd
+2025-03-08 02:39:21,416 - transcript_processing - INFO - Transcript processing task completed for ID: f2d66570-ac68-4bfc-bc05-874f5f3c13dd
+2025-03-08 02:43:39,356 - transcript_processing - INFO - Starting transcript processing task for ID: 6d3e4038-26a3-45ae-89e2-9432ce9183cd
+2025-03-08 02:43:48,568 - transcript_processing - INFO - Transcript processing task completed for ID: 6d3e4038-26a3-45ae-89e2-9432ce9183cd
+2025-03-08 02:48:43,004 - transcript_processing - INFO - Starting transcript processing task for ID: 0f5a5972-491a-4ba9-9247-7340debbd445
+2025-03-08 02:48:53,500 - transcript_processing - INFO - Transcript processing task completed for ID: 0f5a5972-491a-4ba9-9247-7340debbd445
+2025-03-08 02:50:42,412 - transcript_processing - INFO - Starting transcript processing task for ID: 8963a34b-a0ec-4f12-a2f0-87f78e506b0e
+2025-03-08 02:50:52,582 - transcript_processing - INFO - Transcript processing task completed for ID: 8963a34b-a0ec-4f12-a2f0-87f78e506b0e
