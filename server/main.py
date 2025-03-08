@@ -5,6 +5,9 @@ import os
 from dotenv import load_dotenv
 # from celery import app as celery_app
 
+# Import our pretty logging module
+from utils.pretty_logging import setup_pretty_logger, setup_tortoise_sql_logging
+
 # Load environment variables
 load_dotenv()
 
@@ -26,6 +29,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Set up pretty logging for SQL queries
+setup_tortoise_sql_logging()
 
 # Configure Tortoise ORM
 register_tortoise(
