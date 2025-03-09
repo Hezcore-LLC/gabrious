@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import json
 from typing import Optional, Literal
 from pydantic import BaseModel, Field
+from datetime import datetime
 
 from models.user import User
 from models.subscription import SubscriptionPlan, PlanTier
@@ -178,12 +179,23 @@ async def get_subscription_status(current_user: User = Depends(get_current_user)
             PlanTier.PREMIUM: "church"
         }
         
-        return {
+        # Determine subscription status
+        status = "active"
+        if subscription_plan.is_canceled:
+            status = "canceled"
+        
+        response = {
             "plan": plan_name_mapping.get(subscription_plan.plan_tier, "free"),
-            "status": "active",  # We would need to check with Stripe for actual status
+            "status": status,
             "storageLimit": subscription_plan.storage_limit_gb,
             "subscriptionId": subscription_plan.subscription_id
         }
+        
+        # Add next billing date (end date) if subscription is canceled
+        if subscription_plan.is_canceled and subscription_plan.cancel_at:
+            response["nextBillingDate"] = subscription_plan.cancel_at.isoformat()
+        
+        return response
     
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -199,10 +211,19 @@ async def cancel_subscription(request: CancelSubscriptionRequest, current_user: 
         subscription_id = request.subscriptionId
         
         # Cancel the subscription at period end
-        stripe.Subscription.modify(
+        subscription = stripe.Subscription.modify(
             subscription_id,
             cancel_at_period_end=True,
         )
+        
+        # Update our database to reflect cancellation
+        subscription_plan = await SubscriptionPlan.filter(user_id=current_user.id).first()
+        if subscription_plan:
+            subscription_plan.is_canceled = True
+            # Get the cancel_at timestamp from Stripe
+            if subscription.cancel_at:
+                subscription_plan.cancel_at = datetime.fromtimestamp(subscription.cancel_at)
+            await subscription_plan.save()
         
         return {"status": "subscription_canceled"}
     
@@ -349,8 +370,16 @@ async def handle_subscription_deleted(subscription):
     subscription_plan = await SubscriptionPlan.filter(user_id=user_id).first()
     
     if subscription_plan:
+        # Mark the subscription as canceled and set the end date
+        subscription_plan.is_canceled = True
         subscription_plan.plan_tier = PlanTier.FREE
         subscription_plan.storage_limit = SubscriptionPlan.get_plan_storage_limit(PlanTier.FREE)
+        
+        # If the subscription was canceled immediately (not at period end)
+        # set cancel_at to current time
+        if not subscription_plan.cancel_at:
+            subscription_plan.cancel_at = datetime.now()
+            
         # We keep the subscription_id for record-keeping purposes
         # This helps track which subscription was canceled
         await subscription_plan.save()

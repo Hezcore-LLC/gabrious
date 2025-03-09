@@ -1,5 +1,6 @@
 from tortoise import fields, models
 from enum import Enum
+from datetime import datetime
 
 class PlanTier(str, Enum):
     FREE = "free"
@@ -12,6 +13,8 @@ class SubscriptionPlan(models.Model):
     plan_tier = fields.CharEnumField(PlanTier, default=PlanTier.FREE)
     storage_limit = fields.IntField(default=1024 * 1024 * 1024)  # Default 1GB in bytes
     subscription_id = fields.CharField(max_length=255, null=True)  # Stripe subscription ID
+    is_canceled = fields.BooleanField(default=False)  # Whether subscription is canceled
+    cancel_at = fields.DatetimeField(null=True)  # When subscription will end
     created_at = fields.DatetimeField(auto_now_add=True)
     updated_at = fields.DatetimeField(auto_now=True)
 
