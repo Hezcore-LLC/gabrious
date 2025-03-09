@@ -22,6 +22,8 @@ export interface SubscriptionStatusResponse {
   plan: string; // 'free', 'pro', or 'church'
   status: string;
   storageLimit?: number;
+  subscriptionId?: string;
+  nextBillingDate?: string;
 }
 
 export const paymentService = {
