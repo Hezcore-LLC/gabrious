@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +10,7 @@ import { Check, HelpCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { authService } from "@/lib/authService";
+import SubscriptionStatus from "./components/subscription-status";
 
 const pricingPlans = [
   {
@@ -103,6 +104,11 @@ const frequentlyAskedQuestions = [
 export default function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
   const router = useRouter();
+  const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
+
+  const handleSubscriptionStatusLoaded = (hasSubscription: boolean) => {
+    setHasActiveSubscription(hasSubscription);
+  };
 
   const handleSubscribe = (plan: string) => {
     // Check if user is authenticated
@@ -117,6 +123,9 @@ export default function PricingPage() {
 
   return (
     <div className="container py-12 space-y-16">
+      {/* Subscription Status Component */}
+      <SubscriptionStatus onStatusLoaded={handleSubscriptionStatusLoaded} />
+      
       <div className="space-y-6 text-center">
         <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Simple, Transparent Pricing</h1>
         <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
@@ -173,6 +182,14 @@ export default function PricingPage() {
               {plan.name === "Free" ? (
                 <Button variant={plan.buttonVariant} className="w-full" asChild>
                   <Link href="/signup">{plan.buttonText}</Link>
+                </Button>
+              ) : hasActiveSubscription && plan.name.toLowerCase() === "pro" || plan.name.toLowerCase() === "church" ? (
+                <Button 
+                  variant="outline" 
+                  className="w-full" 
+                  asChild
+                >
+                  <Link href="/dashboard/subscription">Manage Subscription</Link>
                 </Button>
               ) : (
                 <Button 
