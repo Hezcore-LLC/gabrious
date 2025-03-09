@@ -142,12 +142,14 @@ async def create_subscription(request: SubscriptionRequest, current_user: User =
         if subscription_plan:
             subscription_plan.plan_tier = plan_tier
             subscription_plan.storage_limit = SubscriptionPlan.get_plan_storage_limit(plan_tier)
+            subscription_plan.subscription_id = subscription.id  # Save the Stripe subscription ID
             await subscription_plan.save()
         else:
             await SubscriptionPlan.create(
                 user_id=current_user.id,
                 plan_tier=plan_tier,
-                storage_limit=SubscriptionPlan.get_plan_storage_limit(plan_tier)
+                storage_limit=SubscriptionPlan.get_plan_storage_limit(plan_tier),
+                subscription_id=subscription.id  # Save the Stripe subscription ID
             )
         
         return {
@@ -179,7 +181,8 @@ async def get_subscription_status(current_user: User = Depends(get_current_user)
         return {
             "plan": plan_name_mapping.get(subscription_plan.plan_tier, "free"),
             "status": "active",  # We would need to check with Stripe for actual status
-            "storageLimit": subscription_plan.storage_limit_gb
+            "storageLimit": subscription_plan.storage_limit_gb,
+            "subscriptionId": subscription_plan.subscription_id
         }
     
     except Exception as e:
@@ -215,7 +218,7 @@ class StripeWebhookEvent(BaseModel):
     data: StripeWebhookData
 
 @router.post("/webhook")
-async def stripe_webhook(request: Request, background_tasks: BackgroundTasks):
+async def stripe_webhook(request: StripeWebhookData, background_tasks: BackgroundTasks):
     """Handle Stripe webhook events"""
     payload = await request.body()
     sig_header = request.headers.get('stripe-signature')
@@ -268,19 +271,27 @@ async def handle_checkout_session(session):
     if not plan_type:
         return
     
+    # Get subscription ID if available
+    subscription_id = session.get('subscription')
+    
     plan_tier = PLAN_MAPPING.get(plan_type, PlanTier.FREE)
     subscription_plan = await SubscriptionPlan.filter(user_id=user_id).first()
     
     if subscription_plan:
         subscription_plan.plan_tier = plan_tier
         subscription_plan.storage_limit = SubscriptionPlan.get_plan_storage_limit(plan_tier)
+        if subscription_id:
+            subscription_plan.subscription_id = subscription_id
         await subscription_plan.save()
     else:
-        await SubscriptionPlan.create(
-            user_id=user_id,
-            plan_tier=plan_tier,
-            storage_limit=SubscriptionPlan.get_plan_storage_limit(plan_tier)
-        )
+        create_data = {
+            'user_id': user_id,
+            'plan_tier': plan_tier,
+            'storage_limit': SubscriptionPlan.get_plan_storage_limit(plan_tier)
+        }
+        if subscription_id:
+            create_data['subscription_id'] = subscription_id
+        await SubscriptionPlan.create(**create_data)
 
 async def handle_invoice_paid(invoice):
     """Process a paid invoice"""
@@ -303,29 +314,25 @@ async def handle_invoice_paid(invoice):
     if not user_id:
         return
     
-    # Update subscription status in our database if needed
-    # This is a good place to extend subscription end dates, etc.
-
-async def handle_invoice_payment_failed(invoice):
-    """Process a failed invoice payment"""
-    # Extract subscription and customer information
-    subscription_id = invoice.get('subscription')
-    customer_id = invoice.get('customer')
+    # Update subscription status in our database
+    subscription_plan = await SubscriptionPlan.filter(user_id=user_id).first()
     
-    if not subscription_id or not customer_id:
-        return
-    
-    # Get subscription details
-    subscription = stripe.Subscription.retrieve(subscription_id)
-    user_id = subscription.get('metadata', {}).get('user_id')
-    
-    if not user_id:
-        # Try to get user_id from customer metadata
-        customer = stripe.Customer.retrieve(customer_id)
-        user_id = customer.get('metadata', {}).get('user_id')
-    
-    if not user_id:
-        return
+    if subscription_plan:
+        # Update the subscription_id if it's not already set
+        if not subscription_plan.subscription_id:
+            subscription_plan.subscription_id = subscription_id
+            await subscription_plan.save()
+    else:
+        # Create a new subscription plan record if it doesn't exist
+        plan_type = subscription.get('metadata', {}).get('plan_type')
+        if plan_type:
+            plan_tier = PLAN_MAPPING.get(plan_type, PlanTier.FREE)
+            await SubscriptionPlan.create(
+                user_id=user_id,
+                plan_tier=plan_tier,
+                storage_limit=SubscriptionPlan.get_plan_storage_limit(plan_tier),
+                subscription_id=subscription_id
+            )
     
     # You might want to notify the user about the failed payment
     # or downgrade their plan if multiple payment attempts fail
@@ -333,6 +340,7 @@ async def handle_invoice_payment_failed(invoice):
 async def handle_subscription_deleted(subscription):
     """Process a canceled subscription"""
     user_id = subscription.get('metadata', {}).get('user_id')
+    subscription_id = subscription.get('id')
     
     if not user_id:
         return
@@ -343,4 +351,6 @@ async def handle_subscription_deleted(subscription):
     if subscription_plan:
         subscription_plan.plan_tier = PlanTier.FREE
         subscription_plan.storage_limit = SubscriptionPlan.get_plan_storage_limit(PlanTier.FREE)
+        # We keep the subscription_id for record-keeping purposes
+        # This helps track which subscription was canceled
         await subscription_plan.save()

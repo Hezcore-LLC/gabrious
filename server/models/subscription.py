@@ -11,6 +11,7 @@ class SubscriptionPlan(models.Model):
     user = fields.ForeignKeyField('models.User', related_name='subscription')
     plan_tier = fields.CharEnumField(PlanTier, default=PlanTier.FREE)
     storage_limit = fields.IntField(default=1024 * 1024 * 1024)  # Default 1GB in bytes
+    subscription_id = fields.CharField(max_length=255, null=True)  # Stripe subscription ID
     created_at = fields.DatetimeField(auto_now_add=True)
     updated_at = fields.DatetimeField(auto_now=True)
 
