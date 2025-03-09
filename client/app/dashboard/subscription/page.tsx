@@ -207,7 +207,7 @@ export default function SubscriptionManagementPage() {
                 </div>
               )}
 
-              {subscription?.plan !== "free" && (
+              {subscription?.plan !== "free" && subscription?.status !== "canceled" && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" className="w-full">
@@ -240,6 +240,12 @@ export default function SubscriptionManagementPage() {
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
+              )}
+              
+              {subscription?.plan !== "free" && subscription?.status === "canceled" && (
+                <div className="p-4 bg-muted rounded-md text-center">
+                  <p className="text-muted-foreground">Your subscription has been canceled and will end on your next billing date.</p>
+                </div>
               )}
             </div>
           </CardContent>
