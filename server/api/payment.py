@@ -206,6 +206,14 @@ async def cancel_subscription(request: CancelSubscriptionRequest, current_user: 
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+class StripeWebhookData(BaseModel):
+    object: dict
+
+class StripeWebhookEvent(BaseModel):
+    id: str
+    type: str
+    data: StripeWebhookData
+
 @router.post("/webhook")
 async def stripe_webhook(request: Request, background_tasks: BackgroundTasks):
     """Handle Stripe webhook events"""
@@ -216,28 +224,33 @@ async def stripe_webhook(request: Request, background_tasks: BackgroundTasks):
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
         )
+        # Convert to Pydantic model for validation
+        webhook_event = StripeWebhookEvent(**event)
     except ValueError as e:
         # Invalid payload
         raise HTTPException(status_code=400, detail="Invalid payload")
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         raise HTTPException(status_code=400, detail="Invalid signature")
+    except Exception as e:
+        # Validation error
+        raise HTTPException(status_code=400, detail=f"Invalid event format: {str(e)}")
     
     # Handle the event
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
+    if webhook_event.type == 'checkout.session.completed':
+        session = webhook_event.data.object
         # Process the checkout session
         background_tasks.add_task(handle_checkout_session, session)
-    elif event['type'] == 'invoice.paid':
-        invoice = event['data']['object']
+    elif webhook_event.type == 'invoice.paid':
+        invoice = webhook_event.data.object
         # Process the successful payment
         background_tasks.add_task(handle_invoice_paid, invoice)
-    elif event['type'] == 'invoice.payment_failed':
-        invoice = event['data']['object']
+    elif webhook_event.type == 'invoice.payment_failed':
+        invoice = webhook_event.data.object
         # Process the failed payment
         background_tasks.add_task(handle_invoice_payment_failed, invoice)
-    elif event['type'] == 'customer.subscription.deleted':
-        subscription = event['data']['object']
+    elif webhook_event.type == 'customer.subscription.deleted':
+        subscription = webhook_event.data.object
         # Process subscription cancellation
         background_tasks.add_task(handle_subscription_deleted, subscription)
     
