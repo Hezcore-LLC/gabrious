@@ -49,13 +49,14 @@ async def root():
     return {"message": "Welcome to Gabrious API"}
 
 # Import and include API routes
-from api import auth, transcription, study_notes, statistics, favorites, storage
+from api import auth, transcription, study_notes, statistics, favorites, storage, payment
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(transcription.router, prefix="/api/transcriptions", tags=["transcription"])
 app.include_router(study_notes.router, prefix="/api/study-notes", tags=["study_notes"])
 app.include_router(statistics.router, prefix="/api/statistics", tags=["statistics"])
 app.include_router(favorites.router, prefix="/api/favorites", tags=["favorites"])
 app.include_router(storage.router, prefix="/api/storage", tags=["storage"])
+app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
 
 # Health check endpoint
 @app.get("/health")

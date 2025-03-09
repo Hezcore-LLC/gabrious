@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Check, HelpCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
+import { authService } from "@/lib/authService";
 
 const pricingPlans = [
   {
@@ -100,6 +102,18 @@ const frequentlyAskedQuestions = [
 
 export default function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
+  const router = useRouter();
+
+  const handleSubscribe = (plan: string) => {
+    // Check if user is authenticated
+    if (authService.isAuthenticated()) {
+      // If authenticated, go to subscribe page
+      router.push(`/pricing/subscribe?plan=${plan.toLowerCase()}`);
+    } else {
+      // If not authenticated, go to signup page with plan parameter
+      router.push(`/auth/signup?plan=${plan.toLowerCase()}`);
+    }
+  };
 
   return (
     <div className="container py-12 space-y-16">
@@ -156,11 +170,19 @@ export default function PricingPage() {
               </ul>
             </CardContent>
             <CardFooter>
-              <Button variant={plan.buttonVariant} className="w-full" asChild>
-                <Link href={plan.name === "Free" ? "/signup" : plan.name === "Pro" ? "/signup?plan=pro" : plan.name === "Church" ? "/signup?plan=church" : "/contact"}>
+              {plan.name === "Free" ? (
+                <Button variant={plan.buttonVariant} className="w-full" asChild>
+                  <Link href="/signup">{plan.buttonText}</Link>
+                </Button>
+              ) : (
+                <Button 
+                  variant={plan.buttonVariant} 
+                  className="w-full" 
+                  onClick={() => handleSubscribe(plan.name)}
+                >
                   {plan.buttonText}
-                </Link>
-              </Button>
+                </Button>
+              )}
             </CardFooter>
           </Card>
         ))}

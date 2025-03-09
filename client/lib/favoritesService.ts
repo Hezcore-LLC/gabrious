@@ -7,8 +7,7 @@ interface StudyNotes {
 
 export type { StudyNotes };
 import { authService } from "./authService";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+import { API_BASE_URL } from './utils';
 
 export const favoritesService = {
   async addToFavorites(notesId: string): Promise<{ message: string }> {
@@ -17,7 +16,7 @@ export const favoritesService = {
       throw new Error('Authentication required');
     }
     
-    const response = await fetch(`${API_URL}/api/favorites/${notesId}`, {
+    const response = await fetch(`${API_BASE_URL}/favorites/${notesId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,7 +37,7 @@ export const favoritesService = {
       throw new Error('Authentication required');
     }
     
-    const response = await fetch(`${API_URL}/api/favorites/${notesId}`, {
+    const response = await fetch(`${API_BASE_URL}/favorites/${notesId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +58,7 @@ export const favoritesService = {
       throw new Error('Authentication required');
     }
     
-    const response = await fetch(`${API_URL}/api/favorites`, {
+    const response = await fetch(`${API_BASE_URL}/favorites`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
