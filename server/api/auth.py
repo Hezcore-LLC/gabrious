@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import os
 
 router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 class UserCreate(BaseModel):
     email: str
