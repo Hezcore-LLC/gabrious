@@ -233,6 +233,104 @@ The Gabrious application consists of the following containers:
 
 Each container is configured in the `docker-compose.yml` file with appropriate dependencies, volumes, and environment variables.
 
+## Git Repository Setup
+
+The Gabrious application code is hosted in a private Git repository. Follow these instructions to access and work with the repository.
+
+### Obtaining Access Credentials
+
+1. **Request Repository Access**: Contact your team lead or system administrator to request access to the private repository.
+
+2. **Receive Credentials**: You will be provided with either:
+   - Username and password/personal access token for HTTPS access
+   - SSH key setup instructions for SSH access
+
+### Cloning the Repository
+
+#### Using HTTPS (with username and password/token)
+
+```bash
+# Replace with the actual repository URL provided by your team
+git clone https://[GIT_HOSTING_SERVICE]/[ORGANIZATION]/gabrious.git
+
+# You will be prompted for your username and password/token
+```
+
+#### Using SSH (recommended for developers)
+
+1. If you haven't set up SSH keys yet:
+
+```bash
+# Generate SSH key
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+# Start the SSH agent
+eval "$(ssh-agent -s)"
+
+# Add your SSH key to the agent
+ssh-add ~/.ssh/id_ed25519
+
+# Copy your public key to clipboard (Mac)
+pbcopy < ~/.ssh/id_ed25519.pub
+# For Linux: cat ~/.ssh/id_ed25519.pub
+# For Windows: clip < ~/.ssh/id_ed25519.pub
+```
+
+2. Add the copied public key to your Git hosting service (GitHub, GitLab, Bitbucket, etc.)
+
+3. Clone the repository using SSH:
+
+```bash
+# Replace with the actual SSH repository URL provided by your team
+git clone git@[GIT_HOSTING_SERVICE]:[ORGANIZATION]/gabrious.git
+```
+
+### Basic Git Operations
+
+#### Pulling Latest Changes
+
+```bash
+# Navigate to the project directory
+cd gabrious
+
+# Fetch and merge changes from the remote repository
+git pull
+```
+
+#### Creating a Branch for Your Changes
+
+```bash
+# Create and switch to a new branch
+git checkout -b feature/your-feature-name
+```
+
+#### Committing and Pushing Changes
+
+```bash
+# Add your changes to staging
+git add .
+
+# Commit your changes with a descriptive message
+git commit -m "Add feature: description of your changes"
+
+# Push your branch to the remote repository
+git push origin feature/your-feature-name
+```
+
+#### Creating a Pull/Merge Request
+
+After pushing your changes, go to the Git hosting service's web interface to create a pull request (GitHub) or merge request (GitLab) to have your changes reviewed and merged into the main branch.
+
+### Git Configuration for the Project
+
+It's recommended to configure your Git identity for this project:
+
+```bash
+# Set your name and email for this repository
+git config user.name "Your Name"
+git config user.email "your.email@example.com"
+```
+
 ## Additional Resources
 
 - [Docker Documentation](https://docs.docker.com/)
@@ -240,3 +338,4 @@ Each container is configured in the `docker-compose.yml` file with appropriate d
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [Celery Documentation](https://docs.celeryq.dev/)
 - [Next.js Documentation](https://nextjs.org/docs)
+- [Git Documentation](https://git-scm.com/doc)
