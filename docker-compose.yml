@@ -100,6 +100,10 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://server:8000
+      - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+      - NEXT_PUBLIC_AUTH_COOKIE_NAME=auth_token
+      - NEXT_PUBLIC_ENABLE_ANALYTICS=false
+      - NEXT_PUBLIC_MAINTENANCE_MODE=false
     depends_on:
       - server
     restart: unless-stopped
