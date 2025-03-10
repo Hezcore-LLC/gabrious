@@ -2,9 +2,11 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies including FFmpeg for audio processing
+# Install system dependencies including FFmpeg with enhanced MP3 support
 RUN apt-get update && apt-get install -y \
     ffmpeg \
+    libmp3lame0 \
+    libavcodec-extra \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 

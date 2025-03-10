@@ -167,3 +167,16 @@
 2025-03-09 22:47:29,519 - video_processing - INFO - Video processing module initialized
 2025-03-09 22:48:02,259 - video_processing - INFO - Video processing module initialized
 2025-03-09 22:48:06,087 - video_processing - INFO - Video processing module initialized
+2025-03-10 16:01:57,510 - video_processing - INFO - Video processing module initialized
+2025-03-10 16:02:01,005 - video_processing - INFO - Video processing module initialized
+2025-03-10 16:02:23,747 - video_processing - INFO - Video processing module initialized
+2025-03-10 16:05:32,247 - video_processing - INFO - Starting video processing task for ID: d8ef51d5-3fb6-4c15-8471-46b12061fe9b, URL: https://www.youtube.com/watch?v=qGw8gwdRMIA
+2025-03-10 16:05:32,499 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=qGw8gwdRMIA
+2025-03-10 16:05:35,961 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=qGw8gwdRMIA
+2025-03-10 16:06:36,251 - video_processing - INFO - Optimizing audio file
+2025-03-10 16:06:53,378 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-10 16:08:47,585 - video_processing - INFO - Cleaning up temporary files
+2025-03-10 16:08:47,588 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-10 16:08:47,627 - video_processing - INFO - Study notes generation task queued
+2025-03-10 16:08:47,629 - video_processing - INFO - Video processing completed successfully for ID: d8ef51d5-3fb6-4c15-8471-46b12061fe9b
+2025-03-10 16:08:47,633 - video_processing - INFO - Video processing task completed for ID: d8ef51d5-3fb6-4c15-8471-46b12061fe9b
