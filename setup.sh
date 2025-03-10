@@ -107,6 +107,29 @@ fi
 # Set up environment variables
 echo "\n[8/8] Setting up environment variables..."
 
+# Root environment setup
+if [ ! -f "./.env" ]; then
+  echo "Creating root .env file..."
+  
+  # Check if .env.example exists
+  if [ -f "./.env.example" ]; then
+    # Copy the example file
+    cp ./.env.example ./.env
+    
+    # Generate a secure random key for SECRET_KEY
+    SECRET_KEY=$(openssl rand -hex 32)
+    
+    # Update the SECRET_KEY
+    sed -i "s/SECRET_KEY=your_secret_key_here/SECRET_KEY=${SECRET_KEY}/g" ./.env
+    
+    echo "Root .env file created from example template. Please update with your actual API keys and credentials."
+  else
+    echo "Warning: .env.example not found at root level."
+  fi
+else
+  echo "Root .env file already exists. Skipping creation."
+fi
+
 # Server environment setup
 if [ ! -f "./server/.env" ]; then
   echo "Creating server .env file..."
