@@ -116,7 +116,19 @@ async def create_subscription(request: SubscriptionRequest, current_user: User =
                 
             customer = stripe.Customer.create(**customer_data)
         
-        # Create the subscription
+        # Check for existing subscription and cancel it if exists
+        subscription_plan = await SubscriptionPlan.filter(user_id=current_user.id).first()
+        if subscription_plan and subscription_plan.subscription_id:
+            try:
+                # Cancel the existing subscription immediately
+                existing_subscription = stripe.Subscription.retrieve(subscription_plan.subscription_id)
+                if existing_subscription.status not in ['canceled', 'incomplete_expired']:
+                    stripe.Subscription.delete(subscription_plan.subscription_id)
+            except stripe.error.StripeError:
+                # If there's an error retrieving/canceling the subscription, continue with new subscription
+                pass
+
+        # Create the new subscription
         subscription_data = {
             'customer': customer.id,
             'items': [
