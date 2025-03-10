@@ -49,6 +49,29 @@ export const paymentService = {
 
     return response.json();
   },
+  
+  async reactivateSubscription(subscriptionId: string): Promise<{ status: string }> {
+    const token = authService.getToken();
+    if (!token) {
+      throw new Error('Authentication required');
+    }
+
+    const response = await fetch(`${API_BASE_URL}/payment/reactivate-subscription`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ subscriptionId }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to reactivate subscription');
+    }
+
+    return response.json();
+  },
 
   async createSubscription(data: CreateSubscriptionRequest): Promise<SubscriptionResponse> {
     const token = authService.getToken();

@@ -230,6 +230,55 @@ async def cancel_subscription(request: CancelSubscriptionRequest, current_user: 
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+class ReactivateSubscriptionRequest(BaseModel):
+    subscriptionId: str
+
+@router.post("/reactivate-subscription")
+async def reactivate_subscription(request: ReactivateSubscriptionRequest, current_user: User = Depends(get_current_user)):
+    """Reactivate a previously canceled subscription"""
+    try:
+        # Pydantic already validated the request body
+        subscription_id = request.subscriptionId
+        
+        # Get the subscription from Stripe
+        subscription = stripe.Subscription.retrieve(subscription_id)
+        
+        # Check if the subscription belongs to the current user
+        if subscription.metadata.get('user_id') != str(current_user.id):
+            raise HTTPException(status_code=403, detail="You don't have permission to reactivate this subscription")
+        
+        # Check if the subscription is actually canceled
+        if not subscription.cancel_at_period_end:
+            return {"status": "subscription_active", "message": "Subscription is already active"}
+        
+        # Reactivate the subscription by setting cancel_at_period_end to False
+        updated_subscription = stripe.Subscription.modify(
+            subscription_id,
+            cancel_at_period_end=False,
+        )
+        
+        # Update our database to reflect reactivation
+        subscription_plan = await SubscriptionPlan.filter(user_id=current_user.id).first()
+        if subscription_plan:
+            subscription_plan.is_canceled = False
+            subscription_plan.cancel_at = None
+            
+            # Restore the appropriate plan tier based on the subscription metadata
+            plan_type = subscription.metadata.get('plan_type')
+            if plan_type:
+                plan_tier = PLAN_MAPPING.get(plan_type, PlanTier.FREE)
+                subscription_plan.plan_tier = plan_tier
+                subscription_plan.storage_limit = SubscriptionPlan.get_plan_storage_limit(plan_tier)
+                
+            await subscription_plan.save()
+        
+        return {"status": "subscription_reactivated"}
+    
+    except stripe.error.StripeError as e:
+        raise HTTPException(status_code=400, detail=f"Stripe error: {e.user_message}")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 class StripeWebhookData(BaseModel):
     object: dict
 

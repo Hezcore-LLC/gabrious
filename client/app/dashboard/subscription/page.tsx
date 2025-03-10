@@ -18,6 +18,7 @@ export default function SubscriptionManagementPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [cancelLoading, setCancelLoading] = useState(false);
+  const [reactivateLoading, setReactivateLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [subscription, setSubscription] = useState<{
     plan: string;
@@ -81,6 +82,39 @@ export default function SubscriptionManagementPage() {
       });
     } finally {
       setCancelLoading(false);
+    }
+  };
+
+  const handleReactivateSubscription = async () => {
+    if (!subscription?.subscriptionId) {
+      toast({
+        title: "Error",
+        description: "Subscription ID not found",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setReactivateLoading(true);
+      await paymentService.reactivateSubscription(subscription.subscriptionId);
+      toast({
+        title: "Subscription Reactivated",
+        description: "Your subscription has been reactivated successfully.",
+      });
+      
+      // Refresh subscription status
+      const status = await paymentService.getSubscriptionStatus();
+      setSubscription(status);
+    } catch (err) {
+      console.error("Failed to reactivate subscription:", err);
+      toast({
+        title: "Error",
+        description: "Failed to reactivate subscription. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setReactivateLoading(false);
     }
   };
 
@@ -243,8 +277,22 @@ export default function SubscriptionManagementPage() {
               )}
               
               {subscription?.plan !== "free" && subscription?.status === "canceled" && (
-                <div className="p-4 bg-muted rounded-md text-center">
-                  <p className="text-muted-foreground">Your subscription has been canceled and will end on your next billing date.</p>
+                <div className="p-4 bg-muted rounded-md space-y-4">
+                  <p className="text-muted-foreground text-center">Your subscription has been canceled and will end on your next billing date.</p>
+                  <Button 
+                    className="w-full" 
+                    onClick={handleReactivateSubscription}
+                    disabled={reactivateLoading}
+                  >
+                    {reactivateLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Reactivating...
+                      </>
+                    ) : (
+                      "Reactivate Subscription"
+                    )}
+                  </Button>
                 </div>
               )}
             </div>
