@@ -152,3 +152,8 @@
 2025-03-09 22:00:07,229 - video_processing - INFO - Video processing module initialized
 2025-03-09 22:07:08,537 - video_processing - INFO - Video processing module initialized
 2025-03-09 22:07:12,025 - video_processing - INFO - Video processing module initialized
+2025-03-09 22:19:23,451 - video_processing - INFO - Starting video processing task for ID: e4cb0a0e-05f7-4990-926b-e67944848bbf, URL: https://www.youtube.com/watch?v=Yt0mo8AB4EU
+2025-03-09 22:19:23,723 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=Yt0mo8AB4EU
+2025-03-09 22:19:28,170 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=Yt0mo8AB4EU
+2025-03-09 22:20:09,851 - video_processing - INFO - Optimizing audio file
+2025-03-09 22:20:20,427 - video_processing - INFO - Transcribing audio using Azure OpenAI
