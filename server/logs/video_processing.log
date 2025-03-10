@@ -157,3 +157,8 @@
 2025-03-09 22:19:28,170 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=Yt0mo8AB4EU
 2025-03-09 22:20:09,851 - video_processing - INFO - Optimizing audio file
 2025-03-09 22:20:20,427 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-09 22:21:42,189 - video_processing - INFO - Cleaning up temporary files
+2025-03-09 22:21:42,192 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-09 22:21:42,205 - video_processing - INFO - Study notes generation task queued
+2025-03-09 22:21:42,206 - video_processing - INFO - Video processing completed successfully for ID: e4cb0a0e-05f7-4990-926b-e67944848bbf
+2025-03-09 22:21:42,208 - video_processing - INFO - Video processing task completed for ID: e4cb0a0e-05f7-4990-926b-e67944848bbf
