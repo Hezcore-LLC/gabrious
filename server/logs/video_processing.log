@@ -163,3 +163,7 @@
 2025-03-09 22:21:42,206 - video_processing - INFO - Video processing completed successfully for ID: e4cb0a0e-05f7-4990-926b-e67944848bbf
 2025-03-09 22:21:42,208 - video_processing - INFO - Video processing task completed for ID: e4cb0a0e-05f7-4990-926b-e67944848bbf
 2025-03-09 22:31:11,526 - video_processing - INFO - Video processing module initialized
+2025-03-09 22:47:25,417 - video_processing - INFO - Video processing module initialized
+2025-03-09 22:47:29,519 - video_processing - INFO - Video processing module initialized
+2025-03-09 22:48:02,259 - video_processing - INFO - Video processing module initialized
+2025-03-09 22:48:06,087 - video_processing - INFO - Video processing module initialized
