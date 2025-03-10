@@ -171,7 +171,7 @@ export default function LoginPage() {
                 transition={{ delay: 0.8, duration: 0.3 }}
               >
                 Don't have an account?{" "}
-                <motion.span whileHover={{ scale: 1.05 }} style={{ display: "inline-block" }}>
+                <motion.span whileHover={{ scale: 1.05 }} className="inline-block">
                   <Link href="/auth/signup" className="hover:text-primary underline underline-offset-4">
                     Sign up
                   </Link>
