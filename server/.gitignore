@@ -1,0 +1,54 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+ENV/
+gabrious/
+
+# Environment variables - these contain sensitive data
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+temp/
+*.tmp
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Test cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Local development settings
+local_settings.py
+
+# Stripe API keys and other sensitive data
+*.pem
+*.key
