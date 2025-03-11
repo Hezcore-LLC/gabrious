@@ -1,11 +1,4 @@
-interface StudyNotes {
-  id: string;
-  title: string;
-  content: string;
-  // Add other required properties based on your application needs
-}
-
-export type { StudyNotes };
+import { StudyNotes } from './studyNotesService';
 import { authService } from "./authService";
 import { API_BASE_URL } from './utils';
 
