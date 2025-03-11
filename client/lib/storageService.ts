@@ -1,4 +1,5 @@
 import { authService } from "./authService";
+import { API_BASE_URL } from "./utils";
 
 export interface StorageStats {
   used: number;
@@ -8,8 +9,6 @@ export interface StorageStats {
   total_formatted: string;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-
 export const storageService = {
   getStorageUsage: async (): Promise<StorageStats> => {
     try {
@@ -18,7 +17,7 @@ export const storageService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/storage/usage`, {
+      const response = await fetch(`${API_BASE_URL}/storage/usage`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -42,7 +41,7 @@ export const storageService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/storage/check-limit?file_size=${fileSize}`, {
+      const response = await fetch(`${API_BASE_URL}/storage/check-limit?file_size=${fileSize}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

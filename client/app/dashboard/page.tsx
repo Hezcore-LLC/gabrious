@@ -11,7 +11,7 @@ import { BookOpen, Clock, Download, FileText, Heart, MoreHorizontal, Search, Upl
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/hooks/use-toast";
+import { useToast, toast } from "@/hooks/use-toast";
 
 // Default fallback image for sermons without thumbnails
 const DEFAULT_THUMBNAIL = "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1470&auto=format&fit=crop";

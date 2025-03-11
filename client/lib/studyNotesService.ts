@@ -1,5 +1,6 @@
 import { toast } from "@/hooks/use-toast";
 import { authService } from "./authService";
+import { API_BASE_URL } from "./utils";
 
 export interface Scripture {
   reference: string;
@@ -24,8 +25,6 @@ export interface StudyNotes {
   updated_at: string;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-
 export const studyNotesService = {
   getStudyNotes: async (id: string): Promise<StudyNotes> => {
     try {
@@ -34,7 +33,7 @@ export const studyNotesService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/study-notes/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/study-notes/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -61,7 +60,7 @@ export const studyNotesService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/study-notes/`, {
+      const response = await fetch(`${API_BASE_URL}/study-notes/`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

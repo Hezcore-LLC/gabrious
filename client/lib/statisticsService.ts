@@ -1,4 +1,5 @@
 import { authService } from "./authService";
+import { API_BASE_URL } from "./utils";
 
 export interface DashboardStatistics {
   total_sermons: number;
@@ -9,8 +10,6 @@ export interface DashboardStatistics {
   favorites_last_month: number;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-
 export const statisticsService = {
   getDashboardStatistics: async (): Promise<DashboardStatistics> => {
     try {
@@ -19,7 +18,7 @@ export const statisticsService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/statistics/dashboard`, {
+      const response = await fetch(`${API_BASE_URL}/statistics/dashboard`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

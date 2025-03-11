@@ -117,7 +117,7 @@ export const transcriptionService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/transcriptions/`, {
+      const response = await fetch(`${API_BASE_URL}/transcriptions/`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
