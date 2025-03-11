@@ -91,7 +91,10 @@ export default function DashboardPage() {
     total_sermons: 0,
     sermons_last_month: 0,
     total_notes: 0,
-    notes_last_month: 0
+    notes_last_month: 0,
+    total_favorites: 0,
+    favorites_last_month: 0
+
   });
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [statsError, setStatsError] = useState<string | null>(null);
