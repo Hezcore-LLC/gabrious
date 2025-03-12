@@ -7,8 +7,13 @@ WORKDIR /app
 # Copy package.json and yarn.lock
 COPY package.json yarn.lock ./
 
-# Ensure yarn is installed (in case it's missing in Alpine)
-RUN corepack enable && yarn install --frozen-lockfile
+# Add packageManager field to package.json to fix corepack warning
+RUN sed -i 's/"private": true,/"private": true,\n  "packageManager": "yarn@1.22.22",/g' package.json
+
+# Clean install with frozen lockfile
+RUN corepack enable && \
+    yarn cache clean && \
+    yarn install --frozen-lockfile
 
 # Copy all project files
 COPY . .
