@@ -138,7 +138,7 @@ class PrettyFormatter(logging.Formatter):
                                 self.terminal_formatter
                             ).rstrip()
                             # Ensure proper line breaks and indentation
-                            formatted_sql = f"\n{COLORS['BRIGHT_CYAN']}SQL Query:{COLORS['RESET']}\n  {highlighted_sql.replace('\n', '\n  ')}\n"
+                            formatted_sql = f"\n{COLORS['BRIGHT_CYAN']}SQL Query:{COLORS['RESET']}\n  {highlighted_sql.replace('\n', r'\n  ')}\n"
                             message = message.replace(full_sql, formatted_sql)
         
         # Format the final message with proper spacing
