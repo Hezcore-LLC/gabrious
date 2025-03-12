@@ -1,47 +1,50 @@
+# Base Image
 FROM node:18-alpine AS base
 
 # Set working directory
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+# Copy package.json and yarn.lock
+COPY package.json yarn.lock ./
 
-# Copy all files
+# Ensure yarn is installed (in case it's missing in Alpine)
+RUN corepack enable && yarn install --frozen-lockfile
+
+# Copy all project files
 COPY . .
 
-# Build the Next.js application
-RUN npm run build
+# Disable Next.js telemetry & set production mode
+ENV NEXT_TELEMETRY_DISABLED=1 \
+    NODE_ENV=production
 
-# Production image, copy all the files and run next
+# Build the Next.js application
+RUN yarn build
+
+# Production Image
 FROM node:18-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+# Set environment to production
+ENV NODE_ENV=production
 
-# Create a non-root user to run the application
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# Create a non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
-# Copy built application
+# Copy only necessary files from the build stage
 COPY --from=base /app/public ./public
 COPY --from=base /app/.next ./.next
 COPY --from=base /app/node_modules ./node_modules
 COPY --from=base /app/package.json ./package.json
 
-# Set correct permissions
+# Change ownership to non-root user
 RUN chown -R nextjs:nodejs /app
 
 # Switch to non-root user
 USER nextjs
 
-# Expose the port the app runs on
+# Expose Next.js port
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "start"]
+# Start the Next.js application using yarn
+CMD ["yarn", "start"]
