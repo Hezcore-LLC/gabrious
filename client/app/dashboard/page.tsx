@@ -70,11 +70,14 @@ const favoriteSermons = [
   }
 ];
 
-import { transcriptionService, Transcription } from '@/lib/transcriptionService';
-import { studyNotesService, StudyNotes } from '@/lib/studyNotesService';
+import { transcriptionService } from '@/lib/transcriptionService';
+import type { Transcription } from '@/lib/transcriptionService';
+import { studyNotesService } from '@/lib/studyNotesService';
+import type { StudyNotes } from '@/lib/studyNotesService';
 import { statisticsService } from '@/lib/statisticsService';
 import { favoritesService } from '@/lib/favoritesService';
-import { storageService, StorageStats } from '@/lib/storageService';
+import { storageService } from '@/lib/storageService';
+import type { StorageStats } from '@/lib/storageService';
 import { useEffect } from 'react';
 import Image from 'next/image';
 
@@ -246,9 +249,9 @@ export default function DashboardPage() {
             <CardContent>
               {isLoadingStorage ? (
                 <div className="space-y-2">
-                  <div className="h-6 w-24 bg-muted animate-pulse rounded"></div>
-                  <div className="h-4 w-32 bg-muted animate-pulse rounded"></div>
-                  <div className="mt-2 h-2 bg-muted animate-pulse rounded"></div>
+                  <div className="h-6 w-24 bg-muted animate-pulse rounded" />
+                  <div className="h-4 w-32 bg-muted animate-pulse rounded" />
+                  <div className="mt-2 h-2 bg-muted animate-pulse rounded" />
                 </div>
               ) : storageError ? (
                 <div className="text-sm text-destructive">{storageError}</div>
@@ -293,7 +296,7 @@ export default function DashboardPage() {
               {isLoading ? (
                 <div className="col-span-full flex justify-center items-center py-12">
                   <div className="text-center space-y-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
                     <p className="text-sm text-muted-foreground">Loading transcriptions...</p>
                   </div>
                 </div>
@@ -379,7 +382,7 @@ export default function DashboardPage() {
               {isLoading ? (
                 <div className="col-span-full flex justify-center items-center py-12">
                   <div className="text-center space-y-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
                     <p className="text-sm text-muted-foreground">Loading transcriptions...</p>
                   </div>
                 </div>
@@ -456,7 +459,7 @@ export default function DashboardPage() {
               {isLoadingNotes ? (
                 <div className="col-span-full flex justify-center items-center py-12">
                   <div className="text-center space-y-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
                     <p className="text-sm text-muted-foreground">Loading study notes...</p>
                   </div>
                 </div>
@@ -513,7 +516,7 @@ export default function DashboardPage() {
                       </div>
                       <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
                         {(expandedNotes[note.id] ? note.keyPoints : note.keyPoints.slice(0, 3)).map((point, index) => (
-                          <li key={index}>{point}</li>
+                          <li key={`${note.id}-point-${point.substring(0, 20)}`}>{point}</li>
                         ))}
                       </ul>
                     </div>
@@ -541,7 +544,7 @@ export default function DashboardPage() {
               <div className="text-center py-12">
                 <Heart className="h-12 w-12 mx-auto mb-4 text-gray-400" />
                 <h2 className="text-xl font-semibold mb-2">No favorites yet</h2>
-                <p className="text-gray-500 mb-4">You haven't added any study notes to your favorites.</p>
+                <p className="text-gray-500 mb-4">You haven&apos;t added any study notes to your favorites.</p>
                 <Button variant="outline" size="sm" asChild>
                   <Link href="/study-notes">Browse Study Notes</Link>
                 </Button>
