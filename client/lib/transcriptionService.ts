@@ -5,12 +5,17 @@ export interface Transcription {
   id: string;
   video_url: string;
   title: string | null;
+  pastor: string | null;
   thumbnail: string | null;
+  duration: string | null;
   status: string;
   transcription_text: string | null;
   error_message: string | null;
   created_at: string;
   updated_at: string;
+  file_size?: number;
+  // Adding a computed property for date display that can be derived from created_at
+  date?: string;
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
