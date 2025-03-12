@@ -1,5 +1,6 @@
 import { toast } from "@/hooks/use-toast";
 import { authService } from "./authService";
+import { API_BASE_URL } from "./utils";
 
 export interface Transcription {
   id: string;
@@ -18,8 +19,6 @@ export interface Transcription {
   date?: string;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-
 export const transcriptionService = {
   submitUrl: async (url: string): Promise<{ id: string; status: string; task_id: string }> => {
     try {
@@ -33,7 +32,7 @@ export const transcriptionService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/transcriptions/`, {
+      const response = await fetch(`${API_BASE_URL}/transcriptions/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +78,7 @@ export const transcriptionService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/transcriptions/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/transcriptions/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
