@@ -94,7 +94,6 @@ export default function DashboardPage() {
     notes_last_month: 0,
     total_favorites: 0,
     favorites_last_month: 0
-
   });
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [statsError, setStatsError] = useState<string | null>(null);
