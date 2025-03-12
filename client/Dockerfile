@@ -22,8 +22,8 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1 \
     NODE_ENV=production
 
-# Build the Next.js application
-RUN yarn build
+# Build the Next.js application with increased memory limit
+RUN NODE_OPTIONS="--max-old-space-size=4096" yarn build
 
 # Production Image
 FROM node:18-alpine AS runner
