@@ -10,10 +10,10 @@ COPY package.json yarn.lock ./
 # Add packageManager field to package.json to fix corepack warning
 RUN sed -i 's/"private": true,/"private": true,\n  "packageManager": "yarn@1.22.22",/g' package.json
 
-# Clean install with frozen lockfile
+# Clean install without frozen lockfile to allow updates
 RUN corepack enable && \
     yarn cache clean && \
-    yarn install --frozen-lockfile
+    yarn install
 
 # Copy all project files
 COPY . .
