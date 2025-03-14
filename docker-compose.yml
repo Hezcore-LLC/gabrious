@@ -69,7 +69,7 @@ services:
       - server
     environment:
       - DATABASE_URL=postgres://postgres:postgres@localhost/gabrious_production
-      - REDIS_URL=redis://redis:6379/0
+      - REDIS_URL=redis://localhost:6379/0
       - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
       - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
       - AZURE_OPENAI_DEPLOYMENT_ID=${AZURE_OPENAI_DEPLOYMENT_ID}

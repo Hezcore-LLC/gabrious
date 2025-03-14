@@ -18,7 +18,7 @@ app.conf.update(
     # Broker settings
     broker_transport_options={'visibility_timeout': 3600},
     broker_connection_retry_on_startup=True,  # Moved here
-    result_backend='redis://localhost:6379/0',
+    result_backend=os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
     
     # Task settings
     task_serializer='json',
