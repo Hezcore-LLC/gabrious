@@ -30,6 +30,8 @@ services:
     depends_on:
       redis:
         condition: service_healthy
+    env_file:
+      - ./server/.env
     environment:
       - DATABASE_URL=postgres://postgres:postgres@localhost/gabrious_production
       - REDIS_URL=redis://redis:6379/0
@@ -100,8 +102,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    env_file:
+      - ./client/.env
     environment:
-      - NEXT_PUBLIC_API_URL=http://server:8000
+      - NEXT_PUBLIC_API_URL=http://172.17.0.1:8000
       - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
       - NEXT_PUBLIC_AUTH_COOKIE_NAME=auth_token
       - NEXT_PUBLIC_ENABLE_ANALYTICS=false

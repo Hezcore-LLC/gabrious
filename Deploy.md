@@ -212,13 +212,34 @@ cat backup.sql | docker-compose exec -T postgres psql -U postgres gabrious_produ
 
 ## Updating the Application
 
-1. Pull the latest code changes
-2. Rebuild and restart the containers:
+### Pulling Latest Code Changes
+
+1. On your server (Azure VM or wherever your application is hosted), navigate to your project directory and pull the latest changes from your repository:
 
 ```bash
-docker-compose down
-docker-compose up -d --build
+# Navigate to your project directory if needed
+cd /path/to/gabrious
+
+# Pull the latest code changes
+git pull origin main  # or the branch you're working on
 ```
+
+### Rebuilding and Restarting Containers
+
+2. After pulling the latest code, rebuild and restart the Docker containers to apply the changes:
+
+```bash
+# Stop and remove the current containers
+docker-compose down
+
+# Rebuild the Docker images with the latest code
+docker-compose build
+
+# Start the containers in detached mode
+docker-compose up -d
+```
+
+This process ensures that your application is running with the most recent code changes and that all containers are rebuilt with the updated code.
 
 ## Container Architecture
 
