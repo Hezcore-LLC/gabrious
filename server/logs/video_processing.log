@@ -195,3 +195,21 @@
 2025-03-13 23:51:12,231 - video_processing - INFO - Video processing module initialized
 2025-03-13 23:51:16,544 - video_processing - INFO - Video processing module initialized
 2025-03-14 01:09:51,645 - video_processing - INFO - Video processing module initialized
+2025-03-19 18:22:00,046 - video_processing - INFO - Video processing module initialized
+2025-03-19 18:22:01,966 - video_processing - INFO - Video processing module initialized
+2025-03-19 18:23:04,959 - video_processing - INFO - Video processing module initialized
+2025-03-19 18:23:05,910 - video_processing - INFO - Video processing module initialized
+2025-03-19 18:23:38,989 - video_processing - INFO - Video processing module initialized
+2025-03-19 18:24:23,235 - video_processing - INFO - Starting video processing task for ID: 0c90c992-da39-4b85-a496-ccb410c57d1a, URL: https://www.youtube.com/watch?v=PFijcR12yHU
+2025-03-19 18:24:23,310 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=PFijcR12yHU
+2025-03-19 18:24:25,754 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=PFijcR12yHU
+2025-03-19 18:24:42,316 - video_processing - INFO - Optimizing audio file
+2025-03-19 18:24:45,696 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-19 18:26:25,004 - video_processing - INFO - Cleaning up temporary files
+2025-03-19 18:26:25,004 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-19 18:26:25,009 - video_processing - INFO - Study notes generation task queued
+2025-03-19 18:26:25,009 - video_processing - INFO - Video processing completed successfully for ID: 0c90c992-da39-4b85-a496-ccb410c57d1a
+2025-03-19 18:26:25,011 - video_processing - INFO - Video processing task completed for ID: 0c90c992-da39-4b85-a496-ccb410c57d1a
+2025-03-19 19:11:01,055 - video_processing - INFO - Video processing module initialized
+2025-03-19 19:11:01,910 - video_processing - INFO - Video processing module initialized
+2025-03-19 19:18:54,716 - video_processing - INFO - Video processing module initialized

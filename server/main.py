@@ -24,7 +24,7 @@ __all__ = ['app']
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Update with your frontend URL
+    allow_origins=["http://localhost:3000", "https://gabrious.com","https://www.gabrious.com", "https://gabrious.hezcore.com", "http://128.85.128.76:3000"],  # Update with your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
