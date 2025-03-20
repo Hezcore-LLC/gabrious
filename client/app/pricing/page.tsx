@@ -181,7 +181,7 @@ export default function PricingPage() {
             <CardFooter>
               {plan.name === "Free" ? (
                 <Button variant={plan.buttonVariant} className="w-full" asChild>
-                  <Link href="/auth/signup">{plan.buttonText}</Link>
+                  <Link href="/signup">{plan.buttonText}</Link>
                 </Button>
               ) : hasActiveSubscription && plan.name.toLowerCase() === "pro" || plan.name.toLowerCase() === "church" ? (
                 <Button 
