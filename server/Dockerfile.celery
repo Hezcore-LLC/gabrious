@@ -1,10 +1,11 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
 # Install system dependencies including FFmpeg with enhanced MP3 support
-# Added browser packages for yt-dlp cookie extraction
-RUN apt-get update && apt-get install -y \
+# Added browser packages for yt-dlp cookie extraction with optimized disk usage
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     ffmpeg \
     libmp3lame0 \
     libavcodec-extra \
@@ -14,8 +15,13 @@ RUN apt-get update && apt-get install -y \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
     && apt-get update \
-    && apt-get install -y google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends google-chrome-stable \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/cache/apt/* \
+    && rm -rf /usr/share/doc/* \
+    && rm -rf /usr/share/man/* \
+    && rm -rf /usr/share/icons/*
 
 # Copy requirements first for better caching
 COPY requirements.txt .
