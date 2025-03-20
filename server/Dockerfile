@@ -3,15 +3,12 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Install system dependencies including FFmpeg with enhanced MP3 support
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
     ffmpeg \
     libmp3lame0 \
     libavcodec-extra \
     postgresql-client \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /var/cache/apt/*
-
+    && rm -rf /var/lib/apt/lists/*
 # Copy requirements first for better caching
 COPY requirements.txt .
 
