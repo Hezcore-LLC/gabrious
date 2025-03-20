@@ -263,7 +263,7 @@ ${domain_name} {
     }
     
     # Proxy API requests to the backend
-    handle_path /api/* {
+    handle /api/* {
         reverse_proxy localhost:8000 {
             header_up X-Forwarded-Proto "https"
             header_up X-Forwarded-For {remote_host}
