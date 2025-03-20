@@ -2,23 +2,17 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install system dependencies including FFmpeg with enhanced MP3 support
-# Added browser packages for yt-dlp cookie extraction with optimized disk usage
-
+# Install system dependencies including FFmpeg, PostgreSQL dev packages, and Chrome
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     libmp3lame0 \
     libavcodec-extra \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
+    google-chrome-stable \
+    build-essential \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY requirements.txt .
-
-# Copy requirements first for better caching
+# Copy the requirements.txt to the container
 COPY requirements.txt .
 
 # Install Python dependencies
@@ -27,8 +21,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Create necessary directories
 RUN mkdir -p /app/temp /app/logs
 
-# Copy application code
+# Copy the application code
 COPY . .
 
 # Command to run Celery worker
 CMD ["celery", "-A", "celery_app", "worker", "--loglevel=info"]
+
