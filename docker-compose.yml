@@ -92,7 +92,7 @@ services:
       - redis
       - celery_worker
     environment:
-      - REDIS_URL=redis://redis:6379/0
+      - REDIS_URL=${REDIS_URL:-redis://localhost:6379/0}
     restart: unless-stopped
 
   # Frontend Client
