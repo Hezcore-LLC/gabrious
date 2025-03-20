@@ -8,6 +8,8 @@ RUN apt-get update && apt-get install -y \
     libmp3lame0 \
     libavcodec-extra \
     postgresql-client \
+    build-essential \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 # Copy requirements first for better caching
 COPY requirements.txt .
