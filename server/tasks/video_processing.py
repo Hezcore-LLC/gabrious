@@ -37,6 +37,8 @@ def process_video(transcription_id: UUID, video_url: str) -> Dict:
         raise
 
 async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
+    # Initialize transcription variable outside try block to avoid UnboundLocalError
+    transcription = None
     try:
         # Initialize database connection
         await Tortoise.init(
@@ -61,7 +63,15 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
                 'preferredcodec': 'mp3',
                 'preferredquality': '32',  # Reduced from 192 to 32 for smaller file size
             }],
-            'outtmpl': f'temp/{transcription_id}.%(ext)s'
+            'outtmpl': f'temp/{transcription_id}.%(ext)s',
+            # Add cookie handling to bypass YouTube bot detection
+            'cookiesfrombrowser': ('chrome',),  # Try to use Chrome cookies
+            'cookiefile': 'temp/youtube_cookies.txt',  # Fallback to a cookie file if available
+            # Add user agent to appear more like a regular browser
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            # Add retries for transient errors
+            'retries': 10,
+            'ignoreerrors': True
         }
         
         # Extract video metadata before downloading
@@ -169,8 +179,12 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         
     except Exception as e:
         logger.error(f"Error processing video: {str(e)}", exc_info=True)
-        # Update status to failed
-        transcription.status = TranscriptionStatus.FAILED
-        transcription.error_message = str(e)
-        await transcription.save()
+        # Update status to failed only if transcription object exists
+        if transcription:
+            transcription.status = TranscriptionStatus.FAILED
+            transcription.error_message = str(e)
+            await transcription.save()
         raise
+    finally:
+        # Ensure database connections are properly closed
+        await Tortoise.close_connections()

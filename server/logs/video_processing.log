@@ -216,3 +216,17 @@
 2025-03-19 20:40:37,322 - video_processing - INFO - Video processing module initialized
 2025-03-19 20:45:03,903 - video_processing - INFO - Video processing module initialized
 2025-03-19 20:46:23,632 - video_processing - INFO - Video processing module initialized
+2025-03-20 15:22:06,041 - video_processing - INFO - Video processing module initialized
+2025-03-20 15:22:06,934 - video_processing - INFO - Video processing module initialized
+2025-03-20 15:22:56,860 - video_processing - INFO - Video processing module initialized
+2025-03-20 15:25:01,626 - video_processing - INFO - Starting video processing task for ID: 31b37d14-bf75-40cc-b927-6b6ae869e1bb, URL: https://youtu.be/6fn5phd_irg?si=Q0pB3Q7NY_RAcKtW
+2025-03-20 15:25:01,710 - video_processing - INFO - Extracting metadata for video: https://youtu.be/6fn5phd_irg?si=Q0pB3Q7NY_RAcKtW
+2025-03-20 15:25:23,899 - video_processing - INFO - Downloading video: https://youtu.be/6fn5phd_irg?si=Q0pB3Q7NY_RAcKtW
+2025-03-20 15:25:30,346 - video_processing - INFO - Optimizing audio file
+2025-03-20 15:25:31,297 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-20 15:26:00,049 - video_processing - INFO - Cleaning up temporary files
+2025-03-20 15:26:00,050 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-20 15:26:00,054 - video_processing - INFO - Study notes generation task queued
+2025-03-20 15:26:00,054 - video_processing - INFO - Video processing completed successfully for ID: 31b37d14-bf75-40cc-b927-6b6ae869e1bb
+2025-03-20 15:26:00,055 - video_processing - INFO - Video processing task completed for ID: 31b37d14-bf75-40cc-b927-6b6ae869e1bb
+2025-03-20 15:38:16,166 - video_processing - INFO - Video processing module initialized
