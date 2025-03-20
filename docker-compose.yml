@@ -15,6 +15,7 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    network_mode: "host"
 
   # Backend API Server
   server:
@@ -34,7 +35,7 @@ services:
       - ./server/.env
     environment:
       - DATABASE_URL=postgres://postgres:postgres@localhost/gabrious_production
-      - REDIS_URL=${REDIS_URL:-redis://localhost:6379/0}
+      - REDIS_URL=${REDIS_URL:-redis://127.0.0.1:6379/0}
       - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
       - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
       - AZURE_OPENAI_DEPLOYMENT_ID=${AZURE_OPENAI_DEPLOYMENT_ID}
@@ -71,7 +72,7 @@ services:
       - server
     environment:
       - DATABASE_URL=${DATABASE_URL:-postgres://postgres:postgres@localhost/gabrious_production}
-      - REDIS_URL=${REDIS_URL:-redis://localhost:6379/0}
+      - REDIS_URL=${REDIS_URL:-redis://127.0.0.1:6379/0}
       - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
       - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
       - AZURE_OPENAI_DEPLOYMENT_ID=${AZURE_OPENAI_DEPLOYMENT_ID}
@@ -92,8 +93,9 @@ services:
       - redis
       - celery_worker
     environment:
-      - REDIS_URL=${REDIS_URL:-redis://localhost:6379/0}
+      - REDIS_URL=${REDIS_URL:-redis://127.0.0.1:6379/0}
     restart: unless-stopped
+    network_mode: "host"
 
   # Frontend Client
   client:
