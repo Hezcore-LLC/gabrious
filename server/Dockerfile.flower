@@ -7,6 +7,14 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
     libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Google Chrome manually
+RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip
