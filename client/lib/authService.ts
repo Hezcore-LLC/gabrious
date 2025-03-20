@@ -28,7 +28,7 @@ const TOKEN_KEY = 'auth_token';
 
 export const authService = {
   async signup(data: SignupData): Promise<UserResponse> {
-    const response = await fetch(`${API_BASE_URL}/signup`, {
+    const response = await fetch(`${API_BASE_URL}/auth/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
