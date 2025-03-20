@@ -19,6 +19,9 @@ RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor
     && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
+# Upgrade pip to the latest version
+RUN pip install --upgrade pip
+
 # Copy requirements first for better caching
 COPY requirements.txt .
 
@@ -33,3 +36,4 @@ COPY . .
 
 # Command to run Celery worker
 CMD ["celery", "-A", "celery_app", "worker", "--loglevel=info"]
+
