@@ -2,12 +2,13 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install required dependencies
+# Install required dependencies for asyncpg and other packages
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     libmp3lame0 \
     libavcodec-extra \
     build-essential \
+    gcc \
     libpq-dev \
     curl \
     && rm -rf /var/lib/apt/lists/*
