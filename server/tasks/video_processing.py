@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 import logging
 import os
 import sys
+import pathlib
 from utils.logger import setup_logger
 
 # Set up logger for video processing
@@ -55,6 +56,20 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         transcription.status = TranscriptionStatus.DOWNLOADING
         await transcription.save()
         
+        # Get temp directory from environment variable or use default paths based on environment
+        # In Docker, use /tmp/gabrious which is writable in containers
+        # In local development, use a directory in the project folder
+        temp_dir = os.getenv('GABRIOUS_TEMP_DIR')
+        if not temp_dir:
+            # Check if we're in a Docker container by looking for /.dockerenv
+            if os.path.exists('/.dockerenv'):
+                temp_dir = '/tmp/gabrious'
+            else:
+                # For local development, use a directory in the project folder
+                # Get the project root directory (2 levels up from the current file)
+                project_dir = pathlib.Path(__file__).parent.parent
+                temp_dir = os.path.join(project_dir, 'temp', 'gabrious')
+        
         # Configure yt-dlp with enhanced options for handling authentication
         ydl_opts = {
             'format': 'bestaudio/best',
@@ -63,8 +78,8 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
                 'preferredcodec': 'mp3',
                 'preferredquality': '32',
             }],
-            'outtmpl': f'temp/{transcription_id}.%(ext)s',
-            'cookiefile': '/app/temp/youtube_cookies.txt',  # Enable cookie file support
+            'outtmpl': os.path.join(temp_dir, f'{transcription_id}.%(ext)s'),
+            'cookiefile': os.path.join(temp_dir, 'youtube_cookies.txt'),  # Enable cookie file support
             'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'retries': 10,
             'ignoreerrors': False,  # Don't ignore errors to catch authentication issues
@@ -74,12 +89,13 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
             'no_warnings': False,
             'verbose': True  # Enable verbose output for better error tracking
         }
-
+        
         # Ensure temp directory exists
-        os.makedirs('/app/temp', exist_ok=True)
+        os.makedirs(temp_dir, exist_ok=True)
+        logger.info(f"Using temporary directory: {temp_dir}")
 
         # Create a properly formatted Netscape cookie file if it doesn't exist
-        cookie_file_path = '/app/temp/youtube_cookies.txt'
+        cookie_file_path = os.path.join(temp_dir, 'youtube_cookies.txt')
         if not os.path.exists(cookie_file_path):
             with open(cookie_file_path, 'w') as f:
                 f.write('# Netscape HTTP Cookie File\n')
@@ -127,8 +143,8 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         await transcription.save()
         
         # Further reduce file size by converting to mono and lower bitrate
-        original_file = f'temp/{transcription_id}.mp3'
-        optimized_file = f'temp/{transcription_id}_optimized.mp3'
+        original_file = os.path.join(temp_dir, f'{transcription_id}.mp3')
+        optimized_file = os.path.join(temp_dir, f'{transcription_id}_optimized.mp3')
         
         logger.info(f"Optimizing audio file")
         # Use FFmpeg to convert to mono with 16kHz sample rate and 24kbps bitrate
@@ -164,7 +180,7 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         deployment_id = os.getenv("AZURE_OPENAI_DEPLOYMENT_ID", "whisper")
         
         logger.info(f"Transcribing audio using Azure OpenAI")
-        with open(f'temp/{transcription_id}.mp3', "rb") as audio_file:
+        with open(os.path.join(temp_dir, f'{transcription_id}.mp3'), "rb") as audio_file:
             result = client.audio.transcriptions.create(
                 file=audio_file,
                 model=deployment_id  # Use the deployment_id instead of hardcoded "whisper"
@@ -177,7 +193,7 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         
         # Clean up temporary files
         logger.info(f"Cleaning up temporary files")
-        os.remove(f'temp/{transcription_id}.mp3')
+        os.remove(os.path.join(temp_dir, f'{transcription_id}.mp3'))
         
         # Generate study notes using transcript processing
         logger.info(f"Initiating study notes generation via transcript processing")

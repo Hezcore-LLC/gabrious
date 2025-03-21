@@ -230,3 +230,153 @@
 2025-03-20 15:26:00,054 - video_processing - INFO - Video processing completed successfully for ID: 31b37d14-bf75-40cc-b927-6b6ae869e1bb
 2025-03-20 15:26:00,055 - video_processing - INFO - Video processing task completed for ID: 31b37d14-bf75-40cc-b927-6b6ae869e1bb
 2025-03-20 15:38:16,166 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:09:34,814 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:09:35,793 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:09:52,820 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:12:18,136 - video_processing - INFO - Starting video processing task for ID: 446e49ec-49b9-4979-a9f0-23646ba0d592, URL: https://www.youtube.com/watch?v=oOwORcCEluE&t=74s
+2025-03-21 15:12:18,166 - video_processing - ERROR - Error processing video: [Errno 30] Read-only file system: '/app'
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 79, in _process_video
+    os.makedirs('/app/temp', exist_ok=True)
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 225, in makedirs
+OSError: [Errno 30] Read-only file system: '/app'
+2025-03-21 15:12:18,171 - video_processing - ERROR - Video processing task failed for ID: 446e49ec-49b9-4979-a9f0-23646ba0d592: [Errno 30] Read-only file system: '/app'
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 32, in process_video
+    result = asyncio.run(_process_video(transcription_id, video_url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 79, in _process_video
+    os.makedirs('/app/temp', exist_ok=True)
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 225, in makedirs
+OSError: [Errno 30] Read-only file system: '/app'
+2025-03-21 15:13:44,504 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:14:17,806 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:14:24,048 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:14:26,710 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:14:27,807 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:14:29,323 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:15:04,826 - video_processing - INFO - Starting video processing task for ID: 3d40c9b6-4e2d-43bd-9153-6317b3b11de0, URL: https://www.youtube.com/watch?v=oOwORcCEluE&t=74s
+2025-03-21 15:15:04,841 - video_processing - ERROR - Error processing video: [Errno 30] Read-only file system: '/app'
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 79, in _process_video
+    temp_dir = '/tmp/gabrious'
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 225, in makedirs
+OSError: [Errno 30] Read-only file system: '/app'
+2025-03-21 15:15:04,846 - video_processing - ERROR - Video processing task failed for ID: 3d40c9b6-4e2d-43bd-9153-6317b3b11de0: [Errno 30] Read-only file system: '/app'
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 32, in process_video
+    result = asyncio.run(_process_video(transcription_id, video_url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 79, in _process_video
+    temp_dir = '/tmp/gabrious'
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 225, in makedirs
+OSError: [Errno 30] Read-only file system: '/app'
+2025-03-21 15:15:29,071 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:15:37,923 - video_processing - INFO - Starting video processing task for ID: 103a1e8b-e8f1-4160-9458-5bd97801d7fc, URL: https://www.youtube.com/watch?v=oOwORcCEluE&t=74s
+2025-03-21 15:15:38,566 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=oOwORcCEluE&t=74s
+2025-03-21 15:15:40,886 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=oOwORcCEluE&t=74s
+2025-03-21 15:15:57,963 - video_processing - INFO - Optimizing audio file
+2025-03-21 15:16:02,117 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-21 15:18:17,118 - video_processing - INFO - Cleaning up temporary files
+2025-03-21 15:18:17,119 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-21 15:18:17,123 - video_processing - INFO - Study notes generation task queued
+2025-03-21 15:18:17,123 - video_processing - INFO - Video processing completed successfully for ID: 103a1e8b-e8f1-4160-9458-5bd97801d7fc
+2025-03-21 15:18:17,126 - video_processing - INFO - Video processing task completed for ID: 103a1e8b-e8f1-4160-9458-5bd97801d7fc
+2025-03-21 15:18:56,464 - video_processing - INFO - Starting video processing task for ID: 0a0fc76a-16f3-4d61-9cad-93cbbf6f7626, URL: https://www.youtube.com/shorts/XFgQkloX-aE
+2025-03-21 15:18:56,519 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/shorts/XFgQkloX-aE
+2025-03-21 15:18:58,834 - video_processing - INFO - Downloading video: https://www.youtube.com/shorts/XFgQkloX-aE
+2025-03-21 15:19:01,735 - video_processing - INFO - Optimizing audio file
+2025-03-21 15:19:01,818 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-21 15:19:03,746 - video_processing - INFO - Cleaning up temporary files
+2025-03-21 15:19:03,746 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-21 15:19:03,748 - video_processing - INFO - Study notes generation task queued
+2025-03-21 15:19:03,748 - video_processing - INFO - Video processing completed successfully for ID: 0a0fc76a-16f3-4d61-9cad-93cbbf6f7626
+2025-03-21 15:19:03,750 - video_processing - INFO - Video processing task completed for ID: 0a0fc76a-16f3-4d61-9cad-93cbbf6f7626
+2025-03-21 15:20:38,710 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:22:26,018 - video_processing - INFO - Starting video processing task for ID: a3085e19-be68-4e04-b157-1e355d2048f3, URL: https://www.youtube.com/shorts/XFgQkloX-aE
+2025-03-21 15:22:26,245 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/shorts/XFgQkloX-aE
+2025-03-21 15:22:28,458 - video_processing - INFO - Downloading video: https://www.youtube.com/shorts/XFgQkloX-aE
+2025-03-21 15:22:31,053 - video_processing - INFO - Optimizing audio file
+2025-03-21 15:22:31,147 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-21 15:22:32,887 - video_processing - INFO - Cleaning up temporary files
+2025-03-21 15:22:32,887 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-21 15:22:32,891 - video_processing - INFO - Study notes generation task queued
+2025-03-21 15:22:32,891 - video_processing - INFO - Video processing completed successfully for ID: a3085e19-be68-4e04-b157-1e355d2048f3
+2025-03-21 15:22:32,894 - video_processing - INFO - Video processing task completed for ID: a3085e19-be68-4e04-b157-1e355d2048f3
+2025-03-21 15:23:16,289 - video_processing - INFO - Starting video processing task for ID: b79781d2-d888-433c-86bd-b40280ee03de, URL: https://www.youtube.com/watch?v=oOwORcCEluE&t=74s
+2025-03-21 15:23:16,339 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=oOwORcCEluE&t=74s
+2025-03-21 15:23:18,577 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=oOwORcCEluE&t=74s
+2025-03-21 15:23:35,830 - video_processing - INFO - Optimizing audio file
+2025-03-21 15:23:40,028 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-21 15:25:15,481 - video_processing - INFO - Cleaning up temporary files
+2025-03-21 15:25:15,481 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-21 15:25:15,482 - video_processing - INFO - Study notes generation task queued
+2025-03-21 15:25:15,483 - video_processing - INFO - Video processing completed successfully for ID: b79781d2-d888-433c-86bd-b40280ee03de
+2025-03-21 15:25:15,485 - video_processing - INFO - Video processing task completed for ID: b79781d2-d888-433c-86bd-b40280ee03de
+2025-03-21 15:28:40,766 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:28:50,336 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:28:52,874 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:28:55,680 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:28:57,342 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:28:58,414 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:31:11,435 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:32:12,064 - video_processing - INFO - Starting video processing task for ID: 2dd42af3-59eb-4fe9-99bf-60894e553c23, URL: https://www.youtube.com/shorts/XFgQkloX-aE
+2025-03-21 15:32:12,098 - video_processing - ERROR - Error processing video: cannot access local variable 'temp_dir' where it is not associated with a value
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 67, in _process_video
+    'outtmpl': os.path.join(temp_dir, f'{transcription_id}.%(ext)s'),
+                            ^^^^^^^^
+UnboundLocalError: cannot access local variable 'temp_dir' where it is not associated with a value
+2025-03-21 15:32:12,101 - video_processing - ERROR - Video processing task failed for ID: 2dd42af3-59eb-4fe9-99bf-60894e553c23: cannot access local variable 'temp_dir' where it is not associated with a value
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 33, in process_video
+    result = asyncio.run(_process_video(transcription_id, video_url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 67, in _process_video
+    'outtmpl': os.path.join(temp_dir, f'{transcription_id}.%(ext)s'),
+                            ^^^^^^^^
+UnboundLocalError: cannot access local variable 'temp_dir' where it is not associated with a value
+2025-03-21 15:33:28,291 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:34:09,314 - video_processing - INFO - Video processing module initialized
+2025-03-21 15:34:40,618 - video_processing - INFO - Starting video processing task for ID: 29300939-9e43-4866-a1cb-e5a07ffb543c, URL: https://www.youtube.com/shorts/XFgQkloX-aE
+2025-03-21 15:34:40,646 - video_processing - INFO - Using temporary directory: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious
+2025-03-21 15:34:40,824 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/shorts/XFgQkloX-aE
+2025-03-21 15:34:43,104 - video_processing - INFO - Downloading video: https://www.youtube.com/shorts/XFgQkloX-aE
+2025-03-21 15:34:45,146 - video_processing - INFO - Optimizing audio file
+2025-03-21 15:34:45,242 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-03-21 15:34:46,973 - video_processing - INFO - Cleaning up temporary files
+2025-03-21 15:34:46,974 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-03-21 15:34:46,978 - video_processing - INFO - Study notes generation task queued
+2025-03-21 15:34:46,978 - video_processing - INFO - Video processing completed successfully for ID: 29300939-9e43-4866-a1cb-e5a07ffb543c
+2025-03-21 15:34:46,981 - video_processing - INFO - Video processing task completed for ID: 29300939-9e43-4866-a1cb-e5a07ffb543c
