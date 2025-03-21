@@ -78,9 +78,13 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         # Ensure temp directory exists
         os.makedirs('/app/temp', exist_ok=True)
 
-        # Create an empty cookie file if it doesn't exist
-        if not os.path.exists('/app/temp/youtube_cookies.txt'):
-            open('/app/temp/youtube_cookies.txt', 'a').close()
+        # Create a properly formatted Netscape cookie file if it doesn't exist
+        cookie_file_path = '/app/temp/youtube_cookies.txt'
+        if not os.path.exists(cookie_file_path):
+            with open(cookie_file_path, 'w') as f:
+                f.write('# Netscape HTTP Cookie File\n')
+                f.write('# https://curl.haxx.se/rfc/cookie_spec.html\n')
+                f.write('# This is a generated file!  Do not edit.\n\n')
         
         # Extract video metadata before downloading
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
