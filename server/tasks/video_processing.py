@@ -70,7 +70,7 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
                 project_dir = pathlib.Path(__file__).parent.parent
                 temp_dir = os.path.join(project_dir, 'temp', 'gabrious')
         
-        # Configure yt-dlp with enhanced options for handling authentication
+        # Configure yt-dlp with enhanced options for cookie-free authentication
         ydl_opts = {
             'format': 'bestaudio/best',
             'postprocessors': [{
@@ -79,7 +79,7 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
                 'preferredquality': '32',
             }],
             'outtmpl': os.path.join(temp_dir, f'{transcription_id}.%(ext)s'),
-            'cookiefile': os.path.join(temp_dir, 'youtube_cookies.txt'),  # Enable cookie file support
+            # Use multiple user agents to avoid detection
             'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'retries': 10,
             'ignoreerrors': False,  # Don't ignore errors to catch authentication issues
@@ -87,25 +87,89 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
             'extract_flat': True,  # Only extract video metadata at first
             'quiet': False,
             'no_warnings': False,
-            'verbose': True  # Enable verbose output for better error tracking
+            'verbose': True,  # Enable verbose output for better error tracking
+            # Add options to bypass age verification
+            'skip_download_archive': True,
+            'age_limit': 21,  # Set high age limit to bypass age restrictions
+            # Add options to use alternative sources
+            'external_downloader_args': ['-4'],  # Force IPv4 which sometimes helps
+            'geo_bypass': True,  # Try to bypass geo-restrictions
+            'geo_bypass_country': 'US',  # Use US as the geo-bypass country
+            # Add options to handle rate limiting
+            'sleep_interval': 5,  # Sleep 5 seconds between requests
+            'max_sleep_interval': 10,  # Maximum sleep time
+            'sleep_interval_requests': 3  # Sleep after every 3 requests
         }
         
         # Ensure temp directory exists
         os.makedirs(temp_dir, exist_ok=True)
         logger.info(f"Using temporary directory: {temp_dir}")
 
-        # Create a properly formatted Netscape cookie file if it doesn't exist
-        cookie_file_path = os.path.join(temp_dir, 'youtube_cookies.txt')
-        if not os.path.exists(cookie_file_path):
-            with open(cookie_file_path, 'w') as f:
-                f.write('# Netscape HTTP Cookie File\n')
-                f.write('# https://curl.haxx.se/rfc/cookie_spec.html\n')
-                f.write('# This is a generated file!  Do not edit.\n\n')
+        # No longer using cookie file for authentication
+        logger.info(f"Using cookie-free authentication approach for YouTube videos")
         
-        # Extract video metadata before downloading
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        # Function to try different download methods when the initial attempt fails
+        async def try_download_with_fallbacks(video_url, ydl_opts, max_attempts=3):
+            logger.info(f"Attempting to download video with fallback methods: {video_url}")
+            
+            # List of different user agents to try
+            user_agents = [
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+                'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0'
+            ]
+            
+            # List of different format options to try
+            format_options = [
+                'bestaudio/best',
+                'bestaudio[ext=m4a]/best[ext=mp4]/best',
+                'worstaudio/worst'  # Sometimes lower quality works when higher quality is restricted
+            ]
+            
+            errors = []
+            
+            # First attempt with original options
+            try:
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    info = ydl.extract_info(video_url, download=False)
+                    return info, ydl
+            except Exception as e:
+                errors.append(f"Initial attempt failed: {str(e)}")
+            
+            # Try with different user agents and format options
+            for i in range(max_attempts):
+                try:
+                    # Create a copy of the original options
+                    current_opts = ydl_opts.copy()
+                    
+                    # Modify with different user agent
+                    current_opts['user_agent'] = user_agents[i % len(user_agents)]
+                    
+                    # Try different format
+                    current_opts['format'] = format_options[i % len(format_options)]
+                    
+                    # Add additional options that might help bypass restrictions
+                    if i > 0:
+                        current_opts['geo_bypass'] = True
+                        current_opts['geo_bypass_country'] = ['US', 'GB', 'CA', 'AU'][i % 4]
+                        
+                    logger.info(f"Attempt {i+1}: Trying with different configuration")
+                    with yt_dlp.YoutubeDL(current_opts) as ydl:
+                        info = ydl.extract_info(video_url, download=False)
+                        return info, ydl
+                except Exception as e:
+                    errors.append(f"Attempt {i+1} failed: {str(e)}")
+            
+            # If all attempts failed, raise the last error
+            error_msg = "\n".join(errors)
+            logger.error(f"All download attempts failed:\n{error_msg}")
+            raise yt_dlp.utils.DownloadError(f"Failed to download after multiple attempts: {errors[-1]}")
+        
+        # Extract video metadata and download using fallback methods
+        try:
             logger.info(f"Extracting metadata for video: {video_url}")
-            info = ydl.extract_info(transcription.video_url, download=False)
+            info, ydl = await try_download_with_fallbacks(transcription.video_url, ydl_opts)
             
             # Extract all metadata directly
             # Title extraction
@@ -137,6 +201,9 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
             # Now download the video
             logger.info(f"Downloading video: {video_url}")
             ydl.download([transcription.video_url])
+        except Exception as e:
+            logger.error(f"Error during video download with fallbacks: {str(e)}")
+            raise
         
         # Update status to extracting audio
         transcription.status = TranscriptionStatus.EXTRACTING_AUDIO
@@ -208,8 +275,20 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
     except yt_dlp.utils.DownloadError as e:
         error_message = str(e)
         logger.error(f"YouTube download error: {error_message}", exc_info=True)
-        if 'Sign in to confirm you\'re not a bot' in error_message:
-            error_message = "YouTube requires authentication. Please try again later or contact support for assistance."
+        
+        # Improved error handling for various authentication issues
+        if any(msg in error_message for msg in [
+            'Sign in to confirm you\'re not a bot', 
+            'This video is private',
+            'This video requires payment',
+            'This video is only available to Music Premium members',
+            'Please sign in to view this video',
+            'Video unavailable',
+            'Private video',
+            'Login required'
+        ]):
+            error_message = "This video requires authentication or is private. Please try a different video or one that is publicly available."
+        
         if transcription:
             transcription.status = TranscriptionStatus.FAILED
             transcription.error_message = error_message
