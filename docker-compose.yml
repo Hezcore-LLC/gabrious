@@ -34,7 +34,7 @@ services:
     env_file:
       - ./server/.env
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@localhost/gabrious_production
+      - DATABASE_URL={DATABASE_URL:-postgres://postgres:postgres@localhost/gabrious_production}
       - REDIS_URL=${REDIS_URL:-redis://127.0.0.1:6379/0}
       - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
       - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
