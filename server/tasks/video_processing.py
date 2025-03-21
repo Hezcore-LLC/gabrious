@@ -55,27 +55,32 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         transcription.status = TranscriptionStatus.DOWNLOADING
         await transcription.save()
         
-        # Configure yt-dlp
+        # Configure yt-dlp with enhanced options for handling authentication
         ydl_opts = {
             'format': 'bestaudio/best',
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
-                'preferredquality': '32',  # Reduced from 192 to 32 for smaller file size
+                'preferredquality': '32',
             }],
             'outtmpl': f'temp/{transcription_id}.%(ext)s',
-            # Disable cookie handling to avoid errors in Docker container
-            # 'cookiesfrombrowser': ('chrome',),  # Disabled - causes errors in Docker
-            # 'cookiefile': 'temp/youtube_cookies.txt',  # Disabled - not needed
-            # Add user agent to appear more like a regular browser
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            # Add retries for transient errors
+            'cookiefile': '/app/temp/youtube_cookies.txt',  # Enable cookie file support
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'retries': 10,
-            'ignoreerrors': True,
-            # Disable cookie loading completely
+            'ignoreerrors': False,  # Don't ignore errors to catch authentication issues
             'nocheckcertificate': True,
-            'no_cookies': True
+            'extract_flat': True,  # Only extract video metadata at first
+            'quiet': False,
+            'no_warnings': False,
+            'verbose': True  # Enable verbose output for better error tracking
         }
+
+        # Ensure temp directory exists
+        os.makedirs('/app/temp', exist_ok=True)
+
+        # Create an empty cookie file if it doesn't exist
+        if not os.path.exists('/app/temp/youtube_cookies.txt'):
+            open('/app/temp/youtube_cookies.txt', 'a').close()
         
         # Extract video metadata before downloading
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -180,9 +185,18 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         logger.info(f"Video processing completed successfully for ID: {transcription_id}")
         return {"status": "success", "transcription_id": str(transcription_id)}
         
+    except yt_dlp.utils.DownloadError as e:
+        error_message = str(e)
+        logger.error(f"YouTube download error: {error_message}", exc_info=True)
+        if 'Sign in to confirm you\'re not a bot' in error_message:
+            error_message = "YouTube requires authentication. Please try again later or contact support for assistance."
+        if transcription:
+            transcription.status = TranscriptionStatus.FAILED
+            transcription.error_message = error_message
+            await transcription.save()
+        raise
     except Exception as e:
         logger.error(f"Error processing video: {str(e)}", exc_info=True)
-        # Update status to failed only if transcription object exists
         if transcription:
             transcription.status = TranscriptionStatus.FAILED
             transcription.error_message = str(e)
