@@ -51,4 +51,4 @@ local_settings.py
 
 # Stripe API keys and other sensitive data
 *.pem
-*.key
+*.key.env
