@@ -7,7 +7,7 @@ import os
 import subprocess
 from openai import AzureOpenAI
 from uuid import UUID
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Tuple
 import asyncio
 from tortoise import Tortoise
 from dotenv import load_dotenv
@@ -16,6 +16,8 @@ import os
 import sys
 import pathlib
 from utils.logger import setup_logger
+from utils.cookie_manager import CookieManager
+from utils.proxy_manager import ProxyManager
 
 # Set up logger for video processing
 logger = setup_logger('video_processing', 'video_processing.log')
@@ -105,8 +107,9 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         os.makedirs(temp_dir, exist_ok=True)
         logger.info(f"Using temporary directory: {temp_dir}")
 
-        # No longer using cookie file for authentication
-        logger.info(f"Using cookie-free authentication approach for YouTube videos")
+        # Initialize cookie manager for browser cookie extraction
+        cookie_manager = CookieManager(temp_dir=os.path.join(temp_dir, 'cookies'))
+        logger.info(f"Cookie manager initialized for YouTube authentication")
         
         # Function to try different download methods when the initial attempt fails
         async def try_download_with_fallbacks(video_url, ydl_opts, max_attempts=3):
@@ -126,6 +129,11 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
                 'bestaudio[ext=m4a]/best[ext=mp4]/best',
                 'worstaudio/worst'  # Sometimes lower quality works when higher quality is restricted
             ]
+            
+            # Get browser options from cookie manager
+            browser_options = cookie_manager.get_browser_cookies_options()
+            # Extract browser names for logging
+            browsers = [option[0] for option in browser_options]
             
             errors = []
             
@@ -161,9 +169,65 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
                 except Exception as e:
                     errors.append(f"Attempt {i+1} failed: {str(e)}")
             
+            # If standard attempts failed, try with browser cookies as a last resort
+            logger.info("Standard download attempts failed, trying with browser cookies")
+            
+            # Try with cookies from various browsers using the browser options from cookie manager
+            for browser_option in browser_options:
+                browser_name = browser_option[0]
+                try:
+                    logger.info(f"Attempting to extract cookies from {browser_name}")
+                    cookie_opts = ydl_opts.copy()
+                    cookie_opts['cookiesfrombrowser'] = browser_option  # (browser_name, profile_path, keyring, container)
+                    
+                    with yt_dlp.YoutubeDL(cookie_opts) as ydl:
+                        logger.info(f"Extracting info with cookies from {browser_name}")
+                        info = ydl.extract_info(video_url, download=False)
+                        logger.info(f"Successfully extracted info using cookies from {browser_name}")
+                        return info, ydl
+                except Exception as e:
+                    error_msg = str(e)
+                    logger.warning(f"Failed to use cookies from {browser_name}: {error_msg}")
+                    errors.append(f"Cookie attempt with {browser_name} failed: {error_msg}")
+                    
+                    # If the error indicates a missing browser, continue to the next one
+                    if "browser is not installed" in error_msg.lower() or "browser not found" in error_msg.lower():
+                        logger.info(f"Browser {browser_name} not installed, trying next browser")
+                        continue
+            
+            # If cookie-based attempts failed, try with proxy rotation as a last resort
+            logger.info("Cookie-based attempts failed, trying with proxy rotation")
+            
+            # Initialize proxy manager
+            proxy_manager = ProxyManager()
+            proxy_options = proxy_manager.get_yt_dlp_proxy_options(count=5)
+            
+            # Try with different proxies
+            for i, proxy_opt in enumerate(proxy_options):
+                try:
+                    logger.info(f"Attempting download with proxy {i+1}/{len(proxy_options)}")
+                    proxy_opts = ydl_opts.copy()
+                    
+                    # Add proxy to options
+                    proxy_opts['proxy'] = proxy_opt.get('proxy')
+                    
+                    # Try with different user agent and format for each proxy
+                    proxy_opts['user_agent'] = user_agents[i % len(user_agents)]
+                    proxy_opts['format'] = format_options[i % len(format_options)]
+                    
+                    with yt_dlp.YoutubeDL(proxy_opts) as ydl:
+                        logger.info(f"Extracting info with proxy {proxy_opt.get('proxy')}")
+                        info = ydl.extract_info(video_url, download=False)
+                        logger.info(f"Successfully extracted info using proxy")
+                        return info, ydl
+                except Exception as e:
+                    error_msg = str(e)
+                    logger.warning(f"Failed to use proxy {proxy_opt.get('proxy')}: {error_msg}")
+                    errors.append(f"Proxy attempt {i+1} failed: {error_msg}")
+            
             # If all attempts failed, raise the last error
             error_msg = "\n".join(errors)
-            logger.error(f"All download attempts failed:\n{error_msg}")
+            logger.error(f"All download attempts failed (including cookie-based and proxy attempts):\n{error_msg}")
             raise yt_dlp.utils.DownloadError(f"Failed to download after multiple attempts: {errors[-1]}")
         
         # Extract video metadata and download using fallback methods
