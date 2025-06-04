@@ -581,3 +581,5 @@ AttributeError: 'QuerySet' object has no attribute '_saved_in_db'
 2025-03-21 15:25:18,448 - transcript_processing - INFO - Transcript processing task completed for ID: b79781d2-d888-433c-86bd-b40280ee03de
 2025-03-21 15:34:46,983 - transcript_processing - INFO - Starting transcript processing task for ID: 29300939-9e43-4866-a1cb-e5a07ffb543c
 2025-03-21 15:34:55,905 - transcript_processing - INFO - Transcript processing task completed for ID: 29300939-9e43-4866-a1cb-e5a07ffb543c
+2025-06-04 17:06:27,816 - transcript_processing - INFO - Starting transcript processing task for ID: d756d3d7-34ca-4274-80fe-d19a19919b24
+2025-06-04 17:06:36,713 - transcript_processing - INFO - Transcript processing task completed for ID: d756d3d7-34ca-4274-80fe-d19a19919b24

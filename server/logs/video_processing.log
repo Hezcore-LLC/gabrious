@@ -412,3 +412,173 @@ UnboundLocalError: cannot access local variable 'temp_dir' where it is not assoc
 2025-04-04 18:49:45,023 - video_processing - INFO - Video processing module initialized
 2025-04-04 18:50:09,716 - video_processing - INFO - Video processing module initialized
 2025-04-04 18:50:19,913 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:29:54,096 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:30:27,577 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:30:33,164 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:30:34,062 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:31:44,715 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:31:45,681 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:36:13,182 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:37:12,139 - video_processing - INFO - Starting video processing task for ID: 66fe6f58-4c8b-4ed0-999d-8d3e23d1cb78, URL: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:37:12,165 - video_processing - INFO - Using temporary directory: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious
+2025-04-27 23:37:12,166 - video_processing - INFO - Cookie manager initialized for YouTube authentication
+2025-04-27 23:37:12,166 - video_processing - INFO - Extracting metadata for video: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:37:12,166 - video_processing - INFO - Attempting to download video with fallback methods: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:37:13,461 - video_processing - INFO - Downloading video: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:37:17,219 - video_processing - INFO - Optimizing audio file
+2025-04-27 23:37:17,259 - video_processing - ERROR - Error processing video: Command '['ffmpeg', '-y', '-i', '/Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/66fe6f58-4c8b-4ed0-999d-8d3e23d1cb78.mp3', '-ac', '1', '-ar', '16000', '-b:a', '24k', '/Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/66fe6f58-4c8b-4ed0-999d-8d3e23d1cb78_optimized.mp3']' returned non-zero exit status 254.
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 282, in _process_video
+    subprocess.run([
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['ffmpeg', '-y', '-i', '/Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/66fe6f58-4c8b-4ed0-999d-8d3e23d1cb78.mp3', '-ac', '1', '-ar', '16000', '-b:a', '24k', '/Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/66fe6f58-4c8b-4ed0-999d-8d3e23d1cb78_optimized.mp3']' returned non-zero exit status 254.
+2025-04-27 23:37:17,264 - video_processing - ERROR - Video processing task failed for ID: 66fe6f58-4c8b-4ed0-999d-8d3e23d1cb78: Command '['ffmpeg', '-y', '-i', '/Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/66fe6f58-4c8b-4ed0-999d-8d3e23d1cb78.mp3', '-ac', '1', '-ar', '16000', '-b:a', '24k', '/Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/66fe6f58-4c8b-4ed0-999d-8d3e23d1cb78_optimized.mp3']' returned non-zero exit status 254.
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 35, in process_video
+    result = asyncio.run(_process_video(transcription_id, video_url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 282, in _process_video
+    subprocess.run([
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['ffmpeg', '-y', '-i', '/Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/66fe6f58-4c8b-4ed0-999d-8d3e23d1cb78.mp3', '-ac', '1', '-ar', '16000', '-b:a', '24k', '/Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/66fe6f58-4c8b-4ed0-999d-8d3e23d1cb78_optimized.mp3']' returned non-zero exit status 254.
+2025-04-27 23:39:56,002 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:40:09,451 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:40:35,212 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:41:00,585 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:41:12,395 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:43:30,639 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:44:02,903 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:45:15,125 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:46:22,067 - video_processing - INFO - Starting video processing task for ID: 614c3f1a-ea5b-4b8b-8187-d64d7c8cd93e, URL: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:46:22,158 - video_processing - INFO - Using temporary directory: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious
+2025-04-27 23:46:22,158 - video_processing - INFO - Cookie manager initialized for YouTube authentication
+2025-04-27 23:46:22,159 - video_processing - INFO - Extracting metadata for video: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:46:22,159 - video_processing - INFO - Attempting to download video with fallback methods: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:46:23,203 - video_processing - INFO - Downloading video: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:46:26,827 - video_processing - ERROR - Original audio file not found at: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/614c3f1a-ea5b-4b8b-8187-d64d7c8cd93e.mp3
+2025-04-27 23:46:26,828 - video_processing - ERROR - Error processing video: Downloaded audio file not found at: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/614c3f1a-ea5b-4b8b-8187-d64d7c8cd93e.mp3
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 283, in _process_video
+    raise FileNotFoundError(f"Downloaded audio file not found at: {original_file}")
+FileNotFoundError: Downloaded audio file not found at: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/614c3f1a-ea5b-4b8b-8187-d64d7c8cd93e.mp3
+2025-04-27 23:46:26,835 - video_processing - ERROR - Video processing task failed for ID: 614c3f1a-ea5b-4b8b-8187-d64d7c8cd93e: Downloaded audio file not found at: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/614c3f1a-ea5b-4b8b-8187-d64d7c8cd93e.mp3
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 35, in process_video
+    result = asyncio.run(_process_video(transcription_id, video_url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 283, in _process_video
+    raise FileNotFoundError(f"Downloaded audio file not found at: {original_file}")
+FileNotFoundError: Downloaded audio file not found at: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/614c3f1a-ea5b-4b8b-8187-d64d7c8cd93e.mp3
+2025-04-27 23:48:43,858 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:49:18,733 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:54:47,645 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:55:00,506 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:55:10,246 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:55:21,965 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:55:35,556 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:56:46,927 - video_processing - INFO - Starting video processing task for ID: 13ed6ea5-76ed-407c-ac73-d3d75d8f011d, URL: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:56:46,959 - video_processing - INFO - Using temporary directory: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious
+2025-04-27 23:56:46,959 - video_processing - INFO - Cookie manager initialized for YouTube authentication
+2025-04-27 23:56:46,960 - video_processing - INFO - Extracting metadata for video: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:56:46,960 - video_processing - INFO - Attempting to download video with fallback methods: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:56:47,984 - video_processing - INFO - Downloading video: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-27 23:56:51,685 - video_processing - ERROR - Original audio file not found at: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/13ed6ea5-76ed-407c-ac73-d3d75d8f011d.mp3
+2025-04-27 23:56:51,686 - video_processing - ERROR - Error processing video: Downloaded audio file not found at: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/13ed6ea5-76ed-407c-ac73-d3d75d8f011d.mp3
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 283, in _process_video
+    ], check=True)
+FileNotFoundError: Downloaded audio file not found at: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/13ed6ea5-76ed-407c-ac73-d3d75d8f011d.mp3
+2025-04-27 23:56:51,690 - video_processing - ERROR - Video processing task failed for ID: 13ed6ea5-76ed-407c-ac73-d3d75d8f011d: Downloaded audio file not found at: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/13ed6ea5-76ed-407c-ac73-d3d75d8f011d.mp3
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 35, in process_video
+    result = asyncio.run(_process_video(transcription_id, video_url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 283, in _process_video
+    ], check=True)
+FileNotFoundError: Downloaded audio file not found at: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious/13ed6ea5-76ed-407c-ac73-d3d75d8f011d.mp3
+2025-04-27 23:58:22,772 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:58:42,975 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:58:56,677 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:59:19,336 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:59:33,513 - video_processing - INFO - Video processing module initialized
+2025-04-27 23:59:47,107 - video_processing - INFO - Video processing module initialized
+2025-04-28 00:00:49,854 - video_processing - INFO - Video processing module initialized
+2025-04-28 00:01:02,442 - video_processing - INFO - Starting video processing task for ID: b99343ef-5354-4d36-90a5-8f9eae1c0f83, URL: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-28 00:01:02,472 - video_processing - INFO - Using temporary directory: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious
+2025-04-28 00:01:02,472 - video_processing - INFO - Verified temp directory is writable: /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious
+2025-04-28 00:01:02,473 - video_processing - INFO - Cookie manager initialized for YouTube authentication
+2025-04-28 00:01:02,473 - video_processing - INFO - Extracting metadata for video: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-28 00:01:02,473 - video_processing - INFO - Attempting to download video with fallback methods: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-28 00:01:03,730 - video_processing - INFO - Downloading video: https://www.facebook.com/share/v/1AZ3dHsx2n/
+2025-04-28 00:01:07,387 - video_processing - ERROR - Download appears to have failed. No files found for ID: b99343ef-5354-4d36-90a5-8f9eae1c0f83
+2025-04-28 00:01:07,387 - video_processing - ERROR - Error during video download with fallbacks: No downloaded files found in /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious for ID: b99343ef-5354-4d36-90a5-8f9eae1c0f83
+2025-04-28 00:01:07,388 - video_processing - ERROR - Error processing video: No downloaded files found in /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious for ID: b99343ef-5354-4d36-90a5-8f9eae1c0f83
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 306, in _process_video
+    raise FileNotFoundError(f"No downloaded files found in {temp_dir} for ID: {transcription_id}")
+FileNotFoundError: No downloaded files found in /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious for ID: b99343ef-5354-4d36-90a5-8f9eae1c0f83
+2025-04-28 00:01:07,393 - video_processing - ERROR - Video processing task failed for ID: b99343ef-5354-4d36-90a5-8f9eae1c0f83: No downloaded files found in /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious for ID: b99343ef-5354-4d36-90a5-8f9eae1c0f83
+Traceback (most recent call last):
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 35, in process_video
+    result = asyncio.run(_process_video(transcription_id, video_url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hezcore/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/hezcore/Desktop/Projects/ai/gabrious/server/tasks/video_processing.py", line 306, in _process_video
+    raise FileNotFoundError(f"No downloaded files found in {temp_dir} for ID: {transcription_id}")
+FileNotFoundError: No downloaded files found in /Users/hezcore/Desktop/Projects/ai/gabrious/server/temp/gabrious for ID: b99343ef-5354-4d36-90a5-8f9eae1c0f83
+2025-04-28 00:02:33,564 - video_processing - INFO - Video processing module initialized
+2025-05-27 21:46:10,490 - video_processing - INFO - Video processing module initialized
+2025-05-28 17:02:35,441 - video_processing - INFO - Video processing module initialized
+2025-06-04 16:52:19,309 - video_processing - INFO - Video processing module initialized
+2025-06-04 16:57:02,972 - video_processing - INFO - Video processing module initialized
+2025-06-04 17:00:11,644 - video_processing - INFO - Video processing module initialized
+2025-06-04 17:00:14,192 - video_processing - INFO - Starting video processing task for ID: d756d3d7-34ca-4274-80fe-d19a19919b24, URL: https://www.youtube.com/watch?v=Og91dX-pfXg&t=149s
+2025-06-04 17:00:14,332 - video_processing - INFO - Using temporary directory: /Users/isaacbrowne/Desktop/ai/gabrious/server/temp/gabrious
+2025-06-04 17:00:14,334 - video_processing - INFO - Cookie manager initialized for YouTube authentication
+2025-06-04 17:00:14,334 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=Og91dX-pfXg&t=149s
+2025-06-04 17:00:14,335 - video_processing - INFO - Attempting to download video with fallback methods: https://www.youtube.com/watch?v=Og91dX-pfXg&t=149s
+2025-06-04 17:00:58,612 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=Og91dX-pfXg&t=149s
+2025-06-04 17:02:29,932 - video_processing - INFO - Optimizing audio file
+2025-06-04 17:02:51,100 - video_processing - INFO - Transcribing audio using Azure OpenAI
+2025-06-04 17:06:27,781 - video_processing - INFO - Cleaning up temporary files
+2025-06-04 17:06:27,784 - video_processing - INFO - Initiating study notes generation via transcript processing
+2025-06-04 17:06:27,798 - video_processing - INFO - Study notes generation task queued
+2025-06-04 17:06:27,799 - video_processing - INFO - Video processing completed successfully for ID: d756d3d7-34ca-4274-80fe-d19a19919b24
+2025-06-04 17:06:27,809 - video_processing - INFO - Video processing task completed for ID: d756d3d7-34ca-4274-80fe-d19a19919b24
