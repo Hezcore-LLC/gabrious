@@ -1,5 +1,7 @@
 import { API_BASE_URL } from './utils';
 
+console.log('API_BASE_URL', API_BASE_URL);
+
 export interface SignupData {
   email: string;
   password: string;

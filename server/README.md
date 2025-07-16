@@ -23,11 +23,13 @@ README.md                 # Project documentation
 ## Setup
 
 1. Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 2. Set up environment variables:
+
 - Create a `.env` file in the root directory
 - Add required environment variables:
   ```
@@ -38,20 +40,25 @@ pip install -r requirements.txt
   ```
 
 3. Run the server:
+
 ```bash
 uvicorn app.main:app --reload
 ```
 
 4. Run Celery worker:
+
 ```bash
 celery -A celery_app worker --loglevel=info
 ```
 
 5. Run Flower monitoring (optional):
+
 ```bash
 python flower_monitor.py
 ```
+
 Or directly with Flower:
+
 ```bash
 celery -A celery_app flower --port=5555
 ```
@@ -63,6 +70,7 @@ Once started, access the Flower dashboard at: http://localhost:5555 to monitor t
 ### Transcription Endpoints
 
 #### Create Transcription
+
 ```
 POST /api/transcriptions
 
@@ -82,6 +90,7 @@ Response:
 ```
 
 #### Get Transcription Status
+
 ```
 GET /api/transcriptions/{transcription_id}
 
@@ -100,6 +109,7 @@ Response:
 ### Study Notes Endpoints
 
 #### Get Study Notes
+
 ```
 GET /api/study-notes/{transcription_id}
 
@@ -125,6 +135,7 @@ Response:
 ## API Documentation
 
 Once the server is running, visit:
+
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 

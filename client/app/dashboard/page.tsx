@@ -53,6 +53,17 @@ const formatDuration = (seconds: number | null) => {
   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
 
+// Helper to safely extract hostname from URL
+const getHostnameFromUrl = (url: string | null | undefined) => {
+  if (!url) return null;
+  try {
+    return new URL(url).hostname;
+  } catch (error) {
+    console.warn('Invalid URL:', url);
+    return null;
+  }
+};
+
 const favoriteSermons = [
   {
     id: "1",
@@ -361,8 +372,8 @@ export default function DashboardPage() {
                       </DropdownMenu>
                     </div>
                     <CardDescription>
-                      {sermon.video_url && (
-                        <span className="truncate block">{new URL(sermon.video_url).hostname}</span>
+                      {sermon.video_url && getHostnameFromUrl(sermon.video_url) && (
+                        <span className="truncate block">{getHostnameFromUrl(sermon.video_url)}</span>
                       )}
                     </CardDescription>
                   </CardHeader>

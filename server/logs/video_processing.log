@@ -412,3 +412,117 @@ UnboundLocalError: cannot access local variable 'temp_dir' where it is not assoc
 2025-04-04 18:49:45,023 - video_processing - INFO - Video processing module initialized
 2025-04-04 18:50:09,716 - video_processing - INFO - Video processing module initialized
 2025-04-04 18:50:19,913 - video_processing - INFO - Video processing module initialized
+2025-05-03 19:59:22,966 - video_processing - INFO - Video processing module initialized
+2025-05-03 19:59:55,449 - video_processing - INFO - Video processing module initialized
+2025-05-03 20:00:00,619 - video_processing - INFO - Video processing module initialized
+2025-05-03 20:00:08,083 - video_processing - INFO - Video processing module initialized
+2025-05-03 20:14:43,243 - video_processing - INFO - Video processing module initialized
+2025-05-03 20:14:47,941 - video_processing - INFO - Video processing module initialized
+2025-05-04 20:48:12,523 - video_processing - INFO - Video processing module initialized
+2025-05-04 20:48:16,232 - video_processing - INFO - Video processing module initialized
+2025-05-04 20:50:49,111 - video_processing - INFO - Video processing module initialized
+2025-05-04 20:50:52,679 - video_processing - INFO - Video processing module initialized
+2025-05-04 20:51:46,789 - video_processing - INFO - Video processing module initialized
+2025-05-05 01:30:57,766 - video_processing - INFO - Video processing module initialized
+2025-05-05 01:31:01,915 - video_processing - INFO - Video processing module initialized
+2025-07-15 17:07:29,289 - video_processing - INFO - Video processing module initialized
+2025-07-15 21:32:53,827 - video_processing - INFO - Video processing module initialized
+2025-07-15 21:32:57,740 - video_processing - INFO - Video processing module initialized
+2025-07-15 23:07:48,401 - video_processing - INFO - Video processing module initialized
+2025-07-15 23:15:24,385 - video_processing - INFO - Video processing module initialized
+2025-07-15 23:16:44,317 - video_processing - INFO - Video processing module initialized
+2025-07-15 23:16:46,352 - video_processing - INFO - Starting video processing task for ID: 98c88c43-b697-4f8b-99af-136165bfca88, URL: celery -A celery_app flower --port=5555
+2025-07-15 23:16:46,352 - video_processing - INFO - Starting video processing task for ID: be2e05ec-f935-4ef4-b5c6-b9ec385e85e6, URL: https://www.youtube.com/watch?v=rouFCZ6KVXw
+2025-07-15 23:16:46,641 - video_processing - INFO - Using temporary directory: /Users/isaacbrowne/Desktop/ai/gabrious/server/temp/gabrious
+2025-07-15 23:16:46,641 - video_processing - INFO - Using temporary directory: /Users/isaacbrowne/Desktop/ai/gabrious/server/temp/gabrious
+2025-07-15 23:16:46,642 - video_processing - INFO - Cookie manager initialized for YouTube authentication
+2025-07-15 23:16:46,642 - video_processing - INFO - Cookie manager initialized for YouTube authentication
+2025-07-15 23:16:46,645 - video_processing - INFO - Extracting metadata for video: https://www.youtube.com/watch?v=rouFCZ6KVXw
+2025-07-15 23:16:46,645 - video_processing - INFO - Extracting metadata for video: celery -A celery_app flower --port=5555
+2025-07-15 23:16:46,646 - video_processing - INFO - Attempting to download video with fallback methods: https://www.youtube.com/watch?v=rouFCZ6KVXw
+2025-07-15 23:16:46,647 - video_processing - INFO - Attempting to download video with fallback methods: celery -A celery_app flower --port=5555
+2025-07-15 23:16:49,777 - video_processing - INFO - Attempt 1: Trying with different configuration
+2025-07-15 23:16:49,950 - video_processing - INFO - Attempt 2: Trying with different configuration
+2025-07-15 23:16:50,120 - video_processing - INFO - Attempt 3: Trying with different configuration
+2025-07-15 23:16:50,300 - video_processing - INFO - Standard download attempts failed, trying with browser cookies
+2025-07-15 23:16:50,301 - video_processing - INFO - Attempting to extract cookies from chrome
+2025-07-15 23:17:10,066 - video_processing - INFO - Downloading video: https://www.youtube.com/watch?v=rouFCZ6KVXw
+2025-07-15 23:17:15,859 - video_processing - INFO - Extracting info with cookies from chrome
+2025-07-15 23:17:15,883 - video_processing - WARNING - Failed to use cookies from chrome: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+2025-07-15 23:17:15,884 - video_processing - INFO - Attempting to extract cookies from firefox
+2025-07-15 23:17:15,990 - video_processing - WARNING - Failed to use cookies from firefox: ERROR: could not find firefox cookies database in '/Users/isaacbrowne/Library/Application Support/Firefox/Profiles'
+2025-07-15 23:17:15,991 - video_processing - INFO - Attempting to extract cookies from edge
+2025-07-15 23:17:16,079 - video_processing - WARNING - Failed to use cookies from edge: ERROR: could not find edge cookies database in "/Users/isaacbrowne/Library/Application Support/Microsoft Edge"
+2025-07-15 23:17:16,080 - video_processing - INFO - Attempting to extract cookies from safari
+2025-07-15 23:17:16,212 - video_processing - WARNING - Failed to use cookies from safari: ERROR: [Errno 1] Operation not permitted: '/Users/isaacbrowne/Library/Containers/com.apple.Safari/Data/Library/Cookies/Cookies.binarycookies'
+2025-07-15 23:17:16,213 - video_processing - INFO - Attempting to extract cookies from opera
+2025-07-15 23:17:16,320 - video_processing - WARNING - Failed to use cookies from opera: ERROR: could not find opera cookies database in "/Users/isaacbrowne/Library/Application Support/com.operasoftware.Opera"
+2025-07-15 23:17:16,322 - video_processing - INFO - Attempting to extract cookies from brave
+2025-07-15 23:17:16,425 - video_processing - WARNING - Failed to use cookies from brave: ERROR: could not find brave cookies database in "/Users/isaacbrowne/Library/Application Support/BraveSoftware/Brave-Browser"
+2025-07-15 23:17:16,426 - video_processing - INFO - Attempting to extract cookies from chromium
+2025-07-15 23:17:16,522 - video_processing - WARNING - Failed to use cookies from chromium: ERROR: could not find chromium cookies database in "/Users/isaacbrowne/Library/Application Support/Chromium"
+2025-07-15 23:17:16,525 - video_processing - INFO - Attempting to extract cookies from vivaldi
+2025-07-15 23:17:16,614 - video_processing - WARNING - Failed to use cookies from vivaldi: ERROR: could not find vivaldi cookies database in "/Users/isaacbrowne/Library/Application Support/Vivaldi"
+2025-07-15 23:17:16,615 - video_processing - INFO - Cookie-based attempts failed, trying with proxy rotation
+2025-07-15 23:17:19,600 - video_processing - INFO - Attempting download with proxy 1/5
+2025-07-15 23:17:19,990 - video_processing - INFO - Extracting info with proxy http://207.166.178.232:3128
+2025-07-15 23:17:20,082 - video_processing - WARNING - Failed to use proxy http://207.166.178.232:3128: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+2025-07-15 23:17:20,084 - video_processing - INFO - Attempting download with proxy 2/5
+2025-07-15 23:17:20,651 - video_processing - INFO - Extracting info with proxy http://72.167.150.151:26210
+2025-07-15 23:17:20,676 - video_processing - WARNING - Failed to use proxy http://72.167.150.151:26210: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+2025-07-15 23:17:20,677 - video_processing - INFO - Attempting download with proxy 3/5
+2025-07-15 23:17:21,050 - video_processing - INFO - Extracting info with proxy http://188.136.162.30:4153
+2025-07-15 23:17:21,238 - video_processing - WARNING - Failed to use proxy http://188.136.162.30:4153: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+2025-07-15 23:17:21,240 - video_processing - INFO - Attempting download with proxy 4/5
+2025-07-15 23:17:21,667 - video_processing - INFO - Extracting info with proxy http://149.20.253.52:12551
+2025-07-15 23:17:21,797 - video_processing - WARNING - Failed to use proxy http://149.20.253.52:12551: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+2025-07-15 23:17:21,799 - video_processing - INFO - Attempting download with proxy 5/5
+2025-07-15 23:17:22,240 - video_processing - INFO - Extracting info with proxy http://171.100.22.133:5678
+2025-07-15 23:17:22,264 - video_processing - WARNING - Failed to use proxy http://171.100.22.133:5678: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+2025-07-15 23:17:22,265 - video_processing - ERROR - All download attempts failed (including cookie-based and proxy attempts):
+Initial attempt failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+Attempt 1 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+Attempt 2 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+Attempt 3 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+Cookie attempt with chrome failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+Cookie attempt with firefox failed: ERROR: could not find firefox cookies database in '/Users/isaacbrowne/Library/Application Support/Firefox/Profiles'
+Cookie attempt with edge failed: ERROR: could not find edge cookies database in "/Users/isaacbrowne/Library/Application Support/Microsoft Edge"
+Cookie attempt with safari failed: ERROR: [Errno 1] Operation not permitted: '/Users/isaacbrowne/Library/Containers/com.apple.Safari/Data/Library/Cookies/Cookies.binarycookies'
+Cookie attempt with opera failed: ERROR: could not find opera cookies database in "/Users/isaacbrowne/Library/Application Support/com.operasoftware.Opera"
+Cookie attempt with brave failed: ERROR: could not find brave cookies database in "/Users/isaacbrowne/Library/Application Support/BraveSoftware/Brave-Browser"
+Cookie attempt with chromium failed: ERROR: could not find chromium cookies database in "/Users/isaacbrowne/Library/Application Support/Chromium"
+Cookie attempt with vivaldi failed: ERROR: could not find vivaldi cookies database in "/Users/isaacbrowne/Library/Application Support/Vivaldi"
+Proxy attempt 1 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+Proxy attempt 2 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+Proxy attempt 3 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+Proxy attempt 4 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+Proxy attempt 5 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+2025-07-15 23:17:22,267 - video_processing - ERROR - Error during video download with fallbacks: Failed to download after multiple attempts: Proxy attempt 5 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+2025-07-15 23:17:22,268 - video_processing - ERROR - YouTube download error: Failed to download after multiple attempts: Proxy attempt 5 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/video_processing.py", line 236, in _process_video
+    info, ydl = await try_download_with_fallbacks(transcription.video_url, ydl_opts)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/video_processing.py", line 231, in try_download_with_fallbacks
+    raise yt_dlp.utils.DownloadError(f"Failed to download after multiple attempts: {errors[-1]}")
+yt_dlp.utils.DownloadError: Failed to download after multiple attempts: Proxy attempt 5 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+2025-07-15 23:17:22,309 - video_processing - ERROR - Video processing task failed for ID: 98c88c43-b697-4f8b-99af-136165bfca88: Failed to download after multiple attempts: Proxy attempt 5 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/video_processing.py", line 35, in process_video
+    result = asyncio.run(_process_video(transcription_id, video_url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/video_processing.py", line 236, in _process_video
+    info, ydl = await try_download_with_fallbacks(transcription.video_url, ydl_opts)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/video_processing.py", line 231, in try_download_with_fallbacks
+    raise yt_dlp.utils.DownloadError(f"Failed to download after multiple attempts: {errors[-1]}")
+yt_dlp.utils.DownloadError: Failed to download after multiple attempts: Proxy attempt 5 failed: ERROR: [generic] 'celery -A celery_app flower --port=5555' is not a valid URL. Set --default-search "ytsearch" (or run  yt-dlp "ytsearch:celery -A celery_app flower --port=5555" ) to search YouTube
