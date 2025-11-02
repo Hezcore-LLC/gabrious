@@ -9,7 +9,7 @@ export const favoritesService = {
       throw new Error('Authentication required');
     }
     
-    const response = await fetch(`${API_BASE_URL}/favorites/${notesId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/favorites/${notesId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export const favoritesService = {
       throw new Error('Authentication required');
     }
     
-    const response = await fetch(`${API_BASE_URL}/favorites/${notesId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/favorites/${notesId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export const favoritesService = {
       throw new Error('Authentication required');
     }
     
-    const response = await fetch(`${API_BASE_URL}/favorites`, {
+    const response = await fetch(`${API_BASE_URL}/api/favorites`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`

@@ -33,7 +33,7 @@ export const paymentService = {
       throw new Error('Authentication required');
     }
 
-    const response = await fetch(`${API_BASE_URL}/payment/create-payment-intent`, {
+    const response = await fetch(`${API_BASE_URL}/api/payment/create-payment-intent`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export const paymentService = {
       throw new Error('Authentication required');
     }
 
-    const response = await fetch(`${API_BASE_URL}/payment/reactivate-subscription`, {
+    const response = await fetch(`${API_BASE_URL}/api/payment/reactivate-subscription`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export const paymentService = {
       throw new Error('Authentication required');
     }
 
-    const response = await fetch(`${API_BASE_URL}/payment/create-subscription`, {
+    const response = await fetch(`${API_BASE_URL}/api/payment/create-subscription`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ export const paymentService = {
       throw new Error('Authentication required');
     }
 
-    const response = await fetch(`${API_BASE_URL}/payment/subscription-status`, {
+    const response = await fetch(`${API_BASE_URL}/api/payment/subscription-status`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -122,7 +122,7 @@ export const paymentService = {
       throw new Error('Authentication required');
     }
 
-    const response = await fetch(`${API_BASE_URL}/payment/cancel-subscription`, {
+    const response = await fetch(`${API_BASE_URL}/api/payment/cancel-subscription`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

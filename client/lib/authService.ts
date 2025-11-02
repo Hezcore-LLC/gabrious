@@ -30,7 +30,7 @@ const TOKEN_KEY = 'auth_token';
 
 export const authService = {
   async signup(data: SignupData): Promise<UserResponse> {
-    const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+    const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export const authService = {
     formData.append('username', data.username);
     formData.append('password', data.password);
 
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json'
@@ -77,7 +77,7 @@ export const authService = {
       throw new Error('No authentication token found');
     }
 
-    const response = await fetch(`${API_BASE_URL}/auth/me`, {
+    const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },

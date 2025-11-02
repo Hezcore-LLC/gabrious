@@ -18,7 +18,7 @@ export const statisticsService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/statistics/dashboard`, {
+      const response = await fetch(`${API_BASE_URL}/api/statistics/dashboard`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

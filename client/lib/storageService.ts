@@ -17,7 +17,7 @@ export const storageService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/storage/usage`, {
+      const response = await fetch(`${API_BASE_URL}/api/storage/usage`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -41,7 +41,7 @@ export const storageService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/storage/check-limit?file_size=${fileSize}`, {
+      const response = await fetch(`${API_BASE_URL}/api/storage/check-limit?file_size=${fileSize}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

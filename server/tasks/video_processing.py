@@ -296,11 +296,12 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         transcription.file_size = file_size
         await transcription.save()
         
-        # Configure Azure OpenAI client
+        # Configure Azure OpenAI client with extended timeout
         client = AzureOpenAI(
             api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-            api_version="2024-02-01",
-            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
+            api_version="2023-09-01-preview",  # Use the correct API version for Whisper
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+            timeout=600.0  # 10 minutes timeout for large audio files
         )
         
         # Update status to transcribing
@@ -311,11 +312,20 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         deployment_id = os.getenv("AZURE_OPENAI_DEPLOYMENT_ID", "whisper")
         
         logger.info(f"Transcribing audio using Azure OpenAI")
+        logger.info(f"Using deployment ID: {deployment_id}")
+        logger.info(f"Using endpoint: {os.getenv('AZURE_OPENAI_ENDPOINT')}")
+        logger.info(f"Using API version: 2023-09-01-preview")
+        
         with open(os.path.join(temp_dir, f'{transcription_id}.mp3'), "rb") as audio_file:
-            result = client.audio.transcriptions.create(
-                file=audio_file,
-                model=deployment_id  # Use the deployment_id instead of hardcoded "whisper"
-            )
+            try:
+                result = client.audio.transcriptions.create(
+                    file=audio_file,
+                    model=deployment_id  # Use the deployment_id instead of hardcoded "whisper"
+                )
+            except Exception as e:
+                logger.error(f"Azure OpenAI transcription failed: {str(e)}")
+                logger.error(f"Error type: {type(e).__name__}")
+                raise
         
         # Save transcription text
         transcription.transcription_text = result.text

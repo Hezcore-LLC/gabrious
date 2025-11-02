@@ -33,4 +33,5 @@ app.conf.update(
 )
 
 # Auto-discover tasks
-app.autodiscover_tasks(['tasks'], force=True)
+# Use lambda to avoid import issues at startup
+app.autodiscover_tasks(lambda: ['tasks'], force=True)

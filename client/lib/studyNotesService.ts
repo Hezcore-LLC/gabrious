@@ -33,7 +33,7 @@ export const studyNotesService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/study-notes/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/study-notes/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -60,7 +60,7 @@ export const studyNotesService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/study-notes/`, {
+      const response = await fetch(`${API_BASE_URL}/api/study-notes/`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

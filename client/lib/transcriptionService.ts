@@ -32,7 +32,7 @@ export const transcriptionService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/transcriptions/`, {
+      const response = await fetch(`${API_BASE_URL}/api/transcriptions/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export const transcriptionService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/transcriptions/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/transcriptions/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -121,7 +121,7 @@ export const transcriptionService = {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/transcriptions/`, {
+      const response = await fetch(`${API_BASE_URL}/api/transcriptions/`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
