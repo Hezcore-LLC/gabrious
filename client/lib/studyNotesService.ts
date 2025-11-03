@@ -7,6 +7,16 @@ export interface Scripture {
   text: string;
 }
 
+export interface Commentary {
+  source: string;
+  text: string;
+}
+
+export interface HistoricalNote {
+  term: string;
+  explanation: string;
+}
+
 export interface StudyNotes {
   id: string;
   title: string;
@@ -16,6 +26,7 @@ export interface StudyNotes {
   duration: string;
   thumbnail: string;
   videoUrl: string;
+  format: "christian" | "jewish";
   summary: string;
   keyPoints: string[];
   scriptures: Scripture[];
@@ -24,6 +35,11 @@ export interface StudyNotes {
   transcriptionId: string;
   created_at: string;
   updated_at: string;
+  // Jewish-specific fields
+  mainText?: string;
+  commentaryLayer?: Commentary[];
+  ethicalInsight?: string;
+  historicalNotes?: HistoricalNote[];
 }
 
 export const studyNotesService = {
@@ -130,6 +146,36 @@ export const studyNotesService = {
       }
     } catch (error) {
       console.error('Error updating transcript:', error);
+      throw error;
+    }
+  },
+
+  regenerateStudyNotes: async (notesId: string, format: "christian" | "jewish"): Promise<{ task_id: string }> => {
+    try {
+      const token = authService.getToken();
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/study-notes/${notesId}/regenerate`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ format })
+      });
+      
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error('Study notes not found');
+        }
+        throw new Error('Failed to regenerate study notes');
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error('Error regenerating study notes:', error);
       throw error;
     }
   },

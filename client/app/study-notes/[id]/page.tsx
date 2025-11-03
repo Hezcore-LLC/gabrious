@@ -31,6 +31,13 @@ import {
   Heart,
   Play,
   ExternalLink,
+  RefreshCw,
+  Scroll,
+  BookText,
+  GraduationCap,
+  ChevronDown,
+  ChevronUp,
+  Menu,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
@@ -56,6 +63,30 @@ export default function StudyNotesPage({ params }: { params: { id: string } }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isEditingTranscript, setIsEditingTranscript] = useState(false);
   const [isSavingTranscript, setIsSavingTranscript] = useState(false);
+  const [isRegenerateDialogOpen, setIsRegenerateDialogOpen] = useState(false);
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+    summary: true,
+    keyPoints: true,
+    scriptures: true,
+    application: true,
+    discussion: true,
+    commentary: true,
+    ethical: true,
+    historical: true,
+  });
+  const [showSidebar, setShowSidebar] = useState(true);
+
+  const toggleSection = (section: string) => {
+    setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   useEffect(() => {
     const fetchStudyNotes = async () => {
@@ -227,6 +258,15 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-2 mt-6">
               <Button
+                variant="default"
+                size="sm"
+                onClick={() => setIsRegenerateDialogOpen(true)}
+                className="gap-2"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Regenerate Notes
+              </Button>
+              <Button
                 variant="outline"
                 size="sm"
                 onClick={handleCopyToClipboard}
@@ -287,12 +327,327 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
           </div>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Study Notes Tabs */}
-            <Card className="border-2 shadow-lg">
+        {/* Floating Action Button - Expand/Collapse All */}
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
+          <Button
+            size="sm"
+            variant="secondary"
+            className="shadow-lg"
+            onClick={() => {
+              const allExpanded = Object.values(expandedSections).every(v => v);
+              const newState = !allExpanded;
+              setExpandedSections({
+                summary: newState,
+                keyPoints: newState,
+                scriptures: newState,
+                application: newState,
+                discussion: newState,
+                commentary: newState,
+                ethical: newState,
+                historical: newState,
+                mainText: newState,
+              });
+            }}
+          >
+            {Object.values(expandedSections).every(v => v) ? (
+              <>
+                <ChevronUp className="h-4 w-4 mr-1" />
+                Collapse All
+              </>
+            ) : (
+              <>
+                <ChevronDown className="h-4 w-4 mr-1" />
+                Expand All
+              </>
+            )}
+          </Button>
+        </div>
+
+        {/* Main Content Grid with Sidebar Navigation */}
+        <div className="grid lg:grid-cols-12 gap-6">
+          {/* Sticky Sidebar Navigation - Hidden on mobile, shown on lg+ */}
+          <div className="hidden lg:block lg:col-span-2">
+            <div className="sticky top-6 space-y-2">
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                Jump to Section
+              </div>
+              <nav className="space-y-1">
+                <button
+                  onClick={() => scrollToSection("summary-section")}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors flex items-center gap-2"
+                >
+                  <FileText className="h-3.5 w-3.5" />
+                  Summary
+                </button>
+                {studyNotes.format === "jewish" && studyNotes.mainText && (
+                  <button
+                    onClick={() => scrollToSection("main-text-section")}
+                    className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors flex items-center gap-2"
+                  >
+                    <Scroll className="h-3.5 w-3.5" />
+                    Main Text
+                  </button>
+                )}
+                <button
+                  onClick={() => scrollToSection("key-points-section")}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors flex items-center gap-2"
+                >
+                  <Lightbulb className="h-3.5 w-3.5" />
+                  Key Points
+                </button>
+                <button
+                  onClick={() => scrollToSection("scriptures-section")}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors flex items-center gap-2"
+                >
+                  <BookOpen className="h-3.5 w-3.5" />
+                  Scriptures
+                </button>
+                <button
+                  onClick={() => scrollToSection("application-section")}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors flex items-center gap-2"
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Application
+                </button>
+                <button
+                  onClick={() => scrollToSection("discussion-section")}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors flex items-center gap-2"
+                >
+                  <MessageCircle className="h-3.5 w-3.5" />
+                  Discussion
+                </button>
+                {studyNotes.format === "jewish" && studyNotes.commentaryLayer && studyNotes.commentaryLayer.length > 0 && (
+                  <button
+                    onClick={() => scrollToSection("commentary-section")}
+                    className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors flex items-center gap-2"
+                  >
+                    <BookText className="h-3.5 w-3.5" />
+                    Commentary
+                  </button>
+                )}
+                {studyNotes.format === "jewish" && studyNotes.ethicalInsight && (
+                  <button
+                    onClick={() => scrollToSection("ethical-section")}
+                    className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors flex items-center gap-2"
+                  >
+                    <GraduationCap className="h-3.5 w-3.5" />
+                    Ethical Insight
+                  </button>
+                )}
+                {studyNotes.format === "jewish" && studyNotes.historicalNotes && studyNotes.historicalNotes.length > 0 && (
+                  <button
+                    onClick={() => scrollToSection("historical-section")}
+                    className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors flex items-center gap-2"
+                  >
+                    <BookMarked className="h-3.5 w-3.5" />
+                    Historical Notes
+                  </button>
+                )}
+              </nav>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* Study Notes - Collapsible Sections */}
+            
+            {/* Summary Section */}
+            <Card id="summary-section" className="border-2 shadow-lg scroll-mt-6">
+              <CardHeader 
+                className="border-b bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors"
+                onClick={() => toggleSection("summary")}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-primary" />
+                    <CardTitle>Summary</CardTitle>
+                  </div>
+                  {expandedSections.summary ? (
+                    <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                  )}
+                </div>
+                <CardDescription>
+                  Overview of the main message
+                </CardDescription>
+              </CardHeader>
+              {expandedSections.summary && (
+                <CardContent className="pt-6">
+                  <div className="prose dark:prose-invert max-w-none">
+                    <p className="text-base leading-relaxed text-foreground/90">
+                      {studyNotes.summary}
+                    </p>
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+
+            {/* Main Text Section (Jewish only) */}
+            {studyNotes.format === "jewish" && studyNotes.mainText && (
+              <Card id="main-text-section" className="border-2 shadow-lg scroll-mt-6">
+                <CardHeader 
+                  className="border-b bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => toggleSection("mainText")}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Scroll className="h-5 w-5 text-primary" />
+                      <CardTitle>Main Text (Parashah)</CardTitle>
+                    </div>
+                    {expandedSections.mainText ? (
+                      <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                    )}
+                  </div>
+                  <CardDescription>
+                    Primary Torah portion or source text
+                  </CardDescription>
+                </CardHeader>
+                {expandedSections.mainText && (
+                  <CardContent className="pt-6">
+                    <div className="p-6 rounded-lg bg-muted/50 border-2 border-primary/20">
+                      <div className="prose dark:prose-invert max-w-none">
+                        <p className="text-base leading-relaxed">
+                          {studyNotes.mainText}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                )}
+              </Card>
+            )}
+
+            {/* Key Points Section */}
+            <Card id="key-points-section" className="border-2 shadow-lg scroll-mt-6">
+              <CardHeader 
+                className="border-b bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors"
+                onClick={() => toggleSection("keyPoints")}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Lightbulb className="h-5 w-5 text-primary" />
+                    <CardTitle>Key Points</CardTitle>
+                  </div>
+                  {expandedSections.keyPoints ? (
+                    <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                  )}
+                </div>
+                <CardDescription>
+                  Main takeaways and insights
+                </CardDescription>
+              </CardHeader>
+              {expandedSections.keyPoints && (
+                <CardContent className="pt-6">
+                  <div className="space-y-4">
+                    {studyNotes.keyPoints.map((point, index) => (
+                      <div
+                        key={index}
+                        className="flex gap-4 p-4 rounded-lg bg-muted/50 border"
+                      >
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
+                          {index + 1}
+                        </div>
+                        <p className="text-base leading-relaxed pt-1">
+                          {point}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+
+            {/* Scriptures Section */}
+            <Card id="scriptures-section" className="border-2 shadow-lg scroll-mt-6">
+              <CardHeader 
+                className="border-b bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors"
+                onClick={() => toggleSection("scriptures")}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="h-5 w-5 text-primary" />
+                    <CardTitle>Scripture References</CardTitle>
+                  </div>
+                  {expandedSections.scriptures ? (
+                    <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                  )}
+                </div>
+                <CardDescription>
+                  Biblical texts referenced in this teaching
+                </CardDescription>
+              </CardHeader>
+              {expandedSections.scriptures && (
+                <CardContent className="pt-6">
+                  <div className="space-y-6">
+                    {studyNotes.scriptures.map((scripture, index) => (
+                      <div
+                        key={index}
+                        className="space-y-3 p-5 rounded-lg bg-muted/50 border"
+                      >
+                        <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+                          <BookOpen className="h-4 w-4" />
+                          {scripture.reference}
+                        </h3>
+                        <blockquote className="border-l-4 border-primary pl-4 italic text-foreground/80">
+                          &ldquo;{scripture.text}&rdquo;
+                        </blockquote>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+
+            {/* Application Section */}
+            <Card id="application-section" className="border-2 shadow-lg scroll-mt-6">
+              <CardHeader 
+                className="border-b bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors"
+                onClick={() => toggleSection("application")}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                    <CardTitle>Practical Application</CardTitle>
+                  </div>
+                  {expandedSections.application ? (
+                    <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                  )}
+                </div>
+                <CardDescription>
+                  Ways to apply these teachings
+                </CardDescription>
+              </CardHeader>
+              {expandedSections.application && (
+                <CardContent className="pt-6">
+                  <div className="space-y-3">
+                    {studyNotes.applicationPoints.map((point, index) => (
+                      <div
+                        key={index}
+                        className="flex items-start gap-3 p-4 rounded-lg bg-muted/50 border"
+                      >
+                        <div className="h-6 w-6 shrink-0 rounded-full border-2 border-primary flex items-center justify-center text-primary">
+                          ✓
+                        </div>
+                        <p className="text-base leading-relaxed pt-0.5">
+                          {point}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+
+            {/* Old Tabs Section - Remove this */}
+            <Card className="border-2 shadow-lg hidden">
               <CardHeader className="border-b bg-muted/30">
                 <div className="flex items-center gap-2">
                   <BookMarked className="h-5 w-5 text-primary" />
@@ -304,11 +659,17 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
               </CardHeader>
               <CardContent className="pt-6">
                 <Tabs defaultValue="summary">
-                  <TabsList className="grid grid-cols-4 w-full">
+                  <TabsList className={`grid w-full ${studyNotes.format === "jewish" ? "grid-cols-5" : "grid-cols-4"}`}>
                     <TabsTrigger value="summary" className="gap-1.5">
                       <FileText className="h-4 w-4" />
                       <span className="hidden sm:inline">Summary</span>
                     </TabsTrigger>
+                    {studyNotes.format === "jewish" && (
+                      <TabsTrigger value="main-text" className="gap-1.5">
+                        <Scroll className="h-4 w-4" />
+                        <span className="hidden sm:inline">Main Text</span>
+                      </TabsTrigger>
+                    )}
                     <TabsTrigger value="key-points" className="gap-1.5">
                       <Lightbulb className="h-4 w-4" />
                       <span className="hidden sm:inline">Key Points</span>
@@ -330,6 +691,24 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
                       </p>
                     </div>
                   </TabsContent>
+
+                  {studyNotes.format === "jewish" && studyNotes.mainText && (
+                    <TabsContent value="main-text" className="mt-6 space-y-4">
+                      <div className="space-y-4">
+                        <div className="p-6 rounded-lg bg-muted/50 border-2 border-primary/20">
+                          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <Scroll className="h-5 w-5 text-primary" />
+                            Parashah / Source Text
+                          </h3>
+                          <div className="prose dark:prose-invert max-w-none">
+                            <p className="text-base leading-relaxed">
+                              {studyNotes.mainText}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </TabsContent>
+                  )}
 
                   <TabsContent value="key-points" className="mt-6 space-y-4">
                     <div className="space-y-4">
@@ -394,17 +773,30 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
             </Card>
 
             {/* Discussion Questions */}
-            <Card className="border-2 shadow-lg">
-              <CardHeader className="border-b bg-muted/30">
-                <div className="flex items-center gap-2">
-                  <MessageCircle className="h-5 w-5 text-primary" />
-                  <CardTitle>Discussion Questions</CardTitle>
+            <Card id="discussion-section" className="border-2 shadow-lg scroll-mt-6">
+              <CardHeader 
+                className="border-b bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors"
+                onClick={() => toggleSection("discussion")}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="h-5 w-5 text-primary" />
+                    <CardTitle>Discussion Questions</CardTitle>
+                  </div>
+                  {expandedSections.discussion ? (
+                    <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                  )}
                 </div>
                 <CardDescription>
-                  Questions for personal reflection or group discussion
+                  {studyNotes.format === "jewish" 
+                    ? "Questions for chavruta (paired) or group study"
+                    : "Questions for personal reflection or group discussion"}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="pt-6">
+              {expandedSections.discussion && (
+                <CardContent className="pt-6">
                 <div className="space-y-6">
                   {studyNotes.discussionQuestions.map((question, index) => (
                     <div key={index} className="space-y-2">
@@ -425,12 +817,133 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
                     </div>
                   ))}
                 </div>
-              </CardContent>
+                </CardContent>
+              )}
             </Card>
+
+            {/* Jewish-specific: Commentary Layer */}
+            {studyNotes.format === "jewish" && studyNotes.commentaryLayer && studyNotes.commentaryLayer.length > 0 && (
+              <Card id="commentary-section" className="border-2 shadow-lg scroll-mt-6">
+                <CardHeader 
+                  className="border-b bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => toggleSection("commentary")}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <BookText className="h-5 w-5 text-primary" />
+                      <CardTitle>Commentary</CardTitle>
+                    </div>
+                    {expandedSections.commentary ? (
+                      <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                    )}
+                  </div>
+                  <CardDescription>
+                    Rabbinic insights and commentary notes
+                  </CardDescription>
+                </CardHeader>
+                {expandedSections.commentary && (
+                  <CardContent className="pt-6">
+                  <div className="space-y-6">
+                    {studyNotes.commentaryLayer?.map((commentary, index) => (
+                      <div key={index} className="space-y-3 p-5 rounded-lg bg-muted/50 border">
+                        <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+                          <BookText className="h-4 w-4" />
+                          {commentary.source}
+                        </h3>
+                        <p className="text-base leading-relaxed italic">
+                          {commentary.text}
+                        </p>
+                        {index < (studyNotes.commentaryLayer?.length || 0) - 1 && (
+                          <Separator className="mt-4" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  </CardContent>
+                )}
+              </Card>
+            )}
+
+            {/* Jewish-specific: Ethical Insight */}
+            {studyNotes.format === "jewish" && studyNotes.ethicalInsight && (
+              <Card id="ethical-section" className="border-2 shadow-lg scroll-mt-6">
+                <CardHeader 
+                  className="border-b bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => toggleSection("ethical")}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <GraduationCap className="h-5 w-5 text-primary" />
+                      <CardTitle>Ethical Insight (Mussar)</CardTitle>
+                    </div>
+                    {expandedSections.ethical ? (
+                      <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                    )}
+                  </div>
+                  <CardDescription>
+                    Moral and life reflection takeaway
+                  </CardDescription>
+                </CardHeader>
+                {expandedSections.ethical && (
+                  <CardContent className="pt-6">
+                  <div className="prose dark:prose-invert max-w-none">
+                    <p className="text-base leading-relaxed">
+                      {studyNotes.ethicalInsight}
+                    </p>
+                  </div>
+                  </CardContent>
+                )}
+              </Card>
+            )}
+
+            {/* Jewish-specific: Historical Notes */}
+            {studyNotes.format === "jewish" && studyNotes.historicalNotes && studyNotes.historicalNotes.length > 0 && (
+              <Card id="historical-section" className="border-2 shadow-lg scroll-mt-6">
+                <CardHeader 
+                  className="border-b bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => toggleSection("historical")}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <BookMarked className="h-5 w-5 text-primary" />
+                      <CardTitle>Historical & Linguistic Notes</CardTitle>
+                    </div>
+                    {expandedSections.historical ? (
+                      <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                    )}
+                  </div>
+                  <CardDescription>
+                    Etymology, context, and historical commentary
+                  </CardDescription>
+                </CardHeader>
+                {expandedSections.historical && (
+                  <CardContent className="pt-6">
+                  <div className="space-y-4">
+                    {studyNotes.historicalNotes?.map((note, index) => (
+                      <div key={index} className="space-y-2 p-4 rounded-lg bg-muted/50 border">
+                        <h3 className="text-base font-semibold text-primary">
+                          {note.term}
+                        </h3>
+                        <p className="text-base leading-relaxed">
+                          {note.explanation}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  </CardContent>
+                )}
+              </Card>
+            )}
           </div>
 
-          {/* Right Column - Sidebar */}
-          <div className="space-y-6">
+          {/* Right Column - Quick Actions Sidebar */}
+          <div className="lg:col-span-3 space-y-6">
             {/* Quick Actions */}
             <Card className="border-2 shadow-lg">
               <CardHeader className="border-b bg-muted/30">
@@ -522,6 +1035,113 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
           </div>
         </div>
       </div>
+
+      {/* Regenerate Dialog */}
+      <Dialog open={isRegenerateDialogOpen} onOpenChange={setIsRegenerateDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Regenerate Study Notes</DialogTitle>
+            <DialogDescription>
+              Choose the format for your study notes. This will regenerate the notes with a different structure.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-3">
+              <Button
+                variant={studyNotes?.format === "christian" ? "default" : "outline"}
+                className="w-full justify-start gap-3 h-auto py-4"
+                onClick={async () => {
+                  if (studyNotes?.format === "christian") {
+                    toast({
+                      title: "Already in Christian format",
+                      description: "These notes are already in Christian sermon format.",
+                    });
+                    return;
+                  }
+                  setIsRegenerating(true);
+                  try {
+                    await studyNotesService.regenerateStudyNotes(params.id, "christian");
+                    toast({
+                      title: "Regenerating Notes",
+                      description: "Your study notes are being regenerated in Christian format. This may take a few minutes.",
+                    });
+                    setIsRegenerateDialogOpen(false);
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 3000);
+                  } catch (error) {
+                    console.error("Error regenerating notes:", error);
+                    toast({
+                      title: "Error",
+                      description: "Failed to regenerate study notes",
+                      variant: "destructive",
+                    });
+                  } finally {
+                    setIsRegenerating(false);
+                  }
+                }}
+                disabled={isRegenerating}
+              >
+                <Church className="h-5 w-5" />
+                <div className="text-left">
+                  <div className="font-semibold">Christian Sermon Format</div>
+                  <div className="text-xs text-muted-foreground font-normal">
+                    Summary, Key Points, Scriptures, Application
+                  </div>
+                </div>
+              </Button>
+              
+              <Button
+                variant={studyNotes?.format === "jewish" ? "default" : "outline"}
+                className="w-full justify-start gap-3 h-auto py-4"
+                onClick={async () => {
+                  if (studyNotes?.format === "jewish") {
+                    toast({
+                      title: "Already in Jewish format",
+                      description: "These notes are already in Jewish teaching format.",
+                    });
+                    return;
+                  }
+                  setIsRegenerating(true);
+                  try {
+                    await studyNotesService.regenerateStudyNotes(params.id, "jewish");
+                    toast({
+                      title: "Regenerating Notes",
+                      description: "Your study notes are being regenerated in Jewish teaching format. This may take a few minutes.",
+                    });
+                    setIsRegenerateDialogOpen(false);
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 3000);
+                  } catch (error) {
+                    console.error("Error regenerating notes:", error);
+                    toast({
+                      title: "Error",
+                      description: "Failed to regenerate study notes",
+                      variant: "destructive",
+                    });
+                  } finally {
+                    setIsRegenerating(false);
+                  }
+                }}
+                disabled={isRegenerating}
+              >
+                <Scroll className="h-5 w-5" />
+                <div className="text-left">
+                  <div className="font-semibold">Jewish Teaching Format</div>
+                  <div className="text-xs text-muted-foreground font-normal">
+                    Main Text, Commentary, Mussar, Historical Notes
+                  </div>
+                </div>
+              </Button>
+            </div>
+            
+            <div className="text-xs text-muted-foreground pt-2">
+              Current format: <span className="font-semibold capitalize">{studyNotes?.format}</span>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Transcript Modal */}
       <Dialog

@@ -1,5 +1,46 @@
 # Features To Implement
 
+## ✅ COMPLETED: Multi-Format Study Notes (Christian & Jewish)
+
+### Status: Implemented
+
+### Description
+
+The application now supports generating study notes in two different formats:
+
+1. **Christian Sermon Format** - Traditional sermon study notes with Summary, Key Points, Scriptures, and Application
+2. **Jewish Teaching Format** - Torah/rabbinic study notes with Main Text (Parashah), Commentary Layer, Ethical Insight (Mussar), Historical Notes, and Discussion Questions for chavruta study
+
+### Implementation Details
+
+**Backend:**
+
+- Extended `StudyNotes` model with format field and Jewish-specific fields (main_text, commentary_layer, ethical_insight, historical_notes)
+- Updated transcript processing to support both formats with specialized prompts
+- Added `/api/study-notes/{id}/regenerate` endpoint to regenerate notes in a different format
+- Created Pydantic models for both `SermonStudyNotes` and `JewishStudyNotes`
+
+**Frontend:**
+
+- Added "Regenerate Notes" button with format selection dialog
+- Dynamic tab layout that shows Jewish-specific sections when applicable
+- New sections: Main Text, Commentary, Ethical Insight (Mussar), Historical & Linguistic Notes
+- Updated TypeScript interfaces to support both formats
+
+**Database Migration:**
+
+- Migration script created at `server/migrations/add_jewish_format_fields.py`
+- Adds: format, main_text, commentary_layer, ethical_insight, historical_notes columns
+
+### Usage
+
+Users can click "Regenerate Notes" on any study notes page and choose between:
+
+- **Christian Format**: Summary, Key Points, Scriptures, Application Points, Discussion Questions
+- **Jewish Format**: Summary, Main Text (Parashah/Source), Key Points, Scriptures, Commentary Layer (Rashi, Talmud, Midrash), Ethical Insight (Mussar), Discussion Questions (for chavruta), Application Points, Historical & Linguistic Notes
+
+---
+
 ## Audio File Storage and Playback
 
 ### Priority: Medium-High

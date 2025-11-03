@@ -102,8 +102,16 @@ def sanitize_transcript(text: str, aggressive: bool = False) -> str:
 
 # Pydantic models for structured output
 class Scripture(BaseModel):
-    reference: str = Field(description="The scripture reference (e.g., 'John 3:16')")
+    reference: str = Field(description="The scripture reference (e.g., 'John 3:16' or 'Genesis 1:1')")
     text: str = Field(description="The full text of the scripture verse")
+
+class Commentary(BaseModel):
+    source: str = Field(description="The source of the commentary (e.g., 'Rashi', 'Talmud', 'Midrash')")
+    text: str = Field(description="The commentary text")
+
+class HistoricalNote(BaseModel):
+    term: str = Field(description="The term or concept being explained")
+    explanation: str = Field(description="Historical, linguistic, or contextual explanation")
 
 class SermonStudyNotes(BaseModel):
     summary: str = Field(description="A concise summary of the sermon's main message")
@@ -111,6 +119,17 @@ class SermonStudyNotes(BaseModel):
     scriptures: List[Scripture] = Field(description="Scripture references used in the sermon")
     discussion_questions: List[str] = Field(description="Questions for group discussion or personal reflection")
     application_points: List[str] = Field(description="Practical ways to apply the sermon's message")
+
+class JewishStudyNotes(BaseModel):
+    summary: str = Field(description="A concise summary of the teaching's main message")
+    main_text: str = Field(description="The primary text referenced (Torah portion, verse, or rabbinic quote)")
+    key_points: List[str] = Field(description="Key points or main takeaways from the teaching")
+    scriptures: List[Scripture] = Field(description="Scripture references used in the teaching")
+    commentary_layer: List[Commentary] = Field(description="Commentary-style notes (Rashi, Talmudic, etc.)")
+    ethical_insight: str = Field(description="Mussar / moral takeaway for life reflection")
+    discussion_questions: List[str] = Field(description="Questions to promote chavruta (paired) or group study")
+    application_points: List[str] = Field(description="Practical ways to apply the teaching")
+    historical_notes: List[HistoricalNote] = Field(description="Etymology, context, or historical commentary")
 
 def chunk_transcript(text: str, max_chunk_size: int = 3000) -> List[str]:
     """
@@ -151,17 +170,17 @@ def add_theological_context(text: str) -> str:
     return context_prefix + text
 
 @shared_task
-def process_transcript(transcription_id: UUID) -> Dict:
-    logger.info(f"Starting transcript processing task for ID: {transcription_id}")
+def process_transcript(transcription_id: UUID, format: str = "christian") -> Dict:
+    logger.info(f"Starting transcript processing task for ID: {transcription_id} with format: {format}")
     try:
-        result = asyncio.run(_process_transcript(transcription_id))
+        result = asyncio.run(_process_transcript(transcription_id, format))
         logger.info(f"Transcript processing task completed for ID: {transcription_id}")
         return result
     except Exception as e:
         logger.error(f"Transcript processing task failed for ID: {transcription_id}: {str(e)}", exc_info=True)
         raise
 
-async def _process_transcript(transcription_id: UUID) -> Dict:
+async def _process_transcript(transcription_id: UUID, format: str = "christian") -> Dict:
     try:
         # Initialize database connection
         await Tortoise.init(
@@ -196,8 +215,9 @@ async def _process_transcript(transcription_id: UUID) -> Dict:
             temperature=0.3  # Lower temperature for more consistent output
         )
 
-        # Set up the output parser
-        parser = PydanticOutputParser(pydantic_object=SermonStudyNotes)
+        # Set up the output parser based on format
+        is_jewish_format = format == "jewish"
+        parser = PydanticOutputParser(pydantic_object=JewishStudyNotes if is_jewish_format else SermonStudyNotes)
 
         # If we have multiple chunks, process them separately and combine
         if len(chunks) > 1:
@@ -206,13 +226,23 @@ async def _process_transcript(transcription_id: UUID) -> Dict:
             all_scriptures = []
             all_discussion_questions = []
             all_application_points = []
+            all_commentary = [] if is_jewish_format else None
+            all_historical_notes = [] if is_jewish_format else None
             summaries = []
+            main_texts = [] if is_jewish_format else None
+            ethical_insights = [] if is_jewish_format else None
             
             # Create a simpler prompt for chunk processing
-            chunk_prompt = ChatPromptTemplate.from_messages([
-                ("system", "You are an educational content analyzer specializing in theological material."),
-                ("user", "Analyze this section of educational content and extract:\n1. Main themes\n2. Scripture references\n3. Key insights\n\nContent:\n{transcript}\n\n{format_instructions}")
-            ])
+            if is_jewish_format:
+                chunk_prompt = ChatPromptTemplate.from_messages([
+                    ("system", "You are an educational content analyzer specializing in Jewish theological and rabbinic material."),
+                    ("user", "Analyze this section of Jewish educational content and extract:\n1. Main Torah/Tanakh text references\n2. Commentary insights (Rashi, Talmud, Midrash style)\n3. Key themes\n4. Historical/linguistic notes\n\nContent:\n{transcript}\n\n{format_instructions}")
+                ])
+            else:
+                chunk_prompt = ChatPromptTemplate.from_messages([
+                    ("system", "You are an educational content analyzer specializing in theological material."),
+                    ("user", "Analyze this section of educational content and extract:\n1. Main themes\n2. Scripture references\n3. Key insights\n\nContent:\n{transcript}\n\n{format_instructions}")
+                ])
             
             successful_chunks = 0
             for i, chunk in enumerate(chunks):
@@ -231,6 +261,13 @@ async def _process_transcript(transcription_id: UUID) -> Dict:
                     all_scriptures.extend(chunk_data.scriptures)
                     all_discussion_questions.extend(chunk_data.discussion_questions)
                     all_application_points.extend(chunk_data.application_points)
+                    
+                    if is_jewish_format:
+                        main_texts.append(chunk_data.main_text)
+                        all_commentary.extend(chunk_data.commentary_layer)
+                        ethical_insights.append(chunk_data.ethical_insight)
+                        all_historical_notes.extend(chunk_data.historical_notes)
+                    
                     successful_chunks += 1
                     
                 except Exception as e:
@@ -244,39 +281,83 @@ async def _process_transcript(transcription_id: UUID) -> Dict:
             if successful_chunks == 0:
                 # If no chunks succeeded, create basic fallback notes
                 logger.warning("No chunks processed successfully, creating fallback notes")
-                study_notes_data = SermonStudyNotes(
-                    summary=f"This sermon titled '{transcription.title or 'Untitled'}' discusses theological themes. Due to content processing limitations, please review the full transcript for detailed analysis.",
-                    key_points=[
-                        "Review the full transcript for comprehensive understanding",
-                        "Contains biblical references and theological discussion",
-                        "Sermon focuses on spiritual growth and biblical principles"
-                    ],
-                    scriptures=[],
-                    discussion_questions=[
-                        "What were the main biblical themes discussed in this sermon?",
-                        "How can the principles shared be applied to daily life?",
-                        "What scriptures were referenced and what is their significance?"
-                    ],
-                    application_points=[
-                        "Reflect on the sermon's message and its personal relevance",
-                        "Study the referenced scriptures in their full context",
-                        "Consider how to apply these teachings in your community"
-                    ]
-                )
+                if is_jewish_format:
+                    study_notes_data = JewishStudyNotes(
+                        summary=f"This teaching titled '{transcription.title or 'Untitled'}' discusses Torah and rabbinic themes. Due to content processing limitations, please review the full transcript for detailed analysis.",
+                        main_text="Please review the full transcript for the primary text references.",
+                        key_points=[
+                            "Review the full transcript for comprehensive understanding",
+                            "Contains Torah/Tanakh references and rabbinic discussion",
+                            "Teaching focuses on Jewish wisdom and ethical principles"
+                        ],
+                        scriptures=[],
+                        commentary_layer=[],
+                        ethical_insight="Reflect on the teaching's message and its relevance to ethical living.",
+                        discussion_questions=[
+                            "What were the main Torah themes discussed in this teaching?",
+                            "How can these principles be applied to daily life?",
+                            "What insights can we draw from the rabbinic commentary?"
+                        ],
+                        application_points=[
+                            "Reflect on the teaching's message and its personal relevance",
+                            "Study the referenced texts in their full context",
+                            "Consider how to apply these teachings in your community"
+                        ],
+                        historical_notes=[]
+                    )
+                else:
+                    study_notes_data = SermonStudyNotes(
+                        summary=f"This sermon titled '{transcription.title or 'Untitled'}' discusses theological themes. Due to content processing limitations, please review the full transcript for detailed analysis.",
+                        key_points=[
+                            "Review the full transcript for comprehensive understanding",
+                            "Contains biblical references and theological discussion",
+                            "Sermon focuses on spiritual growth and biblical principles"
+                        ],
+                        scriptures=[],
+                        discussion_questions=[
+                            "What were the main biblical themes discussed in this sermon?",
+                            "How can the principles shared be applied to daily life?",
+                            "What scriptures were referenced and what is their significance?"
+                        ],
+                        application_points=[
+                            "Reflect on the sermon's message and its personal relevance",
+                            "Study the referenced scriptures in their full context",
+                            "Consider how to apply these teachings in your community"
+                        ]
+                    )
             else:
-                study_notes_data = SermonStudyNotes(
-                    summary=" ".join(summaries[:3]) if summaries else f"Analysis of sermon '{transcription.title or 'Untitled'}'",
-                    key_points=list(set(all_key_points))[:10] if all_key_points else ["Review transcript for key themes"],
-                    scriptures=all_scriptures[:15] if all_scriptures else [],
-                    discussion_questions=list(set(all_discussion_questions))[:8] if all_discussion_questions else ["What were the main themes?"],
-                    application_points=list(set(all_application_points))[:8] if all_application_points else ["Reflect on the message"]
-                )
+                if is_jewish_format:
+                    study_notes_data = JewishStudyNotes(
+                        summary=" ".join(summaries[:3]) if summaries else f"Analysis of teaching '{transcription.title or 'Untitled'}'",
+                        main_text=" ".join(main_texts[:2]) if main_texts else "Primary text references found in transcript.",
+                        key_points=list(set(all_key_points))[:10] if all_key_points else ["Review transcript for key themes"],
+                        scriptures=all_scriptures[:15] if all_scriptures else [],
+                        commentary_layer=all_commentary[:10] if all_commentary else [],
+                        ethical_insight=" ".join(ethical_insights[:2]) if ethical_insights else "Reflect on the ethical implications of this teaching.",
+                        discussion_questions=list(set(all_discussion_questions))[:8] if all_discussion_questions else ["What were the main themes?"],
+                        application_points=list(set(all_application_points))[:8] if all_application_points else ["Reflect on the message"],
+                        historical_notes=all_historical_notes[:8] if all_historical_notes else []
+                    )
+                else:
+                    study_notes_data = SermonStudyNotes(
+                        summary=" ".join(summaries[:3]) if summaries else f"Analysis of sermon '{transcription.title or 'Untitled'}'",
+                        key_points=list(set(all_key_points))[:10] if all_key_points else ["Review transcript for key themes"],
+                        scriptures=all_scriptures[:15] if all_scriptures else [],
+                        discussion_questions=list(set(all_discussion_questions))[:8] if all_discussion_questions else ["What were the main themes?"],
+                        application_points=list(set(all_application_points))[:8] if all_application_points else ["Reflect on the message"]
+                    )
         else:
             # Single chunk processing
-            prompt = ChatPromptTemplate.from_messages([
-                ("system", "You are an educational content analyzer specializing in theological material."),
-                ("user", "Analyze this educational content and extract structured information:\n\n{transcript}\n\n{format_instructions}")
-            ])
+            if is_jewish_format:
+                prompt = ChatPromptTemplate.from_messages([
+                    ("system", "You are an educational content analyzer specializing in Jewish theological and rabbinic material."),
+                    ("user", "Analyze this Jewish educational content and extract structured information including Torah/Tanakh references, rabbinic commentary, ethical insights, and historical context:\n\n{transcript}\n\n{format_instructions}")
+                ])
+            else:
+                prompt = ChatPromptTemplate.from_messages([
+                    ("system", "You are an educational content analyzer specializing in theological material."),
+                    ("user", "Analyze this educational content and extract structured information:\n\n{transcript}\n\n{format_instructions}")
+                ])
 
             # Format the prompt with the sanitized transcript and parser instructions
             formatted_prompt = prompt.format_prompt(
@@ -292,34 +373,60 @@ async def _process_transcript(transcription_id: UUID) -> Dict:
                 if "content filter" in str(e).lower():
                     logger.warning(f"Content filter triggered on single chunk, retrying with simpler approach")
                     # Last resort: create basic notes without AI
-                    study_notes_data = SermonStudyNotes(
-                        summary="This sermon discusses theological themes and biblical principles. Due to processing limitations, please review the full transcript for detailed content.",
-                        key_points=["Review full transcript for key themes", "Contains biblical references and theological discussion"],
-                        scriptures=[],
-                        discussion_questions=["What were the main themes discussed?", "How can these principles be applied?"],
-                        application_points=["Reflect on the sermon content", "Consider personal application"]
-                    )
+                    if is_jewish_format:
+                        study_notes_data = JewishStudyNotes(
+                            summary="This teaching discusses Torah and rabbinic themes. Due to processing limitations, please review the full transcript for detailed content.",
+                            main_text="Primary text references found in transcript.",
+                            key_points=["Review full transcript for key themes", "Contains Torah/Tanakh references and rabbinic discussion"],
+                            scriptures=[],
+                            commentary_layer=[],
+                            ethical_insight="Reflect on the ethical implications of this teaching.",
+                            discussion_questions=["What were the main themes discussed?", "How can these principles be applied?"],
+                            application_points=["Reflect on the teaching content", "Consider personal application"],
+                            historical_notes=[]
+                        )
+                    else:
+                        study_notes_data = SermonStudyNotes(
+                            summary="This sermon discusses theological themes and biblical principles. Due to processing limitations, please review the full transcript for detailed content.",
+                            key_points=["Review full transcript for key themes", "Contains biblical references and theological discussion"],
+                            scriptures=[],
+                            discussion_questions=["What were the main themes discussed?", "How can these principles be applied?"],
+                            application_points=["Reflect on the sermon content", "Consider personal application"]
+                        )
                 else:
                     raise
 
         # Create study notes in database
-        study_notes = await StudyNotes.create(
-            transcript=transcription,
-            user=transcription.user,  # Add the user from the transcription
-            summary=study_notes_data.summary,
-            key_points=study_notes_data.key_points,
-            scriptures=[{"reference": s.reference, "text": s.text} for s in study_notes_data.scriptures],
-            discussion_questions=study_notes_data.discussion_questions,
-            application_points=study_notes_data.application_points
-        )
+        study_notes_dict = {
+            "transcript": transcription,
+            "user": transcription.user,
+            "format": format,
+            "summary": study_notes_data.summary,
+            "key_points": study_notes_data.key_points,
+            "scriptures": [{"reference": s.reference, "text": s.text} for s in study_notes_data.scriptures],
+            "discussion_questions": study_notes_data.discussion_questions,
+            "application_points": study_notes_data.application_points
+        }
+        
+        # Add Jewish-specific fields if applicable
+        if is_jewish_format:
+            study_notes_dict.update({
+                "main_text": study_notes_data.main_text,
+                "commentary_layer": [{"source": c.source, "text": c.text} for c in study_notes_data.commentary_layer],
+                "ethical_insight": study_notes_data.ethical_insight,
+                "historical_notes": [{"term": h.term, "explanation": h.explanation} for h in study_notes_data.historical_notes]
+            })
+        
+        study_notes = await StudyNotes.create(**study_notes_dict)
 
         # Update transcription status to completed
         transcription.status = TranscriptionStatus.COMPLETED
         await transcription.save()
 
-        return {
+        result = {
             "id": str(study_notes.id),
             "transcript_id": str(transcription.id),
+            "format": study_notes.format,
             "summary": study_notes.summary,
             "key_points": study_notes.key_points,
             "scriptures": study_notes.scriptures,
@@ -327,6 +434,17 @@ async def _process_transcript(transcription_id: UUID) -> Dict:
             "application_points": study_notes.application_points,
             "created_at": study_notes.created_at.isoformat()
         }
+        
+        # Add Jewish-specific fields if applicable
+        if is_jewish_format:
+            result.update({
+                "main_text": study_notes.main_text,
+                "commentary_layer": study_notes.commentary_layer,
+                "ethical_insight": study_notes.ethical_insight,
+                "historical_notes": study_notes.historical_notes
+            })
+        
+        return result
 
     except Exception as e:
         logger.error(f"Error processing transcript: {str(e)}", exc_info=True)
