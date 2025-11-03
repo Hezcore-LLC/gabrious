@@ -27,6 +27,7 @@ export interface StudyNotes {
   thumbnail: string;
   videoUrl: string;
   format: "christian" | "jewish";
+  depthMode?: "basic" | "intermediate" | "advanced";
   summary: string;
   keyPoints: string[];
   scriptures: Scripture[];
@@ -150,7 +151,11 @@ export const studyNotesService = {
     }
   },
 
-  regenerateStudyNotes: async (notesId: string, format: "christian" | "jewish"): Promise<{ task_id: string }> => {
+  regenerateStudyNotes: async (
+    notesId: string, 
+    format: "christian" | "jewish",
+    depthMode: "basic" | "intermediate" | "advanced" = "intermediate"
+  ): Promise<{ task_id: string }> => {
     try {
       const token = authService.getToken();
       if (!token) {
@@ -163,7 +168,7 @@ export const studyNotesService = {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ format })
+        body: JSON.stringify({ format, depth_mode: depthMode })
       });
       
       if (!response.ok) {

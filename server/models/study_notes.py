@@ -15,6 +15,7 @@ class StudyNotes(models.Model):
     user = fields.ForeignKeyField('models.User', related_name='study_notes')
     transcript = fields.ForeignKeyField('models.Transcription', related_name='study_notes')
     format = fields.CharEnumField(StudyNotesFormat, default=StudyNotesFormat.CHRISTIAN)
+    depth_mode = fields.CharEnumField(DepthMode, default=DepthMode.INTERMEDIATE, null=True)
     
     # Common fields
     summary = fields.TextField()  # Summary of the sermon/teaching

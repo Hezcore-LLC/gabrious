@@ -25,6 +25,7 @@ class StudyNotesCreate(BaseModel):
 
 class RegenerateStudyNotesRequest(BaseModel):
     format: str = "christian"  # "christian" or "jewish"
+    depth_mode: Optional[str] = "intermediate"  # "basic", "intermediate", or "advanced"
 
 @router.post("/")
 async def create_study_notes(study_notes: StudyNotesCreate, current_user: User = Depends(get_current_user)):
@@ -149,6 +150,10 @@ async def regenerate_study_notes(
     if request.format not in ["christian", "jewish"]:
         raise HTTPException(status_code=400, detail="Invalid format. Must be 'christian' or 'jewish'")
     
+    # Validate depth mode
+    if request.depth_mode not in ["basic", "intermediate", "advanced"]:
+        raise HTTPException(status_code=400, detail="Invalid depth_mode. Must be 'basic', 'intermediate', or 'advanced'")
+    
     # Delete the old notes
     transcript_id = notes.transcript_id
     await notes.delete()
@@ -158,13 +163,14 @@ async def regenerate_study_notes(
     transcription.status = TranscriptionStatus.GENERATING_NOTES
     await transcription.save()
     
-    # Trigger regeneration with the new format
-    task = process_transcript.delay(str(transcript_id), request.format)
+    # Trigger regeneration with the new format and depth mode
+    task = process_transcript.delay(str(transcript_id), request.format, request.depth_mode)
     
     return {
         "message": "Study notes regeneration started",
         "task_id": task.id,
         "format": request.format,
+        "depth_mode": request.depth_mode,
         "transcription_id": str(transcript_id)
     }
 

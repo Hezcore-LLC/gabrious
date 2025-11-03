@@ -65,6 +65,8 @@ export default function StudyNotesPage({ params }: { params: { id: string } }) {
   const [isSavingTranscript, setIsSavingTranscript] = useState(false);
   const [isRegenerateDialogOpen, setIsRegenerateDialogOpen] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
+  const [selectedFormat, setSelectedFormat] = useState<"christian" | "jewish">("christian");
+  const [selectedDepth, setSelectedDepth] = useState<"basic" | "intermediate" | "advanced">("intermediate");
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     summary: true,
     keyPoints: true,
@@ -89,15 +91,26 @@ export default function StudyNotesPage({ params }: { params: { id: string } }) {
   };
 
   useEffect(() => {
+    // Only fetch on client side
+    if (typeof window === 'undefined') return;
+    
     const fetchStudyNotes = async () => {
       try {
         setIsLoading(true);
+        setError(null);
         const data = await studyNotesService.getStudyNotes(params.id);
         setStudyNotes(data);
-        setError(null);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Error fetching study notes:", err);
-        setError("Failed to load study notes. Please try again later.");
+        const errorMessage = err?.message || "Failed to load study notes";
+        
+        if (errorMessage.includes("Authentication")) {
+          setError("Please log in to view study notes.");
+        } else if (errorMessage.includes("not found")) {
+          setError("Study notes not found. It may have been deleted.");
+        } else {
+          setError("Failed to load study notes. Please try again.");
+        }
       } finally {
         setIsLoading(false);
       }
@@ -179,12 +192,32 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
             Back to Dashboard
           </Link>
         </Button>
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <p className="text-destructive mb-4">
-              {error || "Study notes not found"}
-            </p>
-            <Button onClick={() => window.location.reload()}>Try Again</Button>
+        <Card className="border-2">
+          <CardContent className="flex flex-col items-center justify-center py-16 space-y-6">
+            <div className="rounded-full bg-destructive/10 p-4">
+              <FileText className="h-12 w-12 text-destructive" />
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-lg font-semibold">
+                {error?.includes("Authentication") ? "Authentication Required" : 
+                 error?.includes("not found") ? "Study Notes Not Found" :
+                 "Unable to Load Study Notes"}
+              </h3>
+              <p className="text-muted-foreground max-w-md">
+                {error || "The study notes you're looking for could not be found or loaded."}
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Button onClick={() => window.location.reload()} variant="default">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Try Again
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard">
+                  Go to Dashboard
+                </Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -1038,16 +1071,21 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
 
       {/* Regenerate Dialog */}
       <Dialog open={isRegenerateDialogOpen} onOpenChange={setIsRegenerateDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Regenerate Study Notes</DialogTitle>
-            <DialogDescription>
-              Choose the format for your study notes. This will regenerate the notes with a different structure.
+            <DialogTitle className="text-2xl">Regenerate Study Notes</DialogTitle>
+            <DialogDescription className="text-base">
+              Choose the format and depth level for your study notes. This will regenerate the notes with your selected structure.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
+          <div className="space-y-6 py-4">
+            {/* Format Selection */}
             <div className="space-y-3">
-              <Button
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                1. Choose Format
+              </h3>
+              <div className="grid grid-cols-2 gap-3">
+                <Button
                 variant={studyNotes?.format === "christian" ? "default" : "outline"}
                 className="w-full justify-start gap-3 h-auto py-4"
                 onClick={async () => {
@@ -1089,9 +1127,9 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
                     Summary, Key Points, Scriptures, Application
                   </div>
                 </div>
-              </Button>
-              
-              <Button
+                </Button>
+                
+                <Button
                 variant={studyNotes?.format === "jewish" ? "default" : "outline"}
                 className="w-full justify-start gap-3 h-auto py-4"
                 onClick={async () => {
@@ -1133,7 +1171,8 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
                     Main Text, Commentary, Mussar, Historical Notes
                   </div>
                 </div>
-              </Button>
+                </Button>
+              </div>
             </div>
             
             <div className="text-xs text-muted-foreground pt-2">

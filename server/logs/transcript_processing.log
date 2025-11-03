@@ -1031,3 +1031,35 @@ ValueError: Azure has not provided the response due to a content filter being tr
 2025-11-03 02:27:19,558 - transcript_processing - INFO - Processing chunk 13/13
 2025-11-03 02:27:27,863 - transcript_processing - INFO - Successfully processed 4/13 chunks
 2025-11-03 02:27:27,881 - transcript_processing - INFO - Transcript processing task completed for ID: 07558b67-ec37-46a6-8a85-2ea59a72564f
+2025-11-03 02:54:54,608 - transcript_processing - INFO - Starting transcript processing task for ID: 07558b67-ec37-46a6-8a85-2ea59a72564f with format: christian, depth: intermediate
+2025-11-03 02:54:54,731 - transcript_processing - INFO - Sanitizing transcript before processing
+2025-11-03 02:54:54,887 - transcript_processing - INFO - Sanitized transcript: reduced from 49471 to 49878 characters (aggressive=True)
+2025-11-03 02:54:54,891 - transcript_processing - INFO - Split transcript into 13 chunks
+2025-11-03 02:54:54,892 - transcript_processing - INFO - Processing 13 chunks
+2025-11-03 02:54:55,420 - transcript_processing - INFO - Processing transcript in 13 chunks
+2025-11-03 02:54:55,421 - transcript_processing - INFO - Processing chunk 1/13
+2025-11-03 02:55:01,518 - transcript_processing - WARNING - Failed to process chunk 1: Azure has not provided the response due to a content filter being triggered
+2025-11-03 02:55:01,519 - transcript_processing - INFO - Processing chunk 2/13
+2025-11-03 02:55:07,011 - transcript_processing - INFO - Processing chunk 3/13
+2025-11-03 02:55:11,916 - transcript_processing - INFO - Processing chunk 4/13
+2025-11-03 02:55:17,403 - transcript_processing - WARNING - Failed to process chunk 4: Azure has not provided the response due to a content filter being triggered
+2025-11-03 02:55:17,404 - transcript_processing - INFO - Processing chunk 5/13
+2025-11-03 02:55:22,839 - transcript_processing - WARNING - Failed to process chunk 5: Azure has not provided the response due to a content filter being triggered
+2025-11-03 02:55:22,839 - transcript_processing - INFO - Processing chunk 6/13
+2025-11-03 02:55:29,097 - transcript_processing - WARNING - Failed to process chunk 6: Azure has not provided the response due to a content filter being triggered
+2025-11-03 02:55:29,097 - transcript_processing - INFO - Processing chunk 7/13
+2025-11-03 02:55:33,206 - transcript_processing - WARNING - Failed to process chunk 7: Azure has not provided the response due to a content filter being triggered
+2025-11-03 02:55:33,207 - transcript_processing - INFO - Processing chunk 8/13
+2025-11-03 02:55:40,424 - transcript_processing - WARNING - Failed to process chunk 8: Azure has not provided the response due to a content filter being triggered
+2025-11-03 02:55:40,425 - transcript_processing - INFO - Processing chunk 9/13
+2025-11-03 02:55:46,333 - transcript_processing - WARNING - Failed to process chunk 9: Azure has not provided the response due to a content filter being triggered
+2025-11-03 02:55:46,334 - transcript_processing - INFO - Processing chunk 10/13
+2025-11-03 02:55:50,110 - transcript_processing - WARNING - Failed to process chunk 10: Azure has not provided the response due to a content filter being triggered
+2025-11-03 02:55:50,111 - transcript_processing - INFO - Processing chunk 11/13
+2025-11-03 02:55:55,770 - transcript_processing - WARNING - Failed to process chunk 11: Azure has not provided the response due to a content filter being triggered
+2025-11-03 02:55:55,770 - transcript_processing - INFO - Processing chunk 12/13
+2025-11-03 02:56:02,456 - transcript_processing - WARNING - Failed to process chunk 12: Azure has not provided the response due to a content filter being triggered
+2025-11-03 02:56:02,456 - transcript_processing - INFO - Processing chunk 13/13
+2025-11-03 02:56:08,342 - transcript_processing - WARNING - Failed to process chunk 13: Azure has not provided the response due to a content filter being triggered
+2025-11-03 02:56:08,343 - transcript_processing - INFO - Successfully processed 2/13 chunks
+2025-11-03 02:56:08,355 - transcript_processing - INFO - Transcript processing task completed for ID: 07558b67-ec37-46a6-8a85-2ea59a72564f

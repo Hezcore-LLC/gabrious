@@ -170,17 +170,17 @@ def add_theological_context(text: str) -> str:
     return context_prefix + text
 
 @shared_task
-def process_transcript(transcription_id: UUID, format: str = "christian") -> Dict:
-    logger.info(f"Starting transcript processing task for ID: {transcription_id} with format: {format}")
+def process_transcript(transcription_id: UUID, format: str = "christian", depth_mode: str = "intermediate") -> Dict:
+    logger.info(f"Starting transcript processing task for ID: {transcription_id} with format: {format}, depth: {depth_mode}")
     try:
-        result = asyncio.run(_process_transcript(transcription_id, format))
+        result = asyncio.run(_process_transcript(transcription_id, format, depth_mode))
         logger.info(f"Transcript processing task completed for ID: {transcription_id}")
         return result
     except Exception as e:
         logger.error(f"Transcript processing task failed for ID: {transcription_id}: {str(e)}", exc_info=True)
         raise
 
-async def _process_transcript(transcription_id: UUID, format: str = "christian") -> Dict:
+async def _process_transcript(transcription_id: UUID, format: str = "christian", depth_mode: str = "intermediate") -> Dict:
     try:
         # Initialize database connection
         await Tortoise.init(
@@ -232,15 +232,23 @@ async def _process_transcript(transcription_id: UUID, format: str = "christian")
             main_texts = [] if is_jewish_format else None
             ethical_insights = [] if is_jewish_format else None
             
-            # Create a simpler prompt for chunk processing
+            # Create depth-aware prompts for chunk processing
+            depth_instructions = {
+                "basic": "Focus on: Summary, Key Points, and Scripture/Source references only.",
+                "intermediate": "Include: Summary, Key Points, Scriptures, Ethical Insights, and Discussion Questions.",
+                "advanced": "Provide comprehensive analysis including: Summary, Key Points, Scriptures, Commentary, Historical/Linguistic Notes, Cross-references, and Deep Insights."
+            }
+            
+            depth_instruction = depth_instructions.get(depth_mode, depth_instructions["intermediate"])
+            
             if is_jewish_format:
                 chunk_prompt = ChatPromptTemplate.from_messages([
-                    ("system", "You are an educational content analyzer specializing in Jewish theological and rabbinic material."),
+                    ("system", f"You are an educational content analyzer specializing in Jewish theological and rabbinic material. {depth_instruction}"),
                     ("user", "Analyze this section of Jewish educational content and extract:\n1. Main Torah/Tanakh text references\n2. Commentary insights (Rashi, Talmud, Midrash style)\n3. Key themes\n4. Historical/linguistic notes\n\nContent:\n{transcript}\n\n{format_instructions}")
                 ])
             else:
                 chunk_prompt = ChatPromptTemplate.from_messages([
-                    ("system", "You are an educational content analyzer specializing in theological material."),
+                    ("system", f"You are an educational content analyzer specializing in theological material. {depth_instruction}"),
                     ("user", "Analyze this section of educational content and extract:\n1. Main themes\n2. Scripture references\n3. Key insights\n\nContent:\n{transcript}\n\n{format_instructions}")
                 ])
             
@@ -401,6 +409,7 @@ async def _process_transcript(transcription_id: UUID, format: str = "christian")
             "transcript": transcription,
             "user": transcription.user,
             "format": format,
+            "depth_mode": depth_mode,
             "summary": study_notes_data.summary,
             "key_points": study_notes_data.key_points,
             "scriptures": [{"reference": s.reference, "text": s.text} for s in study_notes_data.scriptures],
