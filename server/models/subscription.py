@@ -11,7 +11,7 @@ class SubscriptionPlan(models.Model):
     id = fields.UUIDField(pk=True)
     user = fields.ForeignKeyField('models.User', related_name='subscription')
     plan_tier = fields.CharEnumField(PlanTier, default=PlanTier.FREE)
-    storage_limit = fields.IntField(default=1024 * 1024 * 1024)  # Default 1GB in bytes
+    storage_limit = fields.BigIntField(default=1024 * 1024 * 1024)  # Default 1GB in bytes
     subscription_id = fields.CharField(max_length=255, null=True)  # Stripe subscription ID
     is_canceled = fields.BooleanField(default=False)  # Whether subscription is canceled
     cancel_at = fields.DatetimeField(null=True)  # When subscription will end

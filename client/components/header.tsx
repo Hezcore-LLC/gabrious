@@ -14,20 +14,41 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { BookOpen, Church, FileText, Home, Menu, X, LogOut, User, Settings } from "lucide-react";
+import { 
+  BookOpen, 
+  Church, 
+  FileText, 
+  Home, 
+  Menu, 
+  LogOut, 
+  User, 
+  Settings,
+  Sparkles,
+  Zap,
+  Crown
+} from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Badge } from "@/components/ui/badge";
 import { authService } from "@/lib/authService";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     setIsAuthenticated(authService.isAuthenticated());
+    
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleLogout = () => {
@@ -37,66 +58,115 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Link href="/" className="flex items-center gap-2">
-            <BookOpen className="h-6 w-6" />
-            <span className="hidden font-bold sm:inline-block text-xl">Gabrious</span>
-          </Link>
-        </div>
+    <motion.header 
+      className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        scrolled 
+          ? "border-b bg-background/80 backdrop-blur-xl shadow-lg" 
+          : "border-b border-transparent bg-background/60 backdrop-blur-md"
+      )}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="container flex h-20 items-center justify-between">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <motion.div 
+            className="relative"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-lg blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-yellow-600 shadow-lg">
+              <BookOpen className="h-5 w-5 text-white" />
+            </div>
+          </motion.div>
+          <div className="flex flex-col">
+            <span className="font-bold text-xl bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent">
+              Gabrious
+            </span>
+            <span className="text-[10px] text-muted-foreground -mt-1">AI Study Platform</span>
+          </div>
+        </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex md:items-center md:gap-6">
+        <div className="hidden md:flex md:items-center md:gap-8">
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
                 <Link href="/" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "text-base")}>
+                    <Home className="h-4 w-4 mr-2" />
                     Home
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
+              
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Features</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="text-base">
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Features
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
+                  <ul className="grid gap-3 p-6 md:w-[500px] lg:w-[600px] lg:grid-cols-2">
                     <li className="row-span-3">
                       <NavigationMenuLink asChild>
                         <a
-                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                          href="/transcription"
+                          className="flex h-full w-full select-none flex-col justify-end rounded-xl bg-gradient-to-br from-amber-500/10 to-yellow-500/10 p-6 no-underline outline-none focus:shadow-md hover:shadow-lg transition-all border-2 border-amber-500/20"
+                          href="/upload"
                         >
-                          <FileText className="h-6 w-6" />
-                          <div className="mb-2 mt-4 text-lg font-medium">
-                            Transcription
+                          <Zap className="h-8 w-8 text-amber-600 mb-2" />
+                          <div className="mb-2 mt-4 text-lg font-semibold">
+                            AI Transcription
                           </div>
                           <p className="text-sm leading-tight text-muted-foreground">
-                            Convert sermons to text with our AI-powered transcription service
+                            Convert sermons to text with 99% accuracy using advanced AI
                           </p>
+                          <Badge className="mt-3 w-fit bg-amber-500/10 text-amber-700 hover:bg-amber-500/20">
+                            Most Popular
+                          </Badge>
                         </a>
                       </NavigationMenuLink>
                     </li>
-                    <ListItem href="/study-notes" title="Study Notes" icon={<BookOpen className="h-4 w-4 mr-2" />}>
-                      Generate comprehensive study notes from sermon transcriptions
+                    <ListItem 
+                      href="/dashboard" 
+                      title="Study Notes" 
+                      icon={<BookOpen className="h-4 w-4 mr-2 text-amber-600" />}
+                    >
+                      Comprehensive notes with key insights and scripture references
                     </ListItem>
-                    <ListItem href="/church-automation" title="Church Automation" icon={<Church className="h-4 w-4 mr-2" />}>
-                      Automate sermon processing for your entire church
+                    <ListItem 
+                      href="/how-it-works" 
+                      title="How It Works" 
+                      icon={<FileText className="h-4 w-4 mr-2 text-amber-600" />}
+                    >
+                      Learn how our AI transforms sermons into study materials
+                    </ListItem>
+                    <ListItem 
+                      href="/pricing" 
+                      title="Pricing Plans" 
+                      icon={<Crown className="h-4 w-4 mr-2 text-amber-600" />}
+                    >
+                      Choose the perfect plan for your needs
                     </ListItem>
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+              
               <NavigationMenuItem>
                 <Link href="/pricing" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "text-base")}>
+                    <Crown className="h-4 w-4 mr-2" />
                     Pricing
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
+              
               {isAuthenticated && (
                 <NavigationMenuItem>
                   <Link href="/dashboard" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "text-base")}>
                       Dashboard
                     </NavigationMenuLink>
                   </Link>
@@ -105,21 +175,21 @@ export default function Header() {
             </NavigationMenuList>
           </NavigationMenu>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <ModeToggle />
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full ring-2 ring-amber-500/20 hover:ring-amber-500/40 transition-all">
                     <Avatar>
-                      <AvatarFallback>
+                      <AvatarFallback className="bg-gradient-to-br from-amber-500 to-yellow-600 text-white">
                         <User className="h-5 w-5" />
                       </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuLabel className="font-semibold">My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link href="/profile" className="cursor-pointer">
@@ -134,7 +204,7 @@ export default function Header() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:text-destructive">
                     <LogOut className="mr-2 h-4 w-4" />
                     Log out
                   </DropdownMenuItem>
@@ -142,11 +212,14 @@ export default function Header() {
               </DropdownMenu>
             ) : (
               <>
-                <Button variant="outline" asChild>
+                <Button variant="ghost" asChild className="text-base">
                   <Link href="/auth/login">Log in</Link>
                 </Button>
-                <Button asChild>
-                  <Link href="/auth/signup">Sign up</Link>
+                <Button asChild className="text-base bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 shadow-lg hover:shadow-xl transition-all">
+                  <Link href="/auth/signup">
+                    Get Started
+                    <Sparkles className="ml-2 h-4 w-4" />
+                  </Link>
                 </Button>
               </>
             )}
@@ -154,56 +227,88 @@ export default function Header() {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="flex items-center gap-4 md:hidden">
+        <div className="flex items-center gap-3 md:hidden">
           <ModeToggle />
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="relative">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
-              <div className="flex flex-col gap-6 py-6">
-                <Link href="/" className="flex items-center gap-2">
-                  <BookOpen className="h-6 w-6" />
-                  <span className="font-bold text-xl">Gabrious</span>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <div className="flex flex-col gap-8 py-6">
+                {/* Mobile Logo */}
+                <Link href="/" className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-yellow-600 shadow-lg">
+                    <BookOpen className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-bold text-xl bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent">
+                      Gabrious
+                    </span>
+                    <span className="text-[10px] text-muted-foreground -mt-1">AI Study Platform</span>
+                  </div>
                 </Link>
-                <nav className="flex flex-col gap-4">
-                  <Link href="/" className="flex items-center gap-2 text-lg font-medium">
-                    <Home className="h-5 w-5" />
+                
+                {/* Mobile Nav Links */}
+                <nav className="flex flex-col gap-3">
+                  <Link 
+                    href="/" 
+                    className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg hover:bg-muted transition-colors"
+                  >
+                    <Home className="h-5 w-5 text-amber-600" />
                     Home
                   </Link>
-                  <Link href="/transcription" className="flex items-center gap-2 text-lg font-medium">
-                    <FileText className="h-5 w-5" />
-                    Transcription
+                  <Link 
+                    href="/upload" 
+                    className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg hover:bg-muted transition-colors"
+                  >
+                    <Zap className="h-5 w-5 text-amber-600" />
+                    Upload Sermon
                   </Link>
-                  <Link href="/study-notes" className="flex items-center gap-2 text-lg font-medium">
-                    <BookOpen className="h-5 w-5" />
-                    Study Notes
+                  <Link 
+                    href="/how-it-works" 
+                    className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg hover:bg-muted transition-colors"
+                  >
+                    <FileText className="h-5 w-5 text-amber-600" />
+                    How It Works
                   </Link>
-                  <Link href="/church-automation" className="flex items-center gap-2 text-lg font-medium">
-                    <Church className="h-5 w-5" />
-                    Church Automation
-                  </Link>
-                  <Link href="/pricing" className="flex items-center gap-2 text-lg font-medium">
+                  <Link 
+                    href="/pricing" 
+                    className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg hover:bg-muted transition-colors"
+                  >
+                    <Crown className="h-5 w-5 text-amber-600" />
                     Pricing
                   </Link>
                   {isAuthenticated && (
                     <>
-                      <Link href="/dashboard" className="flex items-center gap-2 text-lg font-medium">
+                      <Link 
+                        href="/dashboard" 
+                        className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg hover:bg-muted transition-colors"
+                      >
+                        <BookOpen className="h-5 w-5 text-amber-600" />
                         Dashboard
                       </Link>
-                      <Link href="/profile" className="flex items-center gap-2 text-lg font-medium">
-                        <Settings className="h-5 w-5" />
+                      <Link 
+                        href="/profile" 
+                        className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg hover:bg-muted transition-colors"
+                      >
+                        <Settings className="h-5 w-5 text-amber-600" />
                         Profile & Settings
                       </Link>
                     </>
                   )}
                 </nav>
-                <div className="flex flex-col gap-2">
+                
+                {/* Mobile Auth Buttons */}
+                <div className="flex flex-col gap-3 pt-4 border-t">
                   {isAuthenticated ? (
-                    <Button variant="outline" onClick={handleLogout} className="w-full">
+                    <Button 
+                      variant="outline" 
+                      onClick={handleLogout} 
+                      className="w-full justify-start text-destructive hover:text-destructive"
+                    >
                       <LogOut className="h-4 w-4 mr-2" />
                       Log out
                     </Button>
@@ -212,8 +317,11 @@ export default function Header() {
                       <Button variant="outline" asChild className="w-full">
                         <Link href="/auth/login">Log in</Link>
                       </Button>
-                      <Button asChild className="w-full">
-                        <Link href="/auth/signup">Sign up</Link>
+                      <Button asChild className="w-full bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 shadow-lg">
+                        <Link href="/auth/signup">
+                          Get Started
+                          <Sparkles className="ml-2 h-4 w-4" />
+                        </Link>
                       </Button>
                     </>
                   )}
@@ -223,7 +331,7 @@ export default function Header() {
           </Sheet>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }
 
@@ -237,12 +345,12 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "block select-none space-y-1 rounded-lg p-4 leading-none no-underline outline-none transition-all hover:bg-muted hover:shadow-md border border-transparent hover:border-amber-500/20",
             className
           )}
           {...props}
         >
-          <div className="flex items-center text-sm font-medium leading-none">
+          <div className="flex items-center text-sm font-semibold leading-none mb-2">
             {icon}
             {title}
           </div>

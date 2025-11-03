@@ -169,8 +169,8 @@ export default function Home() {
                 {/* Main Image */}
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border-2 border-amber-500/20 shadow-2xl">
                   <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1470&auto=format&fit=crop"
-                    alt="AI-powered sermon study platform"
+                    src="https://images.unsplash.com/photo-1519791883288-dc8bd696e667?q=80&w=1470&auto=format&fit=crop"
+                    alt="Open Bible with study notes - AI-powered sermon study platform"
                     className="object-cover w-full h-full"
                   />
                   {/* Overlay Card */}

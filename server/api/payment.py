@@ -93,28 +93,44 @@ async def create_subscription(request: SubscriptionRequest, current_user: User =
         if not price_id:
             raise HTTPException(status_code=400, detail="Invalid plan or billing cycle")
         
+        # Validate that payment method is provided
+        if not payment_method_id:
+            raise HTTPException(status_code=400, detail="Payment method is required to create a subscription")
+        
         # Create or get customer
         customers = stripe.Customer.list(email=current_user.email)
         if customers.data:
             customer = customers.data[0]
-        else:
-            # Create customer without payment method if not provided
-            # When using PaymentElement, the payment method is collected during confirmation
-            customer_data = {
-                'email': current_user.email,
-                'metadata': {
-                    'user_id': str(current_user.id)
-                }
-            }
+            # Attach the payment method to the existing customer if not already attached
+            try:
+                stripe.PaymentMethod.attach(
+                    payment_method_id,
+                    customer=customer.id,
+                )
+            except stripe.error.StripeError as e:
+                # Payment method might already be attached, which is fine
+                if 'already been attached' not in str(e):
+                    raise
             
-            # Only add payment method if provided
-            if payment_method_id:
-                customer_data['payment_method'] = payment_method_id
-                customer_data['invoice_settings'] = {
+            # Set as default payment method
+            stripe.Customer.modify(
+                customer.id,
+                invoice_settings={
                     'default_payment_method': payment_method_id,
                 }
-                
-            customer = stripe.Customer.create(**customer_data)
+            )
+        else:
+            # Create customer with payment method
+            customer = stripe.Customer.create(
+                email=current_user.email,
+                payment_method=payment_method_id,
+                invoice_settings={
+                    'default_payment_method': payment_method_id,
+                },
+                metadata={
+                    'user_id': str(current_user.id)
+                }
+            )
         
         # Check for existing subscription and cancel it if exists
         subscription_plan = await SubscriptionPlan.filter(user_id=current_user.id).first()
@@ -128,25 +144,20 @@ async def create_subscription(request: SubscriptionRequest, current_user: User =
                 # If there's an error retrieving/canceling the subscription, continue with new subscription
                 pass
 
-        # Create the new subscription
-        subscription_data = {
-            'customer': customer.id,
-            'items': [
+        # Create the new subscription with the payment method
+        subscription = stripe.Subscription.create(
+            customer=customer.id,
+            items=[
                 {"price": price_id},
             ],
-            'expand': ["latest_invoice.payment_intent"],
-            'metadata': {
+            default_payment_method=payment_method_id,
+            expand=["latest_invoice.payment_intent"],
+            metadata={
                 'user_id': str(current_user.id),
                 'plan_type': plan_type,
                 'billing_cycle': billing_cycle
             }
-        }
-        
-        # If payment method is provided, use it for the subscription
-        if payment_method_id:
-            subscription_data['default_payment_method'] = payment_method_id
-            
-        subscription = stripe.Subscription.create(**subscription_data)
+        )
         
         # Update user's subscription plan in our database
         plan_tier = PLAN_MAPPING.get(plan_type, PlanTier.FREE)
@@ -171,7 +182,15 @@ async def create_subscription(request: SubscriptionRequest, current_user: User =
             "status": subscription.status
         }
     
+    except stripe.error.StripeError as e:
+        # Log the full Stripe error for debugging
+        print(f"Stripe error: {e}")
+        raise HTTPException(status_code=400, detail=f"Stripe error: {str(e)}")
     except Exception as e:
+        # Log the full error for debugging
+        print(f"Error creating subscription: {e}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/subscription-status")

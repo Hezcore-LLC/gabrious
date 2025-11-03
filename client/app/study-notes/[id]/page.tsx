@@ -43,6 +43,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { studyNotesService, StudyNotes } from "@/lib/studyNotesService";
 import { favoritesService } from "@/lib/favoritesService";
+import { generateStudyGuidePDF } from "@/lib/pdfGenerator";
 import {
   Dialog,
   DialogContent,
@@ -67,6 +68,9 @@ export default function StudyNotesPage({ params }: { params: { id: string } }) {
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<"christian" | "jewish">("christian");
   const [selectedDepth, setSelectedDepth] = useState<"basic" | "intermediate" | "advanced">("intermediate");
+  const [isPDFDialogOpen, setIsPDFDialogOpen] = useState(false);
+  const [pdfColorScheme, setPdfColorScheme] = useState<"blue" | "purple" | "green">("blue");
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     summary: true,
     keyPoints: true,
@@ -312,9 +316,14 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
                 <Printer className="h-4 w-4" />
                 Print
               </Button>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2"
+                onClick={() => setIsPDFDialogOpen(true)}
+              >
                 <Download className="h-4 w-4" />
-                Download
+                Download PDF
               </Button>
               <Button variant="outline" size="sm" className="gap-2">
                 <Share2 className="h-4 w-4" />
@@ -1068,6 +1077,129 @@ ${studyNotes.applicationPoints.map((point) => `- ${point}`).join("\n")}
           </div>
         </div>
       </div>
+
+      {/* PDF Download Dialog */}
+      <Dialog open={isPDFDialogOpen} onOpenChange={setIsPDFDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl flex items-center gap-2">
+              <Download className="h-6 w-6" />
+              Download Study Guide
+            </DialogTitle>
+            <DialogDescription>
+              Choose a color scheme for your PDF study guide
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-6 py-4">
+            {/* Color Scheme Selection */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold">Color Scheme</h3>
+              <div className="grid grid-cols-3 gap-3">
+                <Button
+                  variant={pdfColorScheme === "blue" ? "default" : "outline"}
+                  className="h-auto py-6 flex-col gap-2"
+                  onClick={() => setPdfColorScheme("blue")}
+                >
+                  <div className="w-8 h-8 rounded-full bg-blue-500" />
+                  <span className="text-xs">Blue</span>
+                </Button>
+                
+                <Button
+                  variant={pdfColorScheme === "purple" ? "default" : "outline"}
+                  className="h-auto py-6 flex-col gap-2"
+                  onClick={() => setPdfColorScheme("purple")}
+                >
+                  <div className="w-8 h-8 rounded-full bg-purple-500" />
+                  <span className="text-xs">Purple</span>
+                </Button>
+                
+                <Button
+                  variant={pdfColorScheme === "green" ? "default" : "outline"}
+                  className="h-auto py-6 flex-col gap-2"
+                  onClick={() => setPdfColorScheme("green")}
+                >
+                  <div className="w-8 h-8 rounded-full bg-green-500" />
+                  <span className="text-xs">Green</span>
+                </Button>
+              </div>
+            </div>
+
+            {/* Preview Info */}
+            <div className="p-4 rounded-lg bg-muted/50 space-y-2">
+              <h4 className="text-sm font-semibold">What&apos;s Included:</h4>
+              <ul className="text-xs space-y-1 text-muted-foreground">
+                <li>✓ Professional header with title and metadata</li>
+                <li>✓ All study note sections</li>
+                <li>✓ Scripture references with full text</li>
+                <li>✓ Discussion questions and applications</li>
+                {studyNotes?.format === "jewish" && (
+                  <>
+                    <li>✓ Commentary and historical notes</li>
+                    <li>✓ Ethical insights (Mussar)</li>
+                  </>
+                )}
+                <li>✓ Page numbers and footer</li>
+              </ul>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setIsPDFDialogOpen(false)}
+                disabled={isGeneratingPDF}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="flex-1 gap-2"
+                onClick={async () => {
+                  if (!studyNotes) return;
+                  
+                  setIsGeneratingPDF(true);
+                  try {
+                    await generateStudyGuidePDF(studyNotes, {
+                      colorScheme: pdfColorScheme,
+                      includeHeader: true,
+                      includeFooter: true
+                    });
+                    
+                    toast({
+                      title: "PDF Generated!",
+                      description: "Your study guide has been downloaded successfully.",
+                    });
+                    setIsPDFDialogOpen(false);
+                  } catch (error) {
+                    console.error("Error generating PDF:", error);
+                    toast({
+                      title: "Error",
+                      description: "Failed to generate PDF. Please try again.",
+                      variant: "destructive",
+                    });
+                  } finally {
+                    setIsGeneratingPDF(false);
+                  }
+                }}
+                disabled={isGeneratingPDF}
+              >
+                {isGeneratingPDF ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Download className="h-4 w-4" />
+                    Download PDF
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Regenerate Dialog - Enhanced with Depth Modes */}
       <Dialog open={isRegenerateDialogOpen} onOpenChange={(open) => {

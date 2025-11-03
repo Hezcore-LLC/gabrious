@@ -68,52 +68,41 @@ function CheckoutForm({ plan, billingCycle, intentType }: { plan: string; billin
     setProcessing(true);
     
     try {
-      // Create subscription first to get client secret
+      // First, submit the payment element to create/confirm the payment method
+      const { error: submitError } = await elements.submit();
+      if (submitError) {
+        setError(submitError.message || "Failed to process payment details");
+        setProcessing(false);
+        return;
+      }
+      
+      // Create or confirm the setup intent to get the payment method
+      const { error: confirmError, setupIntent } = await stripe.confirmSetup({
+        elements,
+        redirect: 'if_required',
+      });
+      
+      if (confirmError) {
+        setError(confirmError.message || "Failed to confirm payment method");
+        setProcessing(false);
+        return;
+      }
+      
+      if (!setupIntent?.payment_method) {
+        setError("No payment method was created");
+        setProcessing(false);
+        return;
+      }
+      
+      // Now create the subscription with the payment method
       const result = await paymentService.createSubscription({
         plan,
         billingCycle,
-        // We'll get the payment method from the PaymentElement during confirmation
-        paymentMethodId: '',
+        paymentMethodId: setupIntent.payment_method as string,
       });
       
-      if (result.status === "active") {
-        setSucceeded(true);
-        router.push("/dashboard?subscription=success");
-      } else if (result.clientSecret) {
-        // Handle confirmation with PaymentElement
-        let confirmError;
-        
-        if (intentType === "setup") {
-          // For setup intents
-          const { error } = await stripe.confirmSetup({
-            elements,
-            clientSecret: result.clientSecret,
-            confirmParams: {
-              return_url: window.location.origin + "/dashboard?subscription=success",
-            },
-          });
-          confirmError = error;
-        } else {
-          // For payment intents
-          const { error } = await stripe.confirmPayment({
-            elements,
-            clientSecret: result.clientSecret,
-            confirmParams: {
-              return_url: window.location.origin + "/dashboard?subscription=success",
-            },
-          });
-          confirmError = error;
-        }
-        
-        if (confirmError) {
-          setError(confirmError.message || "An error occurred with your payment");
-        } else {
-          // If we get here, it means the user was redirected to the return_url
-          // This code won't execute in most cases as the page will reload
-          setSucceeded(true);
-          router.push("/dashboard?subscription=success");
-        }
-      }
+      setSucceeded(true);
+      router.push("/dashboard?subscription=success");
     } catch (err: any) {
       setError(err.message || "An error occurred during checkout");
     } finally {
