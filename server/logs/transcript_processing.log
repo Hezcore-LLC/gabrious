@@ -585,3 +585,419 @@ AttributeError: 'QuerySet' object has no attribute '_saved_in_db'
 2025-06-04 17:06:36,713 - transcript_processing - INFO - Transcript processing task completed for ID: d756d3d7-34ca-4274-80fe-d19a19919b24
 2025-11-02 00:26:21,581 - transcript_processing - INFO - Starting transcript processing task for ID: bd85ff66-56fb-4589-ad09-244db4d41201
 2025-11-02 00:26:26,685 - transcript_processing - INFO - Transcript processing task completed for ID: bd85ff66-56fb-4589-ad09-244db4d41201
+2025-11-02 00:44:23,227 - transcript_processing - INFO - Starting transcript processing task for ID: 0b8374f9-8f93-4f17-a6b3-d1a39b02eb17
+2025-11-02 00:44:34,014 - transcript_processing - ERROR - Error processing transcript: Azure has not provided the response due to a content filter being triggered
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 88, in _process_transcript
+    output = llm.predict(formatted_prompt.to_string())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1054, in predict
+    result = self([HumanMessage(content=text)], stop=_stop, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1016, in __call__
+    generation = self.generate(
+                 ^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 634, in generate
+    raise e
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 624, in generate
+    self._generate_with_cache(
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 846, in _generate_with_cache
+    result = self._generate(
+             ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/openai.py", line 476, in _generate
+    return self._create_chat_result(response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/azure_openai.py", line 262, in _create_chat_result
+    raise ValueError(
+ValueError: Azure has not provided the response due to a content filter being triggered
+2025-11-02 00:44:34,078 - transcript_processing - ERROR - Transcript processing task failed for ID: 0b8374f9-8f93-4f17-a6b3-d1a39b02eb17: Azure has not provided the response due to a content filter being triggered
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 88, in _process_transcript
+    output = llm.predict(formatted_prompt.to_string())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1054, in predict
+    result = self([HumanMessage(content=text)], stop=_stop, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1016, in __call__
+    generation = self.generate(
+                 ^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 634, in generate
+    raise e
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 624, in generate
+    self._generate_with_cache(
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 846, in _generate_with_cache
+    result = self._generate(
+             ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/openai.py", line 476, in _generate
+    return self._create_chat_result(response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/azure_openai.py", line 262, in _create_chat_result
+    raise ValueError(
+ValueError: Azure has not provided the response due to a content filter being triggered
+2025-11-02 01:02:58,932 - transcript_processing - INFO - Starting transcript processing task for ID: f65db0fb-3d6e-4339-8a87-36bf7d6b65e6
+2025-11-02 01:03:10,451 - transcript_processing - ERROR - Error processing transcript: Azure has not provided the response due to a content filter being triggered
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 88, in _process_transcript
+    try:
+         
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1054, in predict
+    result = self([HumanMessage(content=text)], stop=_stop, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1016, in __call__
+    generation = self.generate(
+                 ^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 634, in generate
+    raise e
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 624, in generate
+    self._generate_with_cache(
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 846, in _generate_with_cache
+    result = self._generate(
+             ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/openai.py", line 476, in _generate
+    return self._create_chat_result(response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/azure_openai.py", line 262, in _create_chat_result
+    raise ValueError(
+ValueError: Azure has not provided the response due to a content filter being triggered
+2025-11-02 01:03:10,501 - transcript_processing - ERROR - Transcript processing task failed for ID: f65db0fb-3d6e-4339-8a87-36bf7d6b65e6: Azure has not provided the response due to a content filter being triggered
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 88, in _process_transcript
+    try:
+         
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1054, in predict
+    result = self([HumanMessage(content=text)], stop=_stop, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1016, in __call__
+    generation = self.generate(
+                 ^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 634, in generate
+    raise e
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 624, in generate
+    self._generate_with_cache(
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 846, in _generate_with_cache
+    result = self._generate(
+             ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/openai.py", line 476, in _generate
+    return self._create_chat_result(response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/azure_openai.py", line 262, in _create_chat_result
+    raise ValueError(
+ValueError: Azure has not provided the response due to a content filter being triggered
+2025-11-02 01:38:30,904 - transcript_processing - INFO - Starting transcript processing task for ID: 0538c507-30cc-4f54-8f74-8a219a032e0f
+2025-11-02 01:38:40,068 - transcript_processing - ERROR - Error processing transcript: Azure has not provided the response due to a content filter being triggered
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 88, in _process_transcript
+    summary: str = Field(description="A concise summary of the sermon's main message")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1054, in predict
+    result = self([HumanMessage(content=text)], stop=_stop, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1016, in __call__
+    generation = self.generate(
+                 ^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 634, in generate
+    raise e
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 624, in generate
+    self._generate_with_cache(
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 846, in _generate_with_cache
+    result = self._generate(
+             ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/openai.py", line 476, in _generate
+    return self._create_chat_result(response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/azure_openai.py", line 262, in _create_chat_result
+    raise ValueError(
+ValueError: Azure has not provided the response due to a content filter being triggered
+2025-11-02 01:38:40,132 - transcript_processing - ERROR - Transcript processing task failed for ID: 0538c507-30cc-4f54-8f74-8a219a032e0f: Azure has not provided the response due to a content filter being triggered
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 39, in process_transcript
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 88, in _process_transcript
+    summary: str = Field(description="A concise summary of the sermon's main message")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1054, in predict
+    result = self([HumanMessage(content=text)], stop=_stop, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1016, in __call__
+    generation = self.generate(
+                 ^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 634, in generate
+    raise e
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 624, in generate
+    self._generate_with_cache(
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 846, in _generate_with_cache
+    result = self._generate(
+             ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/openai.py", line 476, in _generate
+    return self._create_chat_result(response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/azure_openai.py", line 262, in _create_chat_result
+    raise ValueError(
+ValueError: Azure has not provided the response due to a content filter being triggered
+2025-11-02 01:53:28,049 - transcript_processing - INFO - Starting transcript processing task for ID: 5ef464a2-cf17-45bf-be94-4fff0cb89474
+2025-11-02 01:53:28,191 - transcript_processing - INFO - Sanitizing transcript before processing
+2025-11-02 01:53:28,258 - transcript_processing - INFO - Sanitized transcript: reduced from 49698 to 49698 characters
+2025-11-02 01:53:38,507 - transcript_processing - WARNING - Content filter triggered, retrying with modified approach
+2025-11-02 01:53:49,168 - transcript_processing - ERROR - Error processing transcript: Azure has not provided the response due to a content filter being triggered
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 152, in _process_transcript
+    output = llm.predict(formatted_prompt.to_string())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1054, in predict
+    result = self([HumanMessage(content=text)], stop=_stop, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1016, in __call__
+    generation = self.generate(
+                 ^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 634, in generate
+    raise e
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 624, in generate
+    self._generate_with_cache(
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 846, in _generate_with_cache
+    result = self._generate(
+             ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/openai.py", line 476, in _generate
+    return self._create_chat_result(response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/azure_openai.py", line 262, in _create_chat_result
+    raise ValueError(
+ValueError: Azure has not provided the response due to a content filter being triggered
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 168, in _process_transcript
+    output = llm.predict(formatted_simple_prompt.to_string())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1054, in predict
+    result = self([HumanMessage(content=text)], stop=_stop, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1016, in __call__
+    generation = self.generate(
+                 ^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 634, in generate
+    raise e
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 624, in generate
+    self._generate_with_cache(
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 846, in _generate_with_cache
+    result = self._generate(
+             ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/openai.py", line 476, in _generate
+    return self._create_chat_result(response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/azure_openai.py", line 262, in _create_chat_result
+    raise ValueError(
+ValueError: Azure has not provided the response due to a content filter being triggered
+2025-11-02 01:53:49,224 - transcript_processing - ERROR - Transcript processing task failed for ID: 5ef464a2-cf17-45bf-be94-4fff0cb89474: Azure has not provided the response due to a content filter being triggered
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 152, in _process_transcript
+    output = llm.predict(formatted_prompt.to_string())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1054, in predict
+    result = self([HumanMessage(content=text)], stop=_stop, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1016, in __call__
+    generation = self.generate(
+                 ^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 634, in generate
+    raise e
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 624, in generate
+    self._generate_with_cache(
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 846, in _generate_with_cache
+    result = self._generate(
+             ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/openai.py", line 476, in _generate
+    return self._create_chat_result(response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/azure_openai.py", line 262, in _create_chat_result
+    raise ValueError(
+ValueError: Azure has not provided the response due to a content filter being triggered
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 98, in process_transcript
+    result = asyncio.run(_process_transcript(transcription_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/.pyenv/versions/3.12.0/lib/python3.12/asyncio/base_events.py", line 664, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/tasks/transcript_processing.py", line 168, in _process_transcript
+    output = llm.predict(formatted_simple_prompt.to_string())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1054, in predict
+    result = self([HumanMessage(content=text)], stop=_stop, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/_api/deprecation.py", line 180, in warning_emitting_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 1016, in __call__
+    generation = self.generate(
+                 ^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 634, in generate
+    raise e
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 624, in generate
+    self._generate_with_cache(
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_core/language_models/chat_models.py", line 846, in _generate_with_cache
+    result = self._generate(
+             ^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/openai.py", line 476, in _generate
+    return self._create_chat_result(response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/isaacbrowne/Desktop/ai/gabrious/server/venv/lib/python3.12/site-packages/langchain_community/chat_models/azure_openai.py", line 262, in _create_chat_result
+    raise ValueError(
+ValueError: Azure has not provided the response due to a content filter being triggered
+2025-11-02 18:43:03,369 - transcript_processing - INFO - Starting transcript processing task for ID: 812d71f3-67ba-46f9-8b22-90ac32afb189
+2025-11-02 18:43:03,489 - transcript_processing - INFO - Sanitizing transcript before processing
+2025-11-02 18:43:03,563 - transcript_processing - INFO - Sanitized transcript: reduced from 49470 to 49877 characters (aggressive=True)
+2025-11-02 18:43:03,566 - transcript_processing - INFO - Split transcript into 13 chunks
+2025-11-02 18:43:03,567 - transcript_processing - INFO - Processing 13 chunks
+2025-11-02 18:43:04,089 - transcript_processing - INFO - Processing transcript in 13 chunks
+2025-11-02 18:43:04,092 - transcript_processing - INFO - Processing chunk 1/13
+2025-11-02 18:43:11,268 - transcript_processing - WARNING - Failed to process chunk 1: Azure has not provided the response due to a content filter being triggered
+2025-11-02 18:43:11,270 - transcript_processing - INFO - Processing chunk 2/13
+2025-11-02 18:43:15,350 - transcript_processing - INFO - Processing chunk 3/13
+2025-11-02 18:43:20,709 - transcript_processing - INFO - Processing chunk 4/13
+2025-11-02 18:43:25,834 - transcript_processing - WARNING - Failed to process chunk 4: Azure has not provided the response due to a content filter being triggered
+2025-11-02 18:43:25,836 - transcript_processing - INFO - Processing chunk 5/13
+2025-11-02 18:43:30,269 - transcript_processing - WARNING - Failed to process chunk 5: Azure has not provided the response due to a content filter being triggered
+2025-11-02 18:43:30,270 - transcript_processing - INFO - Processing chunk 6/13
+2025-11-02 18:43:35,629 - transcript_processing - WARNING - Failed to process chunk 6: Azure has not provided the response due to a content filter being triggered
+2025-11-02 18:43:35,630 - transcript_processing - INFO - Processing chunk 7/13
+2025-11-02 18:43:40,104 - transcript_processing - WARNING - Failed to process chunk 7: Azure has not provided the response due to a content filter being triggered
+2025-11-02 18:43:40,104 - transcript_processing - INFO - Processing chunk 8/13
+2025-11-02 18:43:48,811 - transcript_processing - WARNING - Failed to process chunk 8: Azure has not provided the response due to a content filter being triggered
+2025-11-02 18:43:48,812 - transcript_processing - INFO - Processing chunk 9/13
+2025-11-02 18:43:53,310 - transcript_processing - INFO - Processing chunk 10/13
+2025-11-02 18:56:07,283 - transcript_processing - WARNING - Failed to process chunk 10: Connection error.
+2025-11-02 18:56:07,285 - transcript_processing - INFO - Processing chunk 11/13
+2025-11-02 18:56:16,463 - transcript_processing - WARNING - Failed to process chunk 11: Azure has not provided the response due to a content filter being triggered
+2025-11-02 18:56:16,463 - transcript_processing - INFO - Processing chunk 12/13
+2025-11-02 18:56:22,827 - transcript_processing - WARNING - Failed to process chunk 12: Azure has not provided the response due to a content filter being triggered
+2025-11-02 18:56:22,829 - transcript_processing - INFO - Processing chunk 13/13
+2025-11-02 21:56:51,744 - transcript_processing - INFO - Starting transcript processing task for ID: 07558b67-ec37-46a6-8a85-2ea59a72564f
+2025-11-02 21:56:51,858 - transcript_processing - INFO - Sanitizing transcript before processing
+2025-11-02 21:56:51,927 - transcript_processing - INFO - Sanitized transcript: reduced from 49470 to 49877 characters (aggressive=True)
+2025-11-02 21:56:51,929 - transcript_processing - INFO - Split transcript into 13 chunks
+2025-11-02 21:56:51,930 - transcript_processing - INFO - Processing 13 chunks
+2025-11-02 21:56:52,316 - transcript_processing - INFO - Processing transcript in 13 chunks
+2025-11-02 21:56:52,318 - transcript_processing - INFO - Processing chunk 1/13
+2025-11-02 21:56:57,467 - transcript_processing - WARNING - Failed to process chunk 1: Azure has not provided the response due to a content filter being triggered
+2025-11-02 21:56:57,468 - transcript_processing - INFO - Processing chunk 2/13
+2025-11-02 21:57:01,880 - transcript_processing - INFO - Processing chunk 3/13
+2025-11-02 21:57:06,912 - transcript_processing - INFO - Processing chunk 4/13
+2025-11-02 21:57:12,043 - transcript_processing - WARNING - Failed to process chunk 4: Azure has not provided the response due to a content filter being triggered
+2025-11-02 21:57:12,043 - transcript_processing - INFO - Processing chunk 5/13
+2025-11-02 21:57:16,434 - transcript_processing - WARNING - Failed to process chunk 5: Azure has not provided the response due to a content filter being triggered
+2025-11-02 21:57:16,434 - transcript_processing - INFO - Processing chunk 6/13
+2025-11-02 21:57:21,983 - transcript_processing - WARNING - Failed to process chunk 6: Azure has not provided the response due to a content filter being triggered
+2025-11-02 21:57:21,984 - transcript_processing - INFO - Processing chunk 7/13
+2025-11-02 21:57:26,405 - transcript_processing - WARNING - Failed to process chunk 7: Azure has not provided the response due to a content filter being triggered
+2025-11-02 21:57:26,405 - transcript_processing - INFO - Processing chunk 8/13
+2025-11-02 21:57:32,081 - transcript_processing - WARNING - Failed to process chunk 8: Azure has not provided the response due to a content filter being triggered
+2025-11-02 21:57:32,082 - transcript_processing - INFO - Processing chunk 9/13
+2025-11-02 21:57:38,509 - transcript_processing - INFO - Processing chunk 10/13
+2025-11-02 21:57:41,815 - transcript_processing - WARNING - Failed to process chunk 10: Azure has not provided the response due to a content filter being triggered
+2025-11-02 21:57:41,815 - transcript_processing - INFO - Processing chunk 11/13
+2025-11-02 21:57:47,038 - transcript_processing - WARNING - Failed to process chunk 11: Azure has not provided the response due to a content filter being triggered
+2025-11-02 21:57:47,038 - transcript_processing - INFO - Processing chunk 12/13
+2025-11-02 21:57:53,373 - transcript_processing - WARNING - Failed to process chunk 12: Azure has not provided the response due to a content filter being triggered
+2025-11-02 21:57:53,374 - transcript_processing - INFO - Processing chunk 13/13
+2025-11-02 21:57:57,821 - transcript_processing - WARNING - Failed to process chunk 13: Azure has not provided the response due to a content filter being triggered
+2025-11-02 21:57:57,822 - transcript_processing - INFO - Successfully processed 3/13 chunks
+2025-11-02 21:57:57,835 - transcript_processing - INFO - Transcript processing task completed for ID: 07558b67-ec37-46a6-8a85-2ea59a72564f

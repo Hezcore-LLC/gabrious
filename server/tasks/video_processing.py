@@ -296,12 +296,19 @@ async def _process_video(transcription_id: UUID, video_url: str) -> Dict:
         transcription.file_size = file_size
         await transcription.save()
         
+        logger.info(f"Audio file size: {file_size / (1024*1024):.2f} MB")
+        
+        # Azure Whisper has a 25MB limit, warn if close
+        if file_size > 20 * 1024 * 1024:  # 20MB
+            logger.warning(f"Audio file is large ({file_size / (1024*1024):.2f} MB), transcription may take longer")
+        
         # Configure Azure OpenAI client with extended timeout
         client = AzureOpenAI(
             api_key=os.getenv("AZURE_OPENAI_API_KEY"),
             api_version="2023-09-01-preview",  # Use the correct API version for Whisper
             azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-            timeout=600.0  # 10 minutes timeout for large audio files
+            timeout=1800.0,  # 30 minutes timeout for very large audio files
+            max_retries=3
         )
         
         # Update status to transcribing
