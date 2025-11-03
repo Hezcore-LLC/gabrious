@@ -14,7 +14,9 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { BookOpen, Church, FileText, Home, Menu, X, LogOut } from "lucide-react";
+import { BookOpen, Church, FileText, Home, Menu, X, LogOut, User, Settings } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { authService } from "@/lib/authService";
 import { useRouter } from "next/navigation";
@@ -106,10 +108,38 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <ModeToggle />
             {isAuthenticated ? (
-              <Button variant="outline" onClick={handleLogout}>
-                <LogOut className="h-4 w-4 mr-2" />
-                Log out
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                    <Avatar>
+                      <AvatarFallback>
+                        <User className="h-5 w-5" />
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile" className="cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Profile & Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard" className="cursor-pointer">
+                      <BookOpen className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <>
                 <Button variant="outline" asChild>
@@ -160,9 +190,15 @@ export default function Header() {
                     Pricing
                   </Link>
                   {isAuthenticated && (
-                    <Link href="/dashboard" className="flex items-center gap-2 text-lg font-medium">
-                      Dashboard
-                    </Link>
+                    <>
+                      <Link href="/dashboard" className="flex items-center gap-2 text-lg font-medium">
+                        Dashboard
+                      </Link>
+                      <Link href="/profile" className="flex items-center gap-2 text-lg font-medium">
+                        <Settings className="h-5 w-5" />
+                        Profile & Settings
+                      </Link>
+                    </>
                   )}
                 </nav>
                 <div className="flex flex-col gap-2">

@@ -2,8 +2,26 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, FileText, MessageSquare, Upload } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { 
+  BookOpen, 
+  FileText, 
+  MessageSquare, 
+  Upload, 
+  Sparkles, 
+  Zap, 
+  Brain, 
+  Users, 
+  CheckCircle2, 
+  ArrowRight,
+  Play,
+  Star,
+  TrendingUp,
+  Shield,
+  Clock,
+  Globe
+} from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -18,156 +36,296 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-background">
-        <div className="container px-4 md:px-6">
-          <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
+    <div className="flex flex-col overflow-hidden">
+      {/* Hero Section - Modern Gradient */}
+      <section className="relative w-full py-20 md:py-32 lg:py-40 overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/10" />
+        <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+        
+        {/* Floating Elements */}
+        <motion.div
+          className="absolute top-20 left-10 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-10 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+
+        <div className="container relative px-4 md:px-6">
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-16 items-center">
             <motion.div 
-              className="flex flex-col justify-center space-y-4"
-              initial={{ opacity: 0, x: -20 }}
+              className="flex flex-col justify-center space-y-6"
+              initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.8 }}
             >
-              <div className="space-y-2">
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Badge className="inline-flex items-center gap-1 px-3 py-1 text-sm">
+                  <Sparkles className="h-3 w-3" />
+                  AI-Powered Study Platform
+                </Badge>
+              </motion.div>
+
+              {/* Headline */}
+              <div className="space-y-4">
                 <motion.h1 
-                  className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
+                  className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
                 >
-                  Transform Sermons into Powerful Study Notes
+                  Transform Sermons into
+                  <span className="block bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 bg-clip-text text-transparent animate-gradient">
+                    Deep Study Notes
+                  </span>
                 </motion.h1>
                 <motion.p 
-                  className="max-w-[600px] text-muted-foreground md:text-xl"
+                  className="text-lg text-muted-foreground md:text-xl max-w-[600px]"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
                 >
-                  Our AI-powered platform transcribes sermons and generates comprehensive study notes, helping you deepen your understanding and spiritual growth.
+                  Unlock deeper spiritual insights with AI-generated study materials. 
+                  Upload any sermon and get comprehensive notes, scripture references, 
+                  and discussion questions in minutes.
                 </motion.p>
               </div>
+
+              {/* CTA Buttons */}
               <motion.div 
-                className="flex flex-col gap-2 min-[400px]:flex-row"
+                className="flex flex-col sm:flex-row gap-3"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+              >
+                <Button asChild size="lg" className="text-base gap-2 shadow-lg hover:shadow-xl transition-shadow">
+                  <Link href="/upload">
+                    <Upload className="h-4 w-4" />
+                    Upload Your First Sermon
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button variant="outline" size="lg" asChild className="text-base gap-2">
+                  <Link href="/how-it-works">
+                    <Play className="h-4 w-4" />
+                    See How It Works
+                  </Link>
+                </Button>
+              </motion.div>
+
+              {/* Social Proof */}
+              <motion.div
+                className="flex items-center gap-6 pt-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
+                transition={{ delay: 0.6 }}
               >
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button asChild size="lg">
-                    <Link href="/upload">Upload a Sermon</Link>
-                  </Button>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button variant="outline" size="lg" asChild>
-                    <Link href="/how-it-works">How It Works</Link>
-                  </Button>
-                </motion.div>
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  <span className="font-semibold text-foreground">1,000+</span> sermons processed
+                </div>
               </motion.div>
             </motion.div>
+
+            {/* Hero Image/Video */}
             <motion.div 
-              className="mx-auto w-full max-w-[500px] lg:max-w-none"
-              initial={{ opacity: 0, x: 20 }}
+              className="relative mx-auto w-full max-w-[600px]"
+              initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="aspect-video overflow-hidden rounded-xl bg-muted/30">
-                <motion.img
-                  src="https://images.unsplash.com/photo-1616763355548-1b606f439f86?q=80&w=1470&auto=format&fit=crop"
-                  alt="Person studying Bible with notes"
-                  className="object-cover w-full h-full"
-                  initial={{ scale: 1.1 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.8 }}
-                />
+              <div className="relative">
+                {/* Decorative Elements */}
+                <div className="absolute -top-4 -right-4 w-72 h-72 bg-amber-500/20 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute -bottom-4 -left-4 w-72 h-72 bg-yellow-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+                
+                {/* Main Image */}
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border-2 border-amber-500/20 shadow-2xl">
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1470&auto=format&fit=crop"
+                    alt="AI-powered sermon study platform"
+                    className="object-cover w-full h-full"
+                  />
+                  {/* Overlay Card */}
+                  <motion.div
+                    className="absolute bottom-4 left-4 right-4 bg-background/95 backdrop-blur-sm rounded-xl p-4 border shadow-lg"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1 }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-500/10">
+                        <Zap className="h-5 w-5 text-amber-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">AI Processing Complete</p>
+                        <p className="text-xs text-muted-foreground">Study notes ready in 2 minutes</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/50">
+      {/* Stats Section */}
+      <section className="w-full py-12 bg-muted/30 border-y">
         <div className="container px-4 md:px-6">
           <motion.div 
-            className="flex flex-col items-center justify-center space-y-4 text-center"
-            {...fadeIn}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
-            <div className="space-y-2">
-              <motion.h2 
-                className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
+            {[
+              { value: "1,000+", label: "Sermons Processed", icon: TrendingUp },
+              { value: "50+", label: "Churches Served", icon: Users },
+              { value: "99%", label: "Accuracy Rate", icon: CheckCircle2 },
+              { value: "2 min", label: "Average Processing", icon: Clock }
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                className="flex flex-col items-center text-center space-y-2"
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
               >
-                Powerful Features
-              </motion.h2>
-              <motion.p 
-                className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                Everything you need to get more from every sermon
-              </motion.p>
-            </div>
+                <stat.icon className="h-8 w-8 text-amber-600 mb-2" />
+                <div className="text-3xl font-bold">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
+              </motion.div>
+            ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* Features Section - Modern Cards */}
+      <section className="w-full py-20 md:py-32">
+        <div className="container px-4 md:px-6">
           <motion.div 
-            className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3 lg:gap-12 mt-8"
+            className="flex flex-col items-center text-center space-y-4 mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <Badge variant="outline" className="px-3 py-1">
+              <Sparkles className="h-3 w-3 mr-1" />
+              Features
+            </Badge>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+              Everything You Need to
+              <span className="block bg-gradient-to-r from-amber-500 to-yellow-600 bg-clip-text text-transparent">Deepen Your Faith</span>
+            </h2>
+            <p className="max-w-[800px] text-muted-foreground text-lg">
+              Powerful AI tools designed to help you get more from every sermon
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
             variants={staggerContainer}
             initial="initial"
-            animate="animate"
+            whileInView="animate"
+            viewport={{ once: true }}
           >
-            {[{
-              icon: <FileText className="h-6 w-6" />,
-              title: "Transcription",
-              description: "Accurate sermon transcription powered by advanced AI",
-              content: "Upload audio or video files, or paste a YouTube/Facebook URL to get a precise transcription in minutes.",
-              link: "/transcription"
-            }, {
-              icon: <BookOpen className="h-6 w-6" />,
-              title: "Study Notes",
-              description: "Comprehensive study materials from every sermon",
-              content: "Get key points, scripture references, summaries, and discussion questions automatically generated.",
-              link: "/study-notes"
-            }, {
-              icon: <MessageSquare className="h-6 w-6" />,
-              title: "Discussion Questions",
-              description: "Deepen understanding with thoughtful questions",
-              content: "AI-generated discussion questions to help you reflect on the sermon's message and application.",
-              link: "/discussion-questions"
-            }].map((feature, index) => (
+            {[
+              {
+                icon: <Brain className="h-6 w-6" />,
+                title: "AI-Powered Transcription",
+                description: "Crystal-clear transcription using advanced speech recognition",
+                features: ["99% accuracy", "Multiple languages", "Speaker identification"],
+                gradient: "from-amber-500/10 to-yellow-500/10"
+              },
+              {
+                icon: <BookOpen className="h-6 w-6" />,
+                title: "Smart Study Notes",
+                description: "Comprehensive notes with key insights and takeaways",
+                features: ["Key points extraction", "Scripture references", "Sermon summaries"],
+                gradient: "from-yellow-500/10 to-amber-600/10"
+              },
+              {
+                icon: <MessageSquare className="h-6 w-6" />,
+                title: "Discussion Questions",
+                description: "Thought-provoking questions for deeper reflection",
+                features: ["Group study ready", "Personal reflection", "Application focused"],
+                gradient: "from-amber-600/10 to-orange-500/10"
+              },
+              {
+                icon: <FileText className="h-6 w-6" />,
+                title: "Multiple Formats",
+                description: "Export in various formats for different study styles",
+                features: ["PDF export", "Markdown", "Copy to clipboard"],
+                gradient: "from-yellow-400/10 to-amber-500/10"
+              },
+              {
+                icon: <Shield className="h-6 w-6" />,
+                title: "Secure & Private",
+                description: "Your sermons and notes are encrypted and protected",
+                features: ["End-to-end encryption", "Private storage", "GDPR compliant"],
+                gradient: "from-amber-500/10 to-yellow-600/10"
+              },
+              {
+                icon: <Globe className="h-6 w-6" />,
+                title: "Multi-Language Support",
+                description: "Process sermons in multiple languages",
+                features: ["50+ languages", "Auto-detection", "Translation ready"],
+                gradient: "from-yellow-500/10 to-amber-400/10"
+              }
+            ].map((feature, index) => (
               <motion.div
                 key={feature.title}
                 variants={fadeIn}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                whileHover={{ y: -8, transition: { duration: 0.2 } }}
               >
-                <Card className="bg-background h-full">
-                  <CardHeader className="pb-2">
-                    <motion.div 
-                      className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-muted"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
+                <Card className="h-full border-2 hover:border-amber-500/50 transition-all duration-300 hover:shadow-xl">
+                  <CardHeader>
+                    <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} mb-4`}>
                       {feature.icon}
-                    </motion.div>
-                    <CardTitle>{feature.title}</CardTitle>
-                    <CardDescription>{feature.description}</CardDescription>
+                    </div>
+                    <CardTitle className="text-xl">{feature.title}</CardTitle>
+                    <CardDescription className="text-base">{feature.description}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">{feature.content}</p>
+                    <ul className="space-y-2">
+                      {feature.features.map((item) => (
+                        <li key={item} className="flex items-center gap-2 text-sm">
+                          <CheckCircle2 className="h-4 w-4 text-amber-600 shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </CardContent>
-                  <CardFooter>
-                    <motion.div 
-                      className="w-full"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <Button variant="ghost" asChild className="w-full">
-                        <Link href={feature.link}>Learn More</Link>
-                      </Button>
-                    </motion.div>
-                  </CardFooter>
                 </Card>
               </motion.div>
             ))}
@@ -175,50 +333,109 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-background border-t">
+      {/* How It Works Section */}
+      <section className="w-full py-20 md:py-32 bg-muted/30">
         <div className="container px-4 md:px-6">
           <motion.div 
-            className="flex flex-col items-center justify-center space-y-4 text-center"
+            className="flex flex-col items-center text-center space-y-4 mb-16"
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
           >
-            <div className="space-y-2">
-              <motion.h2 
-                className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
+            <Badge variant="outline" className="px-3 py-1">
+              <Zap className="h-3 w-3 mr-1" />
+              Simple Process
+            </Badge>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+              Get Started in
+              <span className="block bg-gradient-to-r from-amber-500 to-yellow-600 bg-clip-text text-transparent">Three Easy Steps</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
+            {[
+              {
+                step: "01",
+                title: "Upload Your Sermon",
+                description: "Drag and drop audio/video files or paste a YouTube link",
+                icon: <Upload className="h-8 w-8" />
+              },
+              {
+                step: "02",
+                title: "AI Processing",
+                description: "Our AI transcribes and analyzes the sermon content",
+                icon: <Brain className="h-8 w-8" />
+              },
+              {
+                step: "03",
+                title: "Get Your Notes",
+                description: "Receive comprehensive study notes ready to use",
+                icon: <BookOpen className="h-8 w-8" />
+              }
+            ].map((step, index) => (
+              <motion.div
+                key={step.step}
+                className="relative"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
               >
-                Ready to Get Started?
-              </motion.h2>
-              <motion.p 
-                className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                Upload your first sermon and see the power of Gabrious
-              </motion.p>
+                {index < 2 && (
+                  <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-amber-500/50 to-transparent -translate-x-1/2" />
+                )}
+                <Card className="relative border-2 hover:border-amber-500/50 transition-all">
+                  <CardHeader className="text-center">
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10">
+                      {step.icon}
+                    </div>
+                    <div className="text-4xl font-bold text-amber-600 mb-2">{step.step}</div>
+                    <CardTitle className="text-xl">{step.title}</CardTitle>
+                    <CardDescription className="text-base">{step.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section - Modern Gradient */}
+      <section className="relative w-full py-20 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-500 via-yellow-500 to-amber-600" />
+        <div className="absolute inset-0 bg-grid-white/10" />
+        
+        <div className="container relative px-4 md:px-6">
+          <motion.div 
+            className="flex flex-col items-center text-center space-y-6 text-white"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <Badge className="bg-white/20 text-white border-white/30">
+              <Sparkles className="h-3 w-3 mr-1" />
+              Start Your Journey
+            </Badge>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl max-w-[800px]">
+              Ready to Transform Your Sermon Study?
+            </h2>
+            <p className="max-w-[600px] text-lg text-white/90">
+              Join thousands of believers using Gabrious to deepen their understanding of God&apos;s Word
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <Button asChild size="lg" variant="secondary" className="text-base gap-2 shadow-xl">
+                <Link href="/upload">
+                  <Upload className="h-4 w-4" />
+                  Upload Your First Sermon
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="text-base gap-2 bg-white/10 border-white/30 text-white hover:bg-white/20">
+                <Link href="/pricing">
+                  View Pricing Plans
+                </Link>
+              </Button>
             </div>
-            <motion.div 
-              className="flex flex-col gap-2 min-[400px]:flex-row"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Button asChild size="lg">
-                  <Link href="/upload">Upload a Sermon</Link>
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Button variant="outline" size="lg" asChild>
-                  <Link href="/pricing">View Pricing</Link>
-                </Button>
-              </motion.div>
-            </motion.div>
           </motion.div>
         </div>
       </section>

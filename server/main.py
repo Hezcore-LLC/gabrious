@@ -49,8 +49,9 @@ async def root():
     return {"message": "Welcome to Gabrious API"}
 
 # Import and include API routes
-from api import auth, transcription, study_notes, statistics, favorites, storage, payment
+from api import auth, transcription, study_notes, statistics, favorites, storage, payment, profile
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+app.include_router(profile.router, prefix="/api/profile", tags=["profile"])
 app.include_router(transcription.router, prefix="/api/transcriptions", tags=["transcription"])
 app.include_router(study_notes.router, prefix="/api/study-notes", tags=["study_notes"])
 app.include_router(statistics.router, prefix="/api/statistics", tags=["statistics"])

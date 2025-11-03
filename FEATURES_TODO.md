@@ -207,3 +207,83 @@ This could be implemented as a quick win while planning the full audio storage f
 - Audio sharing (generate shareable links)
 - Offline audio download for mobile apps
 - Audio quality selection (low/medium/high)
+
+## ✅ COMPLETED: User Profile & Preferences Management
+
+### Status: Implemented
+
+### Description
+
+Users can now manage their profile information and study preferences through a comprehensive profile management system.
+
+### Features Implemented
+
+1. **Personal Information Management**
+
+   - Update first name, last name, and email
+   - Email uniqueness validation
+   - View account creation date and verification status
+
+2. **Study Preferences**
+
+   - Faith Context selection (Christian, Jewish, Muslim, General/Interfaith)
+   - Preferred Depth Mode (Beginner, Intermediate, Advanced, Scholar)
+   - Preferences affect AI-generated study notes
+
+3. **Security**
+
+   - Password change with current password verification
+   - Minimum 8-character password requirement
+   - Secure bcrypt password hashing
+
+4. **Account Management**
+   - Soft delete account functionality
+   - Confirmation dialog for account deletion
+
+### Implementation Details
+
+**Backend:**
+
+- New `/api/profile` router with endpoints for profile, preferences, password, and account management
+- Updated User model responses to include faith_context and preferred_depth_mode
+- Comprehensive validation and error handling
+
+**Frontend:**
+
+- Profile page at `/profile` with tabbed interface
+- User avatar dropdown in header for quick access
+- Real-time form validation and user feedback
+- Mobile-responsive design
+
+**Documentation:**
+
+- Complete API documentation in PROFILE_MANAGEMENT.md
+- Usage examples and security considerations
+
+### Files Created/Modified
+
+- `server/api/profile.py` - Profile management API endpoints
+- `client/lib/profileService.ts` - Frontend service for profile operations
+- `client/app/profile/page.tsx` - Profile management UI
+- `client/components/header.tsx` - Added profile dropdown menu
+- `server/api/auth.py` - Updated to include preferences in user response
+- `server/main.py` - Registered profile router
+- `PROFILE_MANAGEMENT.md` - Complete documentation
+
+---
+
+## Short term (faith context):
+
+✅ Add user profile settings for faith context - COMPLETED
+
+- Adapt AI prompts based on faith context (next step)
+- Update branding to be faith-neutral
+
+## Medium term (textual tools):
+
+- Integrate Sefaria API for Jewish texts
+- Add Bible API for Christian texts
+- Implement auto-linking of scripture references
+- Hebrew/Aramaic text display
+
+The foundation is solid and ready for these powerful enhancements that will make Gabrius a truly comprehensive study tool for all faith traditions!

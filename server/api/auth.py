@@ -25,6 +25,8 @@ class UserResponse(BaseModel):
     email: str
     first_name: Optional[str]
     last_name: Optional[str]
+    faith_context: Optional[str]
+    preferred_depth_mode: Optional[str]
 
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
 ALGORITHM = "HS256"
@@ -82,7 +84,9 @@ async def signup(user_data: UserCreate):
         "id": str(user.id),
         "email": user.email,
         "first_name": user.first_name,
-        "last_name": user.last_name
+        "last_name": user.last_name,
+        "faith_context": user.faith_context,
+        "preferred_depth_mode": user.preferred_depth_mode
     }
 
 @router.post("/login", response_model=Token)
@@ -104,5 +108,7 @@ async def read_users_me(current_user: User = Depends(get_current_user)):
         "id": str(current_user.id),
         "email": current_user.email,
         "first_name": current_user.first_name,
-        "last_name": current_user.last_name
+        "last_name": current_user.last_name,
+        "faith_context": current_user.faith_context,
+        "preferred_depth_mode": current_user.preferred_depth_mode
     }

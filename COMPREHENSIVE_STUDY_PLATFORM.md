@@ -64,16 +64,6 @@ User-level faith context setting that tailors language, terminology, and content
 - Sources: Torah, Prophets, Writings, Talmud, Midrash, Rashi
 - Structure: Parashah-based with commentary layers
 
-**Muslim** (Future)
-- Terminology: Imam, Khutbah, Mosque, Quran
-- Sources: Quran, Hadith, Tafsir
-- Structure: Surah-based with scholarly commentary
-
-**General/Academic**
-- Neutral terminology: Teacher, Lecture, Institution, Sacred Text
-- Sources: Comparative religious texts
-- Structure: Academic analysis format
-
 ### Implementation Status
 - ✅ Database schema updated (faith_context field in users table)
 - ✅ Enum defined for faith contexts
@@ -145,16 +135,15 @@ const linkReferences = (text: string) => {
 
 **Current**: "AI-powered sermon note-taking for pastors"
 
-**New**: "Comprehensive study companion for teachers, scholars, and faith leaders"
+**New**: "AI-powered study companion for Christian and Jewish faith leaders"
 
 ### Target Audiences
 
 1. **Christian Pastors** - Sermon preparation and study
 2. **Jewish Rabbis** - Torah study and teaching prep
-3. **Muslim Imams** - Khutbah preparation (future)
-4. **Theology Professors** - Academic research and teaching
-5. **Seminary Students** - Study and research tool
-6. **Study Group Leaders** - Facilitating discussions
+3. **Theology Professors** - Academic research and teaching
+4. **Seminary Students** - Study and research tool
+5. **Study Group Leaders** - Facilitating discussions
 
 ### Marketing Messages
 
@@ -164,8 +153,8 @@ const linkReferences = (text: string) => {
 **For Jewish Leaders**:
 "Generate comprehensive Torah study notes with commentary layers, historical context, and discussion questions for chavruta study."
 
-**For Academics**:
-"Analyze religious texts with depth modes from basic summaries to advanced scholarly analysis with cross-references and linguistic notes."
+**For Scholars**:
+"Analyze biblical and rabbinic texts with depth modes from basic summaries to advanced scholarly analysis with cross-references and linguistic notes."
 
 ### Website Updates
 - Multi-faith imagery
@@ -293,10 +282,6 @@ FAITH_CONTEXT_PROMPTS = {
     "jewish": {
         "system": "You are analyzing a Jewish teaching. Use terminology like 'rabbi', 'synagogue', 'Torah', 'Tanakh', 'Talmud'.",
         "sources": "Reference Torah, Prophets, Writings, Talmud, Midrash, and rabbinic commentaries like Rashi."
-    },
-    "general": {
-        "system": "You are analyzing a religious or philosophical teaching. Use neutral, academic terminology.",
-        "sources": "Reference the relevant sacred texts and scholarly traditions."
     }
 }
 
@@ -387,7 +372,6 @@ DEPTH_MODE_INSTRUCTIONS = {
 **Total Addressable Market**:
 - Christian pastors/leaders: ~400,000 in US
 - Jewish rabbis/educators: ~4,000 in US
-- Muslim imams: ~2,500 in US
 - Theology professors/students: ~50,000
 - **Total**: ~450,000+ potential users in US alone
 

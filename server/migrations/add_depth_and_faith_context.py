@@ -82,7 +82,7 @@ async def migrate():
         # Update existing users with defaults
         try:
             await conn.execute_query(
-                "UPDATE users SET faith_context = 'general' WHERE faith_context IS NULL"
+                "UPDATE users SET faith_context = 'christian' WHERE faith_context IS NULL"
             )
             await conn.execute_query(
                 "UPDATE users SET preferred_depth_mode = 'intermediate' WHERE preferred_depth_mode IS NULL"
@@ -100,7 +100,7 @@ async def migrate():
         print("\n✅ Migration completed successfully!")
         print("\nNew features enabled:")
         print("  - Depth modes (basic, intermediate, advanced)")
-        print("  - Faith context (christian, jewish, muslim, general)")
+        print("  - Faith context (christian, jewish)")
         print("  - User preferences for depth and language")
         print("  - Support for cross-references and personal notes (future)")
         

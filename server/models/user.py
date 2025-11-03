@@ -6,8 +6,6 @@ from enum import Enum
 class FaithContext(str, Enum):
     CHRISTIAN = "christian"
     JEWISH = "jewish"
-    MUSLIM = "muslim"
-    GENERAL = "general"  # For interfaith or academic use
 
 class User(models.Model):
     id = fields.UUIDField(pk=True)
@@ -15,7 +13,7 @@ class User(models.Model):
     password_hash = fields.CharField(max_length=255)
     first_name = fields.CharField(max_length=50, null=True)
     last_name = fields.CharField(max_length=50, null=True)
-    faith_context = fields.CharEnumField(FaithContext, default=FaithContext.GENERAL, null=True)
+    faith_context = fields.CharEnumField(FaithContext, default=FaithContext.CHRISTIAN, null=True)
     preferred_depth_mode = fields.CharField(max_length=20, default="intermediate", null=True)
     is_active = fields.BooleanField(default=True)
     is_verified = fields.BooleanField(default=False)

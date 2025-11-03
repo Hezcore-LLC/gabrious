@@ -234,9 +234,34 @@ async def _process_transcript(transcription_id: UUID, format: str = "christian",
             
             # Create depth-aware prompts for chunk processing
             depth_instructions = {
-                "basic": "Focus on: Summary, Key Points, and Scripture/Source references only.",
-                "intermediate": "Include: Summary, Key Points, Scriptures, Ethical Insights, and Discussion Questions.",
-                "advanced": "Provide comprehensive analysis including: Summary, Key Points, Scriptures, Commentary, Historical/Linguistic Notes, Cross-references, and Deep Insights."
+                "basic": """BASIC MODE - Keep it concise and focused:
+                - Summary: 2-3 sentences maximum
+                - Key Points: 3-5 main points only
+                - Scriptures: Primary references only (3-5 verses)
+                - Discussion Questions: 2-3 simple questions
+                - Application: 2-3 practical points
+                - Commentary/Historical Notes: Minimal or skip if not essential""",
+                
+                "intermediate": """INTERMEDIATE MODE - Balanced depth:
+                - Summary: 1 paragraph (4-6 sentences)
+                - Key Points: 5-8 detailed points
+                - Scriptures: Main and supporting references (5-10 verses)
+                - Discussion Questions: 4-6 thought-provoking questions
+                - Application: 4-6 practical applications
+                - Ethical Insights: 1-2 paragraphs
+                - Commentary: Key insights from major commentators
+                - Historical Notes: Important context only""",
+                
+                "advanced": """ADVANCED MODE - Comprehensive scholarly analysis:
+                - Summary: 2-3 paragraphs with full context
+                - Key Points: 8-12 detailed points with sub-points
+                - Scriptures: Comprehensive references with cross-references (10-15+ verses)
+                - Discussion Questions: 6-10 deep analytical questions
+                - Application: 6-10 detailed applications with examples
+                - Ethical Insights: 2-3 paragraphs with philosophical depth
+                - Commentary: Extensive rabbinic/patristic commentary with multiple sources
+                - Historical Notes: Detailed etymology, cultural context, manuscript traditions
+                - Cross-references: Related passages and thematic connections"""
             }
             
             depth_instruction = depth_instructions.get(depth_mode, depth_instructions["intermediate"])
@@ -356,14 +381,48 @@ async def _process_transcript(transcription_id: UUID, format: str = "christian",
                     )
         else:
             # Single chunk processing
+            # Define depth instructions for single chunk (same as multi-chunk)
+            depth_instructions = {
+                "basic": """BASIC MODE - Keep it concise and focused:
+                - Summary: 2-3 sentences maximum
+                - Key Points: 3-5 main points only
+                - Scriptures: Primary references only (3-5 verses)
+                - Discussion Questions: 2-3 simple questions
+                - Application: 2-3 practical points
+                - Commentary/Historical Notes: Minimal or skip if not essential""",
+                
+                "intermediate": """INTERMEDIATE MODE - Balanced depth:
+                - Summary: 1 paragraph (4-6 sentences)
+                - Key Points: 5-8 detailed points
+                - Scriptures: Main and supporting references (5-10 verses)
+                - Discussion Questions: 4-6 thought-provoking questions
+                - Application: 4-6 practical applications
+                - Ethical Insights: 1-2 paragraphs
+                - Commentary: Key insights from major commentators
+                - Historical Notes: Important context only""",
+                
+                "advanced": """ADVANCED MODE - Comprehensive scholarly analysis:
+                - Summary: 2-3 paragraphs with full context
+                - Key Points: 8-12 detailed points with sub-points
+                - Scriptures: Comprehensive references with cross-references (10-15+ verses)
+                - Discussion Questions: 6-10 deep analytical questions
+                - Application: 6-10 detailed applications with examples
+                - Ethical Insights: 2-3 paragraphs with philosophical depth
+                - Commentary: Extensive rabbinic/patristic commentary with multiple sources
+                - Historical Notes: Detailed etymology, cultural context, manuscript traditions
+                - Cross-references: Related passages and thematic connections"""
+            }
+            
+            depth_instruction = depth_instructions.get(depth_mode, depth_instructions["intermediate"])
+            
             if is_jewish_format:
                 prompt = ChatPromptTemplate.from_messages([
-                    ("system", "You are an educational content analyzer specializing in Jewish theological and rabbinic material."),
+                    ("system", f"You are an educational content analyzer specializing in Jewish theological and rabbinic material. {depth_instruction}"),
                     ("user", "Analyze this Jewish educational content and extract structured information including Torah/Tanakh references, rabbinic commentary, ethical insights, and historical context:\n\n{transcript}\n\n{format_instructions}")
                 ])
             else:
                 prompt = ChatPromptTemplate.from_messages([
-                    ("system", "You are an educational content analyzer specializing in theological material."),
+                    ("system", f"You are an educational content analyzer specializing in theological material. {depth_instruction}"),
                     ("user", "Analyze this educational content and extract structured information:\n\n{transcript}\n\n{format_instructions}")
                 ])
 
