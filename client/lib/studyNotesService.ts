@@ -15,6 +15,7 @@ export interface StudyNotes {
   date: string;
   duration: string;
   thumbnail: string;
+  videoUrl: string;
   summary: string;
   keyPoints: string[];
   scriptures: Scripture[];
@@ -73,6 +74,62 @@ export const studyNotesService = {
       return response.json();
     } catch (error) {
       console.error('Error fetching recent study notes:', error);
+      throw error;
+    }
+  },
+
+  getTranscript: async (transcriptionId: string): Promise<string> => {
+    try {
+      const token = authService.getToken();
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/transcriptions/${transcriptionId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error('Transcript not found');
+        }
+        throw new Error('Failed to fetch transcript');
+      }
+
+      const data = await response.json();
+      return data.transcription_text || 'No transcript available';
+    } catch (error) {
+      console.error('Error fetching transcript:', error);
+      throw error;
+    }
+  },
+
+  updateTranscript: async (transcriptionId: string, transcriptText: string): Promise<void> => {
+    try {
+      const token = authService.getToken();
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/transcriptions/${transcriptionId}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ transcription_text: transcriptText })
+      });
+      
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error('Transcript not found');
+        }
+        throw new Error('Failed to update transcript');
+      }
+    } catch (error) {
+      console.error('Error updating transcript:', error);
       throw error;
     }
   },

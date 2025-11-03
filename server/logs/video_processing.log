@@ -37,3 +37,6 @@
 2025-11-02 21:56:51,729 - video_processing - INFO - Study notes generation task queued
 2025-11-02 21:56:51,729 - video_processing - INFO - Video processing completed successfully for ID: 07558b67-ec37-46a6-8a85-2ea59a72564f
 2025-11-02 21:56:51,735 - video_processing - INFO - Video processing task completed for ID: 07558b67-ec37-46a6-8a85-2ea59a72564f
+2025-11-03 01:06:32,620 - video_processing - INFO - Video processing module initialized
+2025-11-03 01:24:55,238 - video_processing - INFO - Video processing module initialized
+2025-11-03 01:26:25,055 - video_processing - INFO - Video processing module initialized

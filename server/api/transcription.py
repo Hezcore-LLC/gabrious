@@ -78,6 +78,24 @@ async def get_transcription(transcription_id: str, current_user: User = Depends(
         "updated_at": transcription.updated_at
     }
 
+class TranscriptionUpdate(BaseModel):
+    transcription_text: str
+
+@router.patch("/{transcription_id}")
+async def update_transcription(transcription_id: str, update: TranscriptionUpdate, current_user: User = Depends(get_current_user)):
+    transcription = await Transcription.get_or_none(id=transcription_id, user=current_user)
+    if not transcription:
+        raise HTTPException(status_code=404, detail="Transcription not found")
+    
+    transcription.transcription_text = update.transcription_text
+    await transcription.save()
+    
+    return {
+        "id": transcription.id,
+        "status": "updated",
+        "message": "Transcript updated successfully"
+    }
+
 @router.get("/")
 async def list_transcriptions(current_user: User = Depends(get_current_user)):
     transcriptions = await Transcription.filter(user=current_user)
